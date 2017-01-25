@@ -1,0 +1,220 @@
+<?xml version="1.0"?>
+<!DOCTYPE ggobidata SYSTEM "ggobi.dtd">
+
+<ggobidata count="2">
+<data name="dna.2.loc">
+<description>
+This is XML created by GGobi
+</description>
+<variables count="4">
+   <realvariable name="X1" nickname="X1"/>
+   <realvariable name="X2" nickname="X2"/>
+   <realvariable name="X3" nickname="X3"/>
+   <realvariable name="X4" nickname="X4"/>
+</variables>
+<records count="16" glyph="plus 2" color="0">
+<record id="AA" label="AA" color="2">
+9.22173 -5.24868 0.0695191 -2.04164
+</record>
+<record id="CA" label="CA" color="8" glyph="or 2">
+-7.26611 -5.68511 -5.24184 -2.04164
+</record>
+<record id="GA" label="GA" color="4" glyph="oc 2">
+-3.25553 1.56292 9.9776 -2.04164
+</record>
+<record id="TA" label="TA" glyph="x 2">
+1.29991 9.37087 -4.80528 -2.04164
+</record>
+<record id="AC" label="AC" color="2">
+9.22173 -5.24868 0.0695191 -6.00615
+</record>
+<record id="CC" label="CC" color="8" glyph="or 2">
+-7.26611 -5.68511 -5.24184 -6.00615
+</record>
+<record id="GC" label="GC" color="4" glyph="oc 2">
+-3.25553 1.56292 9.9776 -6.00615
+</record>
+<record id="TC" label="TC" glyph="x 2">
+1.29991 9.37087 -4.80528 -6.00615
+</record>
+<record id="AG" label="AG" color="2">
+9.22173 -5.24868 0.0695191 -2.1405
+</record>
+<record id="CG" label="CG" color="8" glyph="or 2">
+-7.26611 -5.68511 -5.24184 -2.1405
+</record>
+<record id="GG" label="GG" color="4" glyph="oc 2">
+-3.25553 1.56292 9.9776 -2.1405
+</record>
+<record id="TG" label="TG" glyph="x 2">
+1.29991 9.37087 -4.80528 -2.1405
+</record>
+<record id="AT" label="AT" color="2">
+9.22173 -5.24868 0.0695191 10.1883
+</record>
+<record id="CT" label="CT" color="8" glyph="or 2">
+-7.26611 -5.68511 -5.24184 10.1883
+</record>
+<record id="GT" label="GT" color="4" glyph="oc 2">
+-3.25553 1.56292 9.9776 10.1883
+</record>
+<record id="TT" label="TT" glyph="x 2">
+1.29991 9.37087 -4.80528 10.1883
+</record>
+</records>
+</data>
+<data name="dna.2.wires">
+<description>
+This is XML created by GGobi
+</description>
+<variables count="1">
+   <realvariable name="id" nickname="id"/>
+</variables>
+<records count="48" glyph="plus 0" color="7">
+<record id="dna.2.wires1" source="AA" destination="CA" label="dna.2.wires1">
+1
+</record>
+<record id="dna.2.wires2" source="AA" destination="GA" label="dna.2.wires2">
+2
+</record>
+<record id="dna.2.wires3" source="AA" destination="TA" label="dna.2.wires3">
+3
+</record>
+<record id="dna.2.wires4" source="AA" destination="AC" label="dna.2.wires4" color="2" glyph="fc 4">
+4
+</record>
+<record id="dna.2.wires5" source="AA" destination="AG" label="dna.2.wires5" color="2" glyph="fc 4">
+5
+</record>
+<record id="dna.2.wires6" source="AA" destination="AT" label="dna.2.wires6" color="2" glyph="fc 4">
+6
+</record>
+<record id="dna.2.wires7" source="CA" destination="GA" label="dna.2.wires7">
+7
+</record>
+<record id="dna.2.wires8" source="CA" destination="TA" label="dna.2.wires8">
+8
+</record>
+<record id="dna.2.wires9" source="CA" destination="CC" label="dna.2.wires9" color="8" glyph="fc 4">
+9
+</record>
+<record id="dna.2.wires10" source="CA" destination="CG" label="dna.2.wires10" color="8" glyph="fc 4">
+10
+</record>
+<record id="dna.2.wires11" source="CA" destination="CT" label="dna.2.wires11" color="8" glyph="fc 4">
+11
+</record>
+<record id="dna.2.wires12" source="GA" destination="TA" label="dna.2.wires12">
+12
+</record>
+<record id="dna.2.wires13" source="GA" destination="GC" label="dna.2.wires13" color="4" glyph="fc 4">
+13
+</record>
+<record id="dna.2.wires14" source="GA" destination="GG" label="dna.2.wires14" color="4" glyph="fc 4">
+14
+</record>
+<record id="dna.2.wires15" source="GA" destination="GT" label="dna.2.wires15" color="4" glyph="fc 4">
+15
+</record>
+<record id="dna.2.wires16" source="TA" destination="TC" label="dna.2.wires16" color="0" glyph="fc 4">
+16
+</record>
+<record id="dna.2.wires17" source="TA" destination="TG" label="dna.2.wires17" color="0" glyph="fc 4">
+17
+</record>
+<record id="dna.2.wires18" source="TA" destination="TT" label="dna.2.wires18" color="0" glyph="fc 4">
+18
+</record>
+<record id="dna.2.wires19" source="AC" destination="CC" label="dna.2.wires19">
+19
+</record>
+<record id="dna.2.wires20" source="AC" destination="GC" label="dna.2.wires20">
+20
+</record>
+<record id="dna.2.wires21" source="AC" destination="TC" label="dna.2.wires21">
+21
+</record>
+<record id="dna.2.wires22" source="AC" destination="AG" label="dna.2.wires22" color="2" glyph="fc 4">
+22
+</record>
+<record id="dna.2.wires23" source="AC" destination="AT" label="dna.2.wires23" color="2" glyph="fc 4">
+23
+</record>
+<record id="dna.2.wires24" source="CC" destination="GC" label="dna.2.wires24">
+24
+</record>
+<record id="dna.2.wires25" source="CC" destination="TC" label="dna.2.wires25">
+25
+</record>
+<record id="dna.2.wires26" source="CC" destination="CG" label="dna.2.wires26" color="8" glyph="fc 4">
+26
+</record>
+<record id="dna.2.wires27" source="CC" destination="CT" label="dna.2.wires27" color="8" glyph="fc 4">
+27
+</record>
+<record id="dna.2.wires28" source="GC" destination="TC" label="dna.2.wires28">
+28
+</record>
+<record id="dna.2.wires29" source="GC" destination="GG" label="dna.2.wires29" color="4" glyph="fc 4">
+29
+</record>
+<record id="dna.2.wires30" source="GC" destination="GT" label="dna.2.wires30" color="4" glyph="fc 4">
+30
+</record>
+<record id="dna.2.wires31" source="TC" destination="TG" label="dna.2.wires31" color="0" glyph="fc 4">
+31
+</record>
+<record id="dna.2.wires32" source="TC" destination="TT" label="dna.2.wires32" color="0" glyph="fc 4">
+32
+</record>
+<record id="dna.2.wires33" source="AG" destination="CG" label="dna.2.wires33">
+33
+</record>
+<record id="dna.2.wires34" source="AG" destination="GG" label="dna.2.wires34">
+34
+</record>
+<record id="dna.2.wires35" source="AG" destination="TG" label="dna.2.wires35">
+35
+</record>
+<record id="dna.2.wires36" source="AG" destination="AT" label="dna.2.wires36" color="2" glyph="fc 4">
+36
+</record>
+<record id="dna.2.wires37" source="CG" destination="GG" label="dna.2.wires37">
+37
+</record>
+<record id="dna.2.wires38" source="CG" destination="TG" label="dna.2.wires38">
+38
+</record>
+<record id="dna.2.wires39" source="CG" destination="CT" label="dna.2.wires39" color="8" glyph="fc 4">
+39
+</record>
+<record id="dna.2.wires40" source="GG" destination="TG" label="dna.2.wires40">
+40
+</record>
+<record id="dna.2.wires41" source="GG" destination="GT" label="dna.2.wires41" color="4" glyph="fc 4">
+41
+</record>
+<record id="dna.2.wires42" source="TG" destination="TT" label="dna.2.wires42" color="0" glyph="fc 4">
+42
+</record>
+<record id="dna.2.wires43" source="AT" destination="CT" label="dna.2.wires43">
+43
+</record>
+<record id="dna.2.wires44" source="AT" destination="GT" label="dna.2.wires44">
+44
+</record>
+<record id="dna.2.wires45" source="AT" destination="TT" label="dna.2.wires45">
+45
+</record>
+<record id="dna.2.wires46" source="CT" destination="GT" label="dna.2.wires46">
+46
+</record>
+<record id="dna.2.wires47" source="CT" destination="TT" label="dna.2.wires47">
+47
+</record>
+<record id="dna.2.wires48" source="GT" destination="TT" label="dna.2.wires48">
+48
+</record>
+</records>
+</data>
+</ggobidata>

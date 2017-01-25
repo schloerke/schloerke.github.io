@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Y~Y Plot - Lattice</title>
+		<link rel="stylesheet" type="text/css" href="../../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../../index.html'>Home</a></li>
+					<li><a href='../../blocks.html'>Variations</a></li>
+					<li><a href='../../boxplot.html'>Box Plot</a></li>
+					<li><a href='../../quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='../../scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='../../yyplot.html' class='active'>Y~Y Plot</a></li>
+					<li><a href='../../slug.html'>Slug Plot</a></li>
+					<li><a href='../../datasets.html'>Data Sets</a></li>
+					<li><a href='../../documents.html'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 28em">
+					<li><a href='../yyplot-lattice.html' class="active">Lattice</a></li>
+					<li><a href='../yyplot-base.html'>Base</a></li>
+				</ul>
+			</span>
+			<span class="container-sub-sub">
+				<ul id='nav' style="padding-left: 0em">
+					<li><a href='../../blocks/grid.html' class="active-suggestion">Grid</a></li>
+					<li><a href='../../blocks/admin.html' class="option">Admin. Time</a></li>
+					<li><a href='../../blocks/box.html' class="option">Box'n'Whisker</a></li>
+					<li><a href='../../blocks/quantile.html' class="option">Quantile</a></li>
+					<li><a href='../../blocks/abline.html' class="suggestion">a-b-line</a></li>
+					<li><a href='../../blocks/lines.html' class="option">Lines</a></li>
+					<li><a href='../../blocks/mean.html' class="option">Mean Line</a></li>
+					<li><a href='../../blocks/loess.html' class="active-suggestion">Loess</a></li>
+					<li><a href='../../blocks/confidence.html' class="option">95% CI</a></li>
+					<li><a href='../../blocks/points.html' class="active-suggestion">Points</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+		<div class="mid">
+			<h1>Y~Y Plot</h1>
+			<p class="slogan">Example - Points and Loess</p>
+			<span class="float-correction">   </span>
+			<table width="100%"><tr><td align="center"><a href="latticeyy-points-loess-large.jpg"><img src="latticeyy-points-loess-med.jpg" class="med-picture" align="center"/></a></td></tr></table>
+			<h2>Code Used</h2>
+<pre class="code">
+### Using a toy data set due to example data sets not having more than one Y variable
+#pdf(file="F:/Website/yyplot/lattice/latticeyy-points-loess-large.pdf", width = 8.5, height = 11)
+
+### Import Data
+  data <- iris
+  split.column <- "Species"
+    
+  data.to.plot <- list()
+  
+  data.to.plot$x <- data[,"Petal.Length"]  #x
+  data.to.plot$y <- data[,"Sepal.Length"]  #y
+  data.to.plot$criteria <- data[,split.column] #split.column
+
+  x.min.lim <- min(data.to.plot[["x"]])
+  x.max.lim <- max(data.to.plot[["x"]])
+  y.min.lim <- min(data.to.plot[["y"]])
+  y.max.lim <- max(data.to.plot[["y"]])
+
+  range.largest <- max(c(y.max.lim-y.min.lim),c(x.max.lim-x.min.lim))
+
+  data.to.plot$x.lim <- c(x.min.lim,x.max.lim)
+  data.to.plot$y.lim <- c(y.min.lim,y.max.lim)
+
+  bw <- FALSE
+
+  library(lattice)
+### End Import
+
+### Panel Function
+
+  function.of.panel <- function(
+    x,
+    y,
+    data.to.plot.in.panel = data.to.plot,
+    black.and.white.in.panel = bw,
+    subscripts
+  ){
+  cat("\n\n\nPacket", packet.number(),"\n")
+  
+  #### Grid
+    plot.grid(
+      x.divisions = 10,
+      y.divisions = 10,
+      grid.color = "grey95",
+      x.limits = data.to.plot.in.panel[["x.lim"]],
+      y.limits = data.to.plot.in.panel[["y.lim"]]
+    )
+
+  ### Loess Line
+    plot.loess(
+      points.x = x,
+      points.y = y,
+      line.thickness = 1.4,
+      line.style = "solid",
+      line.color = "red",
+      line.span = 5/6
+    )
+
+  ### Plot Points
+    plot.points(
+      points.x = x,
+      points.y = y,
+      points.symbol = "o",
+      points.size = 1,
+      points.color = color.gen("black","grey75",3)
+    )
+
+  }
+      
+### End Panel
+
+### Make Y~Y Plot
+  lat.yy <- xyplot(
+    y ~ x | as.factor(criteria),
+      # remove '| as.factor(criteria)' if do not want to split the data
+    data = data.to.plot,
+    type = NULL,
+      # Taken Care of in Panel
+#    aspect=1,
+      # X length is the same as the Y length.  It produces a square box.
+<span class="newcode">    aspect="iso",
+      # X units have the same length as Y units, does not mean aspect = 1.
+      # Most likely will produce a rectangular shape
+    layout = c(1,3,1),
+      # Forces the layout to have 1 column, 3 rows, 1 page</span>
+    xlab = "Petal Length [units]",
+    ylab = "Sepal Length [units]",
+    xlim = c(x.min.lim - 0.03*(range.largest),x.max.lim + 0.03*(range.largest)), 
+    ylim = c(y.min.lim - 0.03*(range.largest), y.max.lim + 0.03*(range.largest)),
+    main = "iris Data Set",
+    panel = function.of.panel,
+	
+    key = list(
+      title = "Legend",
+      text = list(
+        c("Loess Line","Points"),
+        col="black"
+      ),
+      points = list(
+        col = c("red","black"),
+        pch = c(NA,4),
+        cex = c(1)*0.75
+      ),
+      lines = list(
+        col = c("red","black"),
+        lwd = c(1.4,1),
+        lty = c("solid","blank")
+      ),
+      type = "l",
+      space = "right",
+      cex.title = 1,
+      cex = 0.75
+    )
+
+  )
+
+### Change Color of Trellis Device and Plot Data
+  trellis.device(color = !bw,new = FALSE,retain = FALSE)
+
+### Plot Data
+  print(lat.yy)
+
+#dev.off()
+</pre>
+
+		</div>
+		<div class="footer"/>
+		
+	</body>
+</html>

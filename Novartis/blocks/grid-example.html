@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Grid Example</title>
+		<link rel="stylesheet" type="text/css" href="../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../index.html' >Home</a></li>
+					<li><a href='../blocks.html' class='active'>Variations</a></li>
+					<li><a href='../boxplot.html'>Box Plot</a></li>
+					<li><a href='../quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='../scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='../yyplot.html'>Y~Y Plot</a></li>
+					<li><a href='../slug.html'>Slug Plot</a></li>
+					<li><a href='../datasets.html'>Data Sets</a></li>
+					<li><a href='../documents.html'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 0em">
+					<li><a href='grid.html' class='active'>Grid</a></li>
+					<li><a href='admin.html'>Admin. Time</a></li>
+					<li><a href='box.html'>Box'n'Whisker</a></li>
+					<li><a href='quantile.html'>Quantile</a></li>
+					<li><a href='abline.html'>a-b-line</a></li>
+					<li><a href='lines.html'>Lines</a></li>
+					<li><a href='mean.html'>Mean Line</a></li>
+					<li><a href='loess.html'>Loess</a></li>
+					<li><a href='points.html'>Points</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+		<div class='mid'>
+			<h1>Grid</h1>
+			<p class="slogan">Example</p>
+			<span class="float-correction">   </span>			
+			<a href="grid-large.jpg"><img src="grid-med.jpg" class="med-picture" align="center"/></a>
+			<h2>Code Used</h2>
+<pre class="code">
+#pdf(file="F:/Website/blocks/grid-large.pdf", width = 15, height = 7.5)
+### Import Data  
+  data <- warfarin.mdvpk.1
+  split.column <- "AGE"
+    
+  data <- data[data$DOSE == 120,]
+
+  data.select <- data[ data$MDV == 0 & data$AMT == 0, ] 
+    ### Rows where MDV == 0 and AMT == 0  (Good Rows for plotting x,y)
+    
+  data.to.plot <- list()
+  
+  data.to.plot$x <- data.select[,"TIME"]  #x
+  data.to.plot$y <- data.select[,"DV"]  #y
+  data.to.plot$ids <- data.select[,"ID"]  #ids
+  
+  data.to.plot$criteria <- data.select[,split.column]
+
+  x.min.lim <- 0
+  x.max.lim <- 150
+  y.min.lim <- 0
+  y.max.lim <- max(data.to.plot[["y"]])
+  data.to.plot$x.lim <- c(x.min.lim,x.max.lim)
+  data.to.plot$y.lim <- c(y.min.lim,y.max.lim)
+
+  bw <- FALSE
+
+  library(lattice)
+### End Import
+
+
+### Panel Function
+
+  function.of.panel <- function(
+    x,
+    y,
+    groups = groups,
+    data.to.plot.in.panel = data.to.plot,
+    black.and.white.in.panel = bw,
+    subscripts
+  ){
+  cat("\n\n\nPacket", packet.number(),"\n")
+  
+<span class="newcode">  ### Grid
+    plot.grid(
+      x.divisions = 10,
+      y.divisions = 10,
+      grid.color = "grey95",
+      x.limits = data.to.plot.in.panel[["x.lim"]],
+      y.limits = data.to.plot.in.panel[["y.lim"]]
+    )</span>
+
+  }
+      
+### End Panel
+
+
+
+### Make Scatter Plot
+  lat.grid <- xyplot(
+    y ~ x | as.factor(criteria), 
+      # Remove '| as.factor(criteria)' if you do not want to split the data
+    data = data.to.plot,
+    type = NULL,
+      # Taken Care of in Panel
+    aspect=.5,
+      # X is twice as long as Y
+    groups = ids,
+    xlab = "Time [units]",
+    ylab = "Response [units]",
+    xlim = c(x.min.lim - 0.03*(x.max.lim-x.min.lim)*0.5,x.max.lim + 0.03*(x.max.lim-x.min.lim)*0.5), 
+      #0.5 is to compensate for the aspect ratio (aspect)
+    ylim = c(y.min.lim - 0.03*(y.max.lim-y.min.lim), y.max.lim + 0.03*(y.max.lim-y.min.lim)),
+    main = "Grid Example",
+    panel = function.of.panel,
+	
+<span class="newcode">    key = NULL</span>
+
+  )
+
+### Change Color of Trellis Device and Plot Data
+  trellis.device(color = !bw,new = FALSE,retain = FALSE)
+
+### Plot Data
+  print(lat.grid)
+
+#dev.off()
+</pre>
+		</div>
+		<div class="footer"/>
+		
+	</body>
+</html>

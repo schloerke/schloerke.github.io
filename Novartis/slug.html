@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>'Slug' Plot</title>
+		<link rel="stylesheet" type="text/css" href="style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='index.html' >Home</a></li>
+					<li><a href='blocks.html'>Variations</a></li>
+					<li><a href='boxplot.html'>Box Plot</a></li>
+					<li><a href='quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='yyplot.html'>Y~Y Plot</a></li>
+					<li><a href='slug.html' class='active'>Slug Plot</a></li>
+					<li><a href='datasets.html'>Data Sets</a></li>
+					<li><a href='documents.html'>Documents & Tips</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+		<div class='mid'>
+			<h1>'Slug' Plot</h1>
+			<p class="slogan">Quantiles, Boxes, and Histograms</p>
+			<span class="float-correction">   </span>			
+			<h2>Uses</h2>
+			<span class="small-picture-code">
+				<a href="slug/calculated.html"><img src="slug/slug-small.jpg" class="small-picture" align="right"/></a>
+			</span>
+			<ul>
+				<li>To display the list below according to a time profile
+					<ul>
+						<li>Quantile Ranges</li>
+						<li>Distribution of the Y axis at each individual recorded time point</li>
+						<li>Better view of a Box and Whisker plot with respect to the median of the data</li>
+					</ul>
+				</li>
+			</ul>
+			<h2>Notes</h2>
+			<ul>
+				<li>Can not be used the <a href="blocks.html">Variations</a> (produced with Base graphics, not lattice)</li>
+				<li>The 'Slug' name comes from the <a href='http://addictedtor.free.fr/graphiques/RGraphGallery.php?graph=109' target="_blank">graphic</a> where the idea was modeled from.  It looks like a slug.</li>
+				<li>All data must be ready to plot with not filtering</li>
+				<li>Quantile Ranges may be supplied by the user</li>
+				<li>If the quantiles are supplied by the user, they are from a totally different matrix.</li>
+				<li>The bars in the distributions are relative to each other, even between different time points</li>
+				<li>The dot in the boxplot is the median, not the mean</li>
+				<li>IDs can be named when the IDs outside the Quantile Ranges</li>
+				<li>Should be plotted with TIME on the X axis</li>
+				<li>All Data being plotted must satisfy all requirement within the 'Data Sets' tab to work properly</li>
+				
+			</ul>
+			<h2>Examples</h2>
+			<ul>
+				<li><a href="slug/calculated.html">Calculated Quantiles, No Median Dot, No IDs Example</a></li>
+				<li><a href="slug/supplied.html">Supplied Quantiles, With Median Dot, With IDs Example</a></li>
+			</ul>
+			<h2>Arguments</h2>
+			<dl>
+ 	 			<dt><span class="code">column.x</span></dt>
+					<dd>- Column name where X values of points that will be plotted.  Must be in "quotes".</dd>
+				<dt><span class="code">column.y</span></dt>
+					<dd>- Column name where Y values of points that will be plotted.  Must be in "quotes".</dd>
+ 	 			<dt><span class="code">outlier.ids</span></dt>
+					<dd>- Logical or Character.
+						<ul>
+							<li>If FALSE, IDs are not plotted outside the quantile intervals</li>
+							<li>If a character string, it must be the column name where IDs of points that will be plotted.  Must be in "quotes".</li>
+						</ul>
+					</dd>
+				<dt><span class="code">data</span></dt>
+					<dd>- Matrix that contains the 'column.x', 'column.y', and 'outlier.ids', if applicable</dd>
+				<dt><span class="code">quantile.data</span></dt>
+					<dd>- Matrix that contains the lower, middle, and upper quantiles, if applicable</dd>
+					<dd>- May not be supplied if the quantiles are calculated</dd>
+				<dt><span class="code">quantile.lines</span></dt>
+					<dd>- Default to "calculate".  This is where the function calculates the quantiles for you.</dd>
+					<dd>- If the quantile.data is supplied, 'quantile.lines' must be a vector containing the lower, middle, and upper quantile data.  Must be given in this order and each column name must be in quotes</dd>
+				<dt><span class="code">quantile.type</span></dt>
+					<dd>- Specifies what method should be used for calculating the quantiles.  See the <a href="documents.html">Documents</a> for more information.</dd>
+ 				<dt><span class="code">number.of.bars</span></dt>
+					<dd>- Number of bars for the Y axis</dd>
+ 				<dt><span class="code">bar.col</span></dt>
+					<dd>- Color of the bars</dd>
+ 				<dt><span class="code">boxwex</span></dt>
+					<dd>- A scale factor to be applied to the narrowness of the Box and Whisker plots on top</dd>
+ 				<dt><span class="code">points.mean</span></dt>
+					<dd>- Logical.  Tells function to plot the mean points in the top plot</dd>
+ 				<dt><span class="code">xlab1</span></dt>
+					<dd>- X axis label</dd>
+ 				<dt><span class="code">ylab1</span></dt>
+					<dd>- Y axis label for the bottom plot</dd>
+ 				<dt><span class="code">ylab2</span></dt>
+					<dd>- Y axis label for the top plot</dd>
+ 				<dt><span class="code">main</span></dt>
+					<dd>- Title for the graphic</dd>
+ 				<dt><span class="code">line.types</span></dt>
+					<dd>- The 'lty's for the quantiles, c(lower,middle,upper)</dd>
+			</dl>
+			<h2>Base Code for All Slug Plot Examples</h2>
+			<p>Please source <a href='slug/slug.txt'>this file</a> to obtain the 'Slug' function</p>
+			<p>Please see the examples above</p>
+		</div>
+<div class="footer"/>
+	</body>
+</html>

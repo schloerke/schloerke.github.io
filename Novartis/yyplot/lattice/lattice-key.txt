@@ -1,0 +1,23 @@
+	
+    <span class="darkbluebk">### Key contains suggested variations in a recommended plotting order</span>
+    <span class="darkbluebk">key = list(</span>
+    <span class="darkbluebk">  title = "Legend",</span>
+    <span class="darkbluebk">  text = list(</span>
+    <span class="darkbluebk">    c("(0,1) Line", "Loess Line","Points"),</span>
+    <span class="darkbluebk">    col="black"</span>
+    <span class="darkbluebk">  ),</span>
+    <span class="darkbluebk">  points = list(</span>
+    <span class="darkbluebk">    col = c(if(bw){"black"}else{"darkblue"},"red","black"),</span>
+    <span class="darkbluebk">    pch = c(NA,NA,4),</span>
+    <span class="darkbluebk">    cex = c(1)*0.75</span>
+    <span class="darkbluebk">  ),</span>
+    <span class="darkbluebk">  lines = list(</span>
+    <span class="darkbluebk">    col = c(if(bw){"black"}else{"darkblue"},"red","black"),</span>
+    <span class="darkbluebk">    lwd = c(2,1.4,1)*0.75,</span>
+    <span class="darkbluebk">    lty = c("dotted","solid","blank")</span>
+    <span class="darkbluebk">  ),</span>
+    <span class="darkbluebk">  type = "l",</span>
+    <span class="darkbluebk">  space = "right",</span>
+    <span class="darkbluebk">  cex.title = 1,</span>
+    <span class="darkbluebk">  cex = 0.75</span>
+    <span class="darkbluebk">)</span>

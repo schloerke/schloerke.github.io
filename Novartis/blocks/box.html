@@ -1,0 +1,225 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Box and Whisker Variation</title>
+		<link rel="stylesheet" type="text/css" href="../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../index.html' >Home</a></li>
+					<li><a href='../blocks.html' class='active'>Variations</a></li>
+					<li><a href='../boxplot.html'>Box Plot</a></li>
+					<li><a href='../quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='../scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='../yyplot.html'>Y~Y Plot</a></li>
+					<li><a href='../slug.html'>Slug Plot</a></li>
+					<li><a href='../datasets.html'>Data Sets</a></li>
+					<li><a href='../documents.html'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 0em">
+					<li><a href='grid.html'>Grid</a></li>
+					<li><a href='admin.html'>Admin. Time</a></li>
+					<li><a href='box.html' class='active'>Box'n'Whisker</a></li>
+					<li><a href='quantile.html'>Quantile</a></li>
+					<li><a href='abline.html'>a-b-line</a></li>
+					<li><a href='lines.html'>Lines</a></li>
+					<li><a href='mean.html'>Mean Line</a></li>
+					<li><a href='loess.html'>Loess</a></li>
+					<li><a href='confidence.html'>95% CI</a></li>
+					<li><a href='points.html'>Points</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+	 	<div class='mid'>
+ 			<h1>Box and Whiskers, Violin</h1>
+ 	 		<p class="slogan">Variation</p>
+			<span class="float-correction">   </span>			
+			<h2>Box and Whisker</h2>
+			<div class="small-picture-code">
+				<a href="box-example.html"><img src="box-small.jpg" class="small-picture" align="right"/></a>
+			</div>
+			<h3>Use</h3>
+			<ul>
+				<li>To plot a box and whisker plot</li>
+			</ul>
+			<h3>Arguments</h3>
+			<dl>
+				<dt><span class="code">points.x</span></dt>
+					<dd>- All X values of points that will be plotted</dd>
+				<dt><span class="code">points.y</span></dt>
+					<dd>- All Y values of points that will be plotted</dd>
+				<dt><span class="code">minimum.required</span></dt>
+				  <dd>- Minimum number of points required to form a box plot</dd>
+				<dt><span class="code">black.and.white</span></dt>
+					<dd>- Logical, Describes whether the line should be for grey scale or color output</dd>
+			</dl>
+			<h3>Notes</h3>
+			<ul>
+			  <li><span class="code">minimum.required</span> may be set to 1 for plot a box plot for every unique time point</li>
+  			<li>Remove the '#' before the <span class="code">cat</span>s to see what the function is doing</li>
+			</ul>	
+			<h3>Code</h3>
+<pre class="code">
+'plot.box.and.whiskers' <-
+function(
+  points.x = x,
+  points.y = y,
+  minimum.required = 6,
+  black.and.white = black.and.white.in.panel
+){
+cat("\nPlotting Box and Whiskers\n")
+  ### Box Plot Box Color (Default color is blue)
+  box.rectangle <- trellis.par.get("box.rectangle")
+  box.rectangle$col <- "black"
+  trellis.par.set("box.rectangle", box.rectangle)
+
+  ### Box Plot Outliers
+  outlier.color <- "black"
+  plot.symbol <- trellis.par.get("plot.symbol")
+  plot.symbol$col <- outlier.color
+  plot.symbol$cex <- 1
+  trellis.par.set("plot.symbol", plot.symbol)
+
+  ### Box Plot Whiskers
+  whisker.color <- "black"
+  box.umbrella <- trellis.par.get("box.umbrella")
+  box.umbrella$col <- whisker.color
+  trellis.par.set("box.umbrella", box.umbrella)
+
+
+  if(black.and.white){
+    <span class="blackcode">boxfill.color <- "grey 90"</span>
+  }else{
+    <span class="colorcode">boxfill.color <- "light yellow"</span>
+  }
+    
+  table.points.x <- table(points.x)
+  locations.x <- table.points.x[table.points.x >= minimum.required]
+  x.names <- as.numeric(names(locations.x))
+
+  if(length(x.names) > 0){
+    x.box.points <- points.x[points.x %in% x.names]
+    y.box.points <- points.y[points.x %in% x.names]
+      ### Select only locations that contained the minimum requirement
+
+#cat("Table of X.Points\n");print(table.points.x)
+#cat("X Points that Passed");print(x.names)
+#cat("x.box.points");print(x.box.points)
+#cat("y.box.points");print(y.box.points)
+
+    panel.bwplot(
+      x = x.box.points,
+      y = y.box.points,
+      horizontal = FALSE,
+      color = "black",  ### Color of "dot at median"
+      pch="|",  ### Creates a horizontal line at the median, instead of a solid dot.  Omit if you like the 'dot' better.
+      fill = boxfill.color
+    )
+  }else{
+    cat("\nWarning!\n
+          \tPlease lower the minimum required for the box and whisker plot to allow boxes to be plotted.\n
+          \t(Only if desired)\n")
+  }
+}
+</pre>
+			<h3>Legend Info</h3>
+<pre class="code">
+key = list(
+  title = "Legend",
+  text = list(
+    c("Box and Whisker Outliers"),
+    col="black"
+  ),
+  points = list(
+    col = c("black"),
+    pch = c(1),
+    cex = c(1.5)*0.75
+  ),
+  lines = list(
+    col = c("black"),
+    lwd = c(1)*0.75,
+    lty = c("blank")
+  ),
+  type = "l",
+  space = "right",
+  cex.title = 1,
+  cex = 0.75
+)
+</pre>
+		</div>
+		<br clear="all">
+		<br class="gap">
+	  	<div class='mid'>
+			<h2>Violin Plot</h2>
+			<div class="small-picture-code">
+				<a href="violin-example.html"><img src="violin-small.jpg" class="small-picture" align="right"/></a>
+			</div>
+			<h3>Use</h3>
+			<ul>
+				<li>To plot a a violin plot</li>
+				<li>Combination of a Box and Whisker Plot and a Density Kernel</li>
+				<li>Helps solve the problem of a bi-modal data set.  This is not usually found using Box and Whisker plots, but easily found using a violin plot</li>
+			</ul>
+				<h3>Arguments</h3>
+			<dl>
+				<dt><span class="code">points.x</span></dt>
+					<dd>- All X values of points that will be plotted</dd>
+				<dt><span class="code">points.y</span></dt>
+					<dd>- All Y values of points that will be plotted</dd>
+				<dt><span class="code">cut.off</span></dt>
+					<dd>- Where should the violin stop at the ends</dd>
+					<dd>- If cut.off == 0, the violins stop at the most extreme points and do not continue</dd>
+					<dd>- If cut.off > 0, the violins continue past the most extreme values.  The larger the number, the farther they extend</dd>
+				<dt><span class="code">violin.color</span></dt>
+					<dd>- Default to "transparent". Typical color values may be used.  "transparent" allows the inside of the plot to be 'see-through'.</dd>
+				<dt><span class="code">violin.ghost</span></dt>
+					<dd>- Percentage of transparency.  Range of values = [0,1] with 1 being solid and 0 being invisible.</dd>
+			</dl>
+			<h3>Notes</h3>
+			<ul>
+			  <li>Please look at the documentation on the <a href="http://search.r-project.org/library/lattice/html/panel.violin.html" target="_blank">Violin Plot</a> to learn about more arguments.</li>
+  			</ul>	
+			<h3>Code</h3>
+<pre class="code">
+'plot.violin' <-
+function(
+  points.x = x,
+  points.y = y,
+  cut.off = 0,
+  violin.color = "transparent",
+  violin.ghost = .5
+){
+cat("\nPlotting Violin Plot\n")
+
+  ### Violin Color and Alpha (Default color is blue; Default alpha is 1)
+  viol <- trellis.par.get("plot.polygon")
+  viol$col <- violin.color
+  viol$alpha <- violin.ghost
+  trellis.par.set("plot.polygon", viol)
+    
+  panel.violin(
+    x = points.x,
+    y = points.y,
+    horizontal = FALSE,
+    cut=cut.off
+  )
+}
+</pre>
+			<h3>Legend Info</h3>
+<pre class="code">
+NA
+</pre>
+
+
+
+	</div>		
+	<div class="footer"/>
+	</body>
+</html>

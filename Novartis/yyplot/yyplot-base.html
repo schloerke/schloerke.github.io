@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Y~Y Plot - Base</title>
+		<link rel="stylesheet" type="text/css" href="../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../index.html'>Home</a></li>
+					<li><a href='../blocks.html'>Variations</a></li>
+					<li><a href='../boxplot.html'>Box Plot</a></li>
+					<li><a href='../quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='../scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='../yyplot.html' class='active'>Y~Y Plot</a></li>
+					<li><a href='../slug.html'>Slug Plot</a></li>
+					<li><a href='../datasets.html'>Data Sets</a></li>
+					<li><a href='../documents.html'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 28em">
+					<li><a href='yyplot-lattice.html'>Lattice</a></li>
+					<li><a href='yyplot-base.html' class="active">Base</a></li>
+				</ul>
+			</span>
+			<span class="container-sub-sub">
+				<ul id='nav' style="padding-left: 23em">
+					<li><a href='base/points.html'>Points</a></li>
+					<li><a href='base/points-abline.html'>a-b-line</a></li>
+					<li><a href='base/points-loess.html'>Loess</a></li>
+					<li><a href='base/points-abline-loess.html'>Both</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+		<div class="mid">
+			<h1>Y~Y Plot</h1>
+			<p class="slogan">Base Version (With Bar Charts)</p>
+			<span class="float-correction">   </span>			
+			<h2>Uses</h2>
+			<span class="small-picture-code">
+				<a href="base/points.html"><img src="base/baseyy-points-small.jpg" class="small-picture" align="right"/></a>
+			</span>
+			<ul>
+				<li>To display "Y~Y Plot" plots with a histogram of the Y and X axis</li>
+				<li>Good for checking Y variables according to 'ID'
+			</ul>
+			<h2>Source Code</h2>
+			<p>Please source <a href="yy-base-code.txt">this code (yy-base-code.txt)</a> so that 'yyplot' may work properly</p>
+			<h2>Notes</h2>
+			<ul>
+				<li>It is NOT plotted using Lattice</li>
+				<li>Does not work with the functions under the 'Variations' tab</li>
+				<li>Similar to Lattice in where one function does a lot of work</li>
+				<li>Should be plotted with two Y variables, i.e. WRES and PRED</li>
+				<li>Uses a grid-like setup to plot the data</li>
+				<li>The examples use a parameter called 'mar', par("mar")
+					<ul>
+						<li>"A numerical vector of the form <span class="code">c(bottom, left, top, right)</span> which gives the number of lines of margin to be specified on the four sides of the plot.  The default is <span class="code">c(5,4,4,2) + 0.1</span>"</li>
+						<li>The goal when using 'mar', in this context, is to keep the layout of the plots symmetrical over a y=x line</li>
+						<li>Example from the top histogram: <br>
+							par(mar=c(0,4,1,0))	# No gap between plots<br>
+							par(mar=c(gap between plots, space for axis and labels of middle plot, space for title of all plots, being flush with the middle plot on the right))</li>
+					</ul>
+				<li>All Data being sent to 'yyplot' must be ready to plot, with no filtering, to work properly
+					<ul>
+						<li>AMT is not used</li>
+						<li>Lines are not used</li>
+					</ul>
+				</li>
+				<li>If there are more plots than the value for 'max.plots', all remainder plots will appear the same size as the first page and will have blank space.  Ex. 100 plots & max.plots = 16, the remaining 4 plots on the last page will be plotted as if there are 16 plots.  The page produced will contain 4 real plots and 12 invisible plots.</li>
+				<li>MORE NOTES</li>
+			</ul>
+			<h2>Arguments</h2>
+			<dl>
+				<dt><span class="code">x.column</span></dt>
+					<dd>- Column name containing all 'good' X data</dd>
+				<dt><span class="code">y.column</span></dt>
+					<dd>- Column name containing all 'good' Y data</dd>
+				<dt><span class="code">split.column</span></dt>
+					<dd>- Column name containing the column for which the data is split by.  If you do not want to split your data, <span class="code">split.column = FALSE</span></dd>
+				<dt><span class="code">data</span></dt>
+					<dd>- Matrix where the data is pulled from</dd>
+				<dt><span class="code">ratio</span></dt>
+					<dd>- Percentage of the X and Y direction given to the scatter plot</dd>
+				<dt><span class="code">title</span></dt>
+					<dd>- Title of all plots (at the top of the page)</dd>
+				<dt><span class="code">cex.title</span></dt>
+					<dd>- Cex of the Title at the top of the page</dd>
+				<dt><span class="code">xlab</span></dt>
+					<dd>- X label</dd>
+				<dt><span class="code">ylab</span></dt>
+					<dd>- Y label</dd>
+				<dt><span class="code">color.of.middle.plot</span></dt>
+					<dd>- Color of points in the middle scatter plot.  Good place to use the function 'color.gen'</dd>
+				<dt><span class="code">number.of.bars</span></dt>
+					<dd>- Number of bars that are in the bar charts</dd>
+				<dt><span class="code">abline.list</span></dt>
+					<dd>- List or Logical.</dd>
+					<dd>- If you do not want to plot an abline, <span class="code">abline.list = FALSE</span></dd>
+					<dd>- Or it MUST contain all of the fields below spelled exactly the same or will not be plotted
+						<ul>
+							<li><span class="code">intercept</span> - Intercept on the Y axis</li>
+							<li><span class="code">slope</span> - Slope of line</li>
+							<li><span class="code">color</span> - Color of line</li>
+							<li><span class="code">legend</span> - Name supplied to the 'Legend'</li>
+						</ul>
+					</dd>
+					<dd>- Example form
+<pre class = "code">abline.list = list(
+  intercept = c(0),
+  slope = c(1),
+  color = "red",
+  legend = "(0,1) Line"
+)
+</pre>						
+					</dd>
+				<dt><span class="code">loess.list</span></dt>
+					<dd>- List or Logical.</dd>
+					<dd>- If you do not want to plot an loess line, <span class="code">loess.list = FALSE</span></dd>
+					<dd>- Or it MUST contain all of the fields below spelled exactly the same or will not be plotted
+						<ul>
+							<li><span class="code">color</span> - Color of line</li>
+							<li><span class="code">span</span> - Span supplied to 'Loess.smooth'</li>
+							<li><span class="code">legend</span> - Name supplied to the 'Legend'</li>
+						</ul>
+					</dd>
+					<dd>- Example form
+<pre class = "code">loess.list = list(
+  color = "blue",
+  span = 5/6,
+  legend = "(0,1) Line"
+)
+</pre>						
+					</dd>
+				<dt><span class="code">max.plots</span></dt>
+					<dd>- Maximum number of plots that are on each 'page'</dd>
+				<dt><span class="code">top.down</span></dt>
+					<dd>- Logical.  Tells the function to plot the plots from the top-down or bottom-up</dd>
+
+			<h2>Common Examples</h2>
+			<ul>
+				<li><a href="base/points.html">Points and Histograms</a></li>
+				<li><a href="base/points-abline.html">Points, a-b-line, and Histograms</a></li>
+				<li><a href="base/points-loess.html">Points, Loess Line, and Histograms</a></li>
+				<li><a href="base/points-abline-loess.html">Points, a-b-line, Loess Line, and Histograms</a></li>
+			</ul>
+			<h2>Base Code for Y~Y Base Examples</h2>
+			<p>See the example code for the common example of <a href="base/points.html">Points and Histograms</a>.</p>
+		</div>
+		<div class="footer"/>
+		</div>
+	</body>
+</html>

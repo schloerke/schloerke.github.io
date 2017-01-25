@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Slug Plot Example</title>
+		<link rel="stylesheet" type="text/css" href="../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../index.html' >Home</a></li>
+					<li><a href='../blocks.html'>Variations</a></li>
+					<li><a href='../boxplot.html'>Box Plot</a></li>
+					<li><a href='../quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='../scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='../yyplot.html'>Y~Y Plot</a></li>
+					<li><a href='../slug.html' class='active'>Slug Plot</a></li>
+					<li><a href='../datasets.html'>Data Sets</a></li>
+					<li><a href='../documents.html'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 32em">
+					<li><a href='calculated.html'>Calculated</a></li>
+					<li><a href='supplied.html' class="active">Supplied</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+		<div class='mid'>
+			<h1>Slug Plot</h1>
+			<p class="slogan">Example - Supplied Quantiles</p>
+			<span class="float-correction">   </span>			
+			<a href="supplied-slug-large.jpg"><img src="supplied-slug-med.jpg" class="med-picture" align="center"/></a>
+			<h2>Code Used</h2>
+<pre class="code">
+#pdf(file="F:/Website/slug/supplied-slug-large.pdf", width = 15, height = 7.5)</pre>
+<div class="greenbk"><div class="description-even">Import<br>Data</div><pre class="code">### Import Data
+data.to.plot <- bolus
+dose <- 120000
+
+data.to.plot <- data.to.plot[data.to.plot["AMT"]==0 &
+    data.to.plot["MDV"]==0 & data.to.plot["DOSE"] == dose,]
+data.to.plot <- data.to.plot[data.to.plot["TIME"] <= 10,]
+
+sequence <- unique(data.to.plot[,"TIME"])
+#print(sequence)
+range.start <- range(data.to.plot[data.to.plot$TIME == sequence[1],"DV"])
+range.finish <- range(data.to.plot[data.to.plot$TIME == sequence[length(sequence)],"DV"])
+m <- c((range.start[2]-range.finish[2])/(sequence[1] - sequence[length(sequence)]))
+
+calculate.y <- function(x0,x1,y0,m,b){
+	y1 <- -m*(x0-x1) + y0
+	y1
+}
+
+#print(range.start);print(range.finish);print(m)
+quantile.data.to.plot <- sapply(
+	sequence,
+	function(x,xstart = sequence[1], yrange = range.start, slope = m){
+	
+		upper <- calculate.y(x0 = xstart, x1 = x, y0 = 0.95*diff(yrange)+yrange[1],m = 0.95*slope)
+		middle <- calculate.y(x0 = xstart, x1 = x, y0 = 0.50*diff(yrange)+yrange[1],m = 0.8*slope)
+		lower <- calculate.y(x0 = xstart, x1 = x, y0 = 0.05*diff(yrange)+yrange[1],m = 0.5*slope)
+		cbind(lower,middle,upper)
+	}
+)
+quantile.data.to.plot <- t(quantile.data.to.plot)
+colnames(quantile.data.to.plot) <- c("lower","middle","upper")
+
+
+### End Import</pre></div>
+
+<div class="lightbluebk"><span class="description">Set up/Plot<br>the graph</span><pre class="code">### Make Slug Plot
+plot.slug(
+  column.x = "TIME",
+  column.y = "DV",
+  <span class="newcode">outlier.ids = "ID",</span>
+  data = data.to.plot,
+  quantile.data = quantile.data.to.plot,
+  quantile.lines = c("lower","middle","upper"), #Fake, 'fun' lines that I made up
+  xlab = "Time [units]", 
+  ylab1 = "Response [units]",
+  ylab2 = "Residuals [units]",
+  main = "Supplied Quantiles",
+) </div>
+<pre class="code">
+#dev.off()
+</pre>
+		<div class="footer"/>
+		
+	</body>
+</html>

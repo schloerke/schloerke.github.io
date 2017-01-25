@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Warfarin - Data Sets</title>
+		<link rel="stylesheet" type="text/css" href="../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../index.html' >Home</a></li>
+					<li><a href='../blocks.html'>Variations</a></li>
+					<li><a href='../boxplot.html'>Box Plot</a></li>
+					<li><a href='../quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='../scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='../yyplot.html'>Y~Y Plot</a></li>
+					<li><a href='../slug.html'>Slug Plot</a></li>
+					<li><a href='../datasets.html' class='active'>Data Sets</a></li>
+					<li><a href='../documents.html'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 34em">
+					<li><a href='theophylline.html'>Theophylline</a></li>
+					<li><a href='warfarin.html' class='active'>Warfarin</a></li>
+					<li><a href='monolix.html'>Monolix</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+		<div class='mid'>
+			<h1>Warfarin</h1>
+			<p class="slogan">Data Sets</p>
+			<span class="float-correction">   </span>			
+			<h2>Info</h2>
+			<ul>
+				<li>32 different ID's with varying entries for each ID.</li>
+				<table border=1px ><tr ><td valign='top'>
+<pre class='code'>ID = 1 , Entries = 14
+ID = 2 , Entries = 20
+ID = 3 , Entries = 18
+ID = 4 , Entries = 19
+ID = 5 , Entries = 17
+ID = 6 , Entries = 17
+ID = 7 , Entries = 20
+ID = 8 , Entries = 26
+ID = 9 , Entries = 15
+ID = 11 , Entries = 19
+ID = 12 , Entries = 15</pre></td><td valign='top'>
+<pre class='code'>ID = 13 , Entries = 19
+ID = 14 , Entries = 20
+ID = 15 , Entries = 19
+ID = 16 , Entries = 14
+ID = 17 , Entries = 14
+ID = 18 , Entries = 14
+ID = 19 , Entries = 14
+ID = 20 , Entries = 14
+ID = 21 , Entries = 14
+ID = 22 , Entries = 14
+ID = 23 , Entries = 14</pre></td><td valign="top">
+<pre class='code'>ID = 24 , Entries = 14
+ID = 25 , Entries = 14
+ID = 26 , Entries = 14
+ID = 27 , Entries = 14
+ID = 28 , Entries = 14
+ID = 29 , Entries = 14
+ID = 30 , Entries = 14
+ID = 31 , Entries = 14
+ID = 32 , Entries = 14
+ID = 100 , Entries = 19</pre></td></tr>
+</table>
+			<li>The "AMT" is at time = 0 for each ID (missing "DV" variable)</li>
+				<li>The "DOSE" is understood by "AMT"</li>
+				<li>No "MDV" (Missing Dependent Variable)</li>
+			</ul>
+			<h2>Original Form</h2>
+				<a href="warfarin.original.txt">Download Warfarin (Original)</a>
+			<p>Original Data Set</p>
+<pre class="code">
+> head(warfarin)
+   ID TIME WEIGHT AGE SEX CMT AMT DVID  DV MDV MDVPK
+1 100  0.0   66.7  50   1   1 100    1  NA   1     1
+2 100  0.5   66.7  50   1   2  NA    1 0.0   0     0
+3 100  1.0   66.7  50   1   2  NA    1 1.9   0     0
+4 100  2.0   66.7  50   1   2  NA    1 3.3   0     0
+5 100  3.0   66.7  50   1   2  NA    1 6.6   0     0
+6 100  6.0   66.7  50   1   2  NA    1 9.1   0     0
+
+</pre>
+				<h2>Massage Data</h2>
+				<p>Changes that NEED to be made</p>
+				<ul>
+					<li>Replace warfarin["AMT"]==NA with warfarin["AMT"]==0</li>
+					<li>Add a column that repeats the dose given to each ID</li>
+					<li>Split the data into two other matrices by warfarin["MDVPK"]</li>
+				</ul>
+				
+				<h2>Final Form</h2>
+					<a href="warfarin.mdvpk.1.txt">Download warfarin.mdvpk.1</a>(Source the file)
+<pre class="code">
+> head(warfarin.mdvpk.1)
+    ID TIME WEIGHT AGE SEX CMT AMT DVID DV MDV MDVPK DOSE
+1  100    0   66.7  50   1   1 100    1 NA   1     1  100
+10 100   24   66.7  50   1   2   0    2 44   0     1  100
+12 100   36   66.7  50   1   2   0    2 27   0     1  100
+14 100   48   66.7  50   1   2   0    2 28   0     1  100
+16 100   72   66.7  50   1   2   0    2 31   0     1  100
+17 100   96   66.7  50   1   2   0    2 60   0     1  100
+</pre>
+					<a href="warfarin.mdvpk.0.txt">Download warfarin.mdvpk.0</a>(Source the file)
+<pre class="code">
+> head(warfarin.mdvpk.0)
+   ID TIME WEIGHT AGE SEX CMT AMT DVID   DV MDV MDVPK DOSE
+2 100  0.5   66.7  50   1   2   0    1  0.0   0     0  100
+3 100  1.0   66.7  50   1   2   0    1  1.9   0     0  100
+4 100  2.0   66.7  50   1   2   0    1  3.3   0     0  100
+5 100  3.0   66.7  50   1   2   0    1  6.6   0     0  100
+6 100  6.0   66.7  50   1   2   0    1  9.1   0     0  100
+7 100  9.0   66.7  50   1   2   0    1 10.8   0     0  100
+</pre>
+
+				<h2>Code</h2>
+				<p>Code to alter Warfarin to fit the requests above</p>
+<pre class="code">
+warfarin <- read.csv(file.choose())		### warfarin.txt
+warfarin[is.na(warfarin["AMT"]),"AMT"] <- 0
+
+tmp <- as.character(warfarin$ID)
+tmp.split <- split(warfarin,warfarin["ID"])
+
+final <- NULL
+for( i in unique(tmp)){
+  section <- rep(tmp.split[[i]][1,"AMT"],nrow(tmp.split[[i]]))
+  final <- c(final,section)
+}
+DOSE <- final
+warfarin <- cbind(warfarin, DOSE)
+
+warfarin.mdvpk.0 <- warfarin[ warfarin$MDVPK==0,]
+warfarin.mdvpk.1 <- warfarin[ warfarin$MDVPK==1,]
+
+warfarin.mdvpk.0   #No AMT data (warfarin.mdvpk.0["AMT"]==0)
+warfarin.mdvpk.1			
+</pre>
+
+		</div>
+		<div class="footer"/>
+	</body>
+</html>

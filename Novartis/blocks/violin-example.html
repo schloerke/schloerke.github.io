@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Violin Example</title>
+		<link rel="stylesheet" type="text/css" href="../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../index.html' >Home</a></li>
+					<li><a href='../blocks.html' class='active'>Variations</a></li>
+					<li><a href='../boxplot.html'>Box Plot</a></li>
+					<li><a href='../quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='../scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='../yyplot.html'>Y~Y Plot</a></li>
+					<li><a href='../slug.html'>Slug Plot</a></li>
+					<li><a href='../datasets.html'>Data Sets</a></li>
+					<li><a href='../documents.html'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 0em">
+					<li><a href='grid.html'>Grid</a></li>
+					<li><a href='admin.html'>Admin. Time</a></li>
+					<li><a href='box.html' class='active'>Box'n'Whisker</a></li>
+					<li><a href='quantile.html'>Quantile</a></li>
+					<li><a href='abline.html'>a-b-line</a></li>
+					<li><a href='lines.html'>Lines</a></li>
+					<li><a href='mean.html'>Mean Line</a></li>
+					<li><a href='loess.html'>Loess</a></li>
+					<li><a href='confidence.html'>95% CI</a></li>
+					<li><a href='points.html'>Points</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+	 	<div class='mid'>
+ 			<h1>Violin</h1>
+			<p class="slogan">Example</p>
+			<span class="float-correction">   </span>			
+			<a href="violin-large.jpg"><img src="violin-med.jpg" class="med-picture" align="center"/></a>
+			<h2>Note</h2>
+			<ul>
+				<li>More complicated example to show the power of the violin plot</li>
+				<li>Notice how the Violin Plot code is plotted last, but the points and box plot are still visible.  This is through the use of 'violin.alpha'.</li>
+			</ul>
+			<h2>Code Used</h2>
+<pre class="code">
+#pdf(file="F:/Website/blocks/violin-large.pdf", width = 15, height = 7.5)
+### Import Data  
+  data <- bolus
+  split.column <- "DOSE"
+
+  data <- data[data$DOSE == 120000,]
+
+  data.select <- data[ data$MDV == 0 & data$AMT == 0, ] 
+    ### Rows where MDV == 0 and AMT == 0  (Good Rows for plotting x,y)
+    
+  data.to.plot <- list()
+  
+  data.to.plot$x <- data.select[,"TIME"]  #x
+  data.to.plot$y <- data.select[,"DV"]  #y
+  data.to.plot$ids <- data.select[,"ID"]  #ids
+  
+  data.to.plot$criteria <- data.select[,split.column]
+
+  min.required <- 10
+
+  x.min.lim <- 0
+  x.max.lim <- 10
+  y.min.lim <- 0
+  y.max.lim <- max(data.to.plot[["y"]])
+  data.to.plot$x.lim <- c(x.min.lim,x.max.lim)
+  data.to.plot$y.lim <- c(y.min.lim,y.max.lim)
+
+  bw <- FALSE
+
+  library(lattice)
+### End Import
+
+
+### Panel Function
+
+  function.of.panel <- function(
+    x,
+    y,
+    groups = groups,
+    data.to.plot.in.panel = data.to.plot,
+    black.and.white.in.panel = bw,
+    min.required.in.panel = min.required,
+    subscripts
+  ){
+  cat("\n\n\nPacket", packet.number(),"\n")
+  
+  ### Grid
+    plot.grid(
+      x.divisions = 10,
+      y.divisions = 10,
+      grid.color = "grey95",
+      x.limits = data.to.plot.in.panel[["x.lim"]],
+      y.limits = data.to.plot.in.panel[["y.lim"]]
+    )
+
+<span class="gridcode">  ### Plot Box Plot
+    plot.box.and.whiskers(
+      points.x = x,
+      points.y = y,
+      minimum.required = min.required.in.panel,
+      black.and.white = black.and.white.in.panel
+    )</span>
+
+<span class="gridcode">  ### Plot Points
+    plot.points(
+      points.x = x, 
+      points.y = y, 
+      points.symbol = "x", 
+      points.size = 1, 
+      points.color = "black"
+    )</span>
+    
+<span class="newcode">  ### Plot Violin Plot
+    plot.violin(
+      points.x = x,
+      points.y = y,
+      cut.off = 0,
+      violin.color = "green",
+      violin.ghost = .25
+    )</span>
+
+  }
+
+      
+### End Panel
+
+
+
+### Make Violin Plot
+  lat.box <- xyplot(
+    y ~ x | as.factor(criteria), 
+      # Remove '| as.factor(criteria)' if you do not want to split the data
+    data = data.to.plot,
+    type = NULL,
+      # Taken Care of in Panel
+    aspect=.5,
+      # X is twice as long as Y
+    groups = ids,
+    xlab = "Time [units]",
+    ylab = "Response [units]",
+    xlim = c(x.min.lim - 0.03*(x.max.lim-x.min.lim)*0.5,x.max.lim + 0.03*(x.max.lim-x.min.lim)*0.5), 
+      #0.5 is to compensate for the aspect ratio (aspect)
+    ylim = c(y.min.lim - 0.03*(y.max.lim-y.min.lim), y.max.lim + 0.03*(y.max.lim-y.min.lim)),
+    main = "Violin Example",
+    panel = function.of.panel,
+
+    key = list(
+      title = "Legend",
+      text = list(
+        c("Box and Whisker Outliers","Points"),
+        col="black"
+      ),
+      points = list(
+        col = c("black"),
+        pch = c(1,4),
+        cex = c(1.5,1)*0.75
+      ),
+      type = "l",
+      space = "right",
+      cex.title = 1,
+      cex = 0.75
+    )
+
+  )
+
+### Change Color of Trellis Device and Plot Data
+  trellis.device(color = !bw,new = FALSE,retain = FALSE)
+
+### Plot Data
+  print(lat.box)
+
+#dev.off()
+</pre>
+		</div>
+		<div class="footer"/>
+		
+	</body>
+</html>

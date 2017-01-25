@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Lines By ID Variation</title>
+		<link rel="stylesheet" type="text/css" href="../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../index.html' >Home</a></li>
+					<li><a href='../blocks.html' class='active'>Variations</a></li>
+					<li><a href='../boxplot.html'>Box Plot</a></li>
+					<li><a href='../quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='../scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='../yyplot.html'>Y~Y Plot</a></li>
+					<li><a href='../slug.html'>Slug Plot</a></li>
+					<li><a href='../datasets.html'>Data Sets</a></li>
+					<li><a href='../documents.html'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 0em">
+					<li><a href='grid.html'>Grid</a></li>
+					<li><a href='admin.html'>Admin. Time</a></li>
+					<li><a href='box.html'>Box'n'Whisker</a></li>
+					<li><a href='quantile.html'>Quantile</a></li>
+					<li><a href='abline.html'>a-b-line</a></li>
+					<li><a href='lines.html' class='active'>Lines</a></li>
+					<li><a href='mean.html'>Mean Line</a></li>
+					<li><a href='loess.html'>Loess</a></li>
+					<li><a href='confidence.html'>95% CI</a></li>
+					<li><a href='points.html'>Points</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+		<div class='mid'>
+			<h1>Lines By ID</h1>
+			<p class="slogan">Variation</p>
+			<span class="float-correction">   </span>			
+			<div class="small-picture-code">
+				<a href="lines-example.html"><img src="lines-small.jpg" class="small-picture" align="right"/></a>
+			</div>
+			<h2>Use</h2>
+			<ul>
+				<li>To plot lines according to the ID number</li>
+			</ul>
+			<h2>Arguments</h2>
+			<dl>
+				<dt><span class="code">points.x</span></dt>
+					<dd>- All X values of points that will be plotted</dd>
+				<dt><span class="code">points.y</span></dt>
+					<dd>- All Y values of points that will be plotted</dd>
+				<dt><span class="code">ids</span></dt>
+					<dd>- Equals 'groups'</dd>
+					<dd>- Supplied from the 'groups' in <span class="code">xyplot()</span></dd>
+				<dt><span class="code">rows.being.used</span></dt>
+					<dd>- Equals 'subscripts'</dd>
+					<dd>- Supplied from <span class="code">xyplot()</span></dd>
+				<dt><span class="code">black.and.white</span></dt>
+					<dd>- Logical, Describes whether the line should be for grey scale or color output</dd>
+			</dl>
+  		<h2>Notes</h2>
+				<ul>
+					<li>If <span class="code">black.and.white == TRUE</span>
+            <ul>
+              <li>Each ID will have it's own unique color</li>
+              <li>The unique color will be consistent if and only if the exact same IDs are used</li>
+            </ul>
+          </li>
+          <li>Remove the '#' before the <span class="code">cat</span>s to see what the function is doing</li>
+        </ul>	
+			<h2>Code</h2>
+<pre class="code">
+'lines.by.id' <-
+function(
+  points.x = x,
+  points.y = y,
+  ids = groups,
+  rows.being.plotted = subscripts,
+  black.and.white = black.and.white.in.panel
+){
+cat("\nPlotting Lines Connected by ID\n")
+
+  unique.ids <- unique(ids)
+
+  if(black.and.white){ 
+    <span class="blackcode">colors.unique <- c(rep(1,length(unique.ids) ))</span>
+    <span class="blackcode">line.style <- "dashed"</span>
+  }else{
+    <span class="colorcode">colors.unique <- rainbow( length(unique.ids) ,start = .56,end = .13)</span>
+      <span class="colorcode">#Colors blue to purple to red to orange, no yellow and green</span>
+    <span class="colorcode">line.style <- "solid"</span>
+  }
+  
+  panel.superpose(
+    x = points.x,
+    y = points.y,
+    subscripts = rows.being.plotted,
+    groups = ids,
+    panel.groups = "panel.lines", # Panel used to plot the data
+    col = colors.unique,
+    pch = NA,
+    lty = line.style,
+    type = "l",
+    alpha = 1  # The opacity of the lines
+  )
+}
+</pre>
+			<h2>Legend Info</h2>
+<pre class="code">
+key = list(
+  title = "Legend",
+  text = list(
+    c("ID Lines"),
+    col="black"
+  ),
+  points = list(
+    col = c(if(bw){c("black")}else{rainbow(1,start=.56,end=.55)}),
+    pch = c(NA),
+    cex = c(1)*0.75
+  ),
+  lines = list(
+    col = c(if(bw){c("black")}else{rainbow(1,start=.56,end=.55)}),
+    lwd = c(1)*0.75,
+    lty = if(bw){"dashed"}else{"solid"}
+  ),
+  type = "l",
+  space = "right",
+  cex.title = 1,
+  cex = 0.75
+)
+</pre>
+	
+		</div>
+<div class="footer"/>
+	</body>
+</html>

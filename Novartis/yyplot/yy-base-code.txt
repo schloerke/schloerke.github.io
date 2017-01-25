@@ -1,0 +1,269 @@
+
+color.gen <- function(
+	color.start = "black",
+	color.finish = "grey75",
+	number = 5
+){
+# Function that creates the hexadecimal names of the colors.
+# Idea taken from 'example(rgb)'
+	ramp <- colorRamp(c(color.start,color.finish))
+	colors <- rgb( ramp( seq(0,1, length = number)), max = 255)
+	return(colors)
+}
+
+reset.layout <- function(){
+	par(mar=c(c(5,4,4,2)+0.1))
+	layout(1)
+}
+
+title.layout <- function( main = "TITLE OF PAGE", p.loess = FALSE, p.abline = FALSE, cex.main = 2 ){
+
+	plot(1,1,type="l",col="white",xlab="",ylab="",axes=FALSE)
+		#Moves the plotting area to the 'title' area of the 'page'
+	par(mar= c(0,0,0,0))
+		#produce a buffer of 0 lines from the top of the 'page'
+	mtext(main, cex = cex.main,side = 3, adj = .5,line= -(cex.main + 1.5), font = 2)
+		# Write the title of the 'page', at cex.main size, on the top, in the middle, with a 1.5 line buffer, in bold
+
+#print(mode(p.loess));print(mode(p.abline))
+	if(!is.list(p.loess)) p.loess <- NULL
+	if(!is.list(p.abline)) p.abline <- NULL
+	if(TRUE %in% c(is.list(p.loess), is.list(p.abline))){
+	
+		legend("right",c(p.abline$legend,p.loess$legend),col=c(p.abline$color,p.loess$color),lty="solid",lwd = 2,title="Legend", inset=0.02)
+	}	
+}
+
+name.check <- function( list.to.check, names.to.check){
+	# Function to check whether or not the list has the necessary information
+	# Prevents R from crashing!
+	t.f <- sapply(
+		names(list.to.check),
+		function(x, n.t.c = names.to.check){
+			return( x %in% n.t.c)
+		})
+		
+	if(length(list.to.check) == length(names.to.check)){
+		length.t.f <- TRUE
+	}else{
+		length.t.f <- FALSE
+	}
+		
+	if(FALSE %in% c(t.f,length.t.f)){
+		return(FALSE)
+	}else{
+		return(list.to.check)
+	}
+}
+
+fun.zones <- function(n = 1, ratio=0.66, top.down=FALSE, full.page = FALSE, max.sections = 16){
+	# n = Number of plots
+	# max(n) == 30
+	
+	n.original <- n
+	
+	if(full.page){
+		n <- max.sections
+	}
+
+	if(n > max.sections){
+		n <- max.sections
+	}
+
+	if(n > 30){
+		n <- 30
+		cat("\nThe maximum number of plots per page is 30.  It is being trimmed to this number.\n")
+	}
+
+
+	plot.zone <- matrix(c(0,0,0,0,0,2,1,0,0,4,3,0,0,0,0,0),ncol=4,byrow=FALSE)
+	plot.zone.original <- plot.zone
+	plot.widths <- c(5,ratio*90,(1-ratio)*90,5)
+	plot.heights <- c(5,(1-ratio)*90,ratio*90,5)
+	multiplier <- 4
+	
+	plot.cols <- ceiling(n^(1/2) )
+	plot.rows <- ceiling(n/ceiling(n^(1/2)) )
+	
+	# Easiest way to understand what is going on is to remove the # before the cat's
+	# Replicates the base plot.zone horizontally, adding 4 each time
+	# Then depending on what row the 'row' is it is multiplied again
+	for(j in 0:(plot.rows-1)){ #by rows (vertically)
+		plot.zone.row <- NULL
+		for(i in 1:plot.cols-1){ #by columns (horizontally)
+			if(i==0){
+				plot.zone.row <- plot.zone.original
+#cat("\n\nplot.zone.row\n");print(plot.zone.row)
+			}else{
+				plot.zone.tmp <- plot.zone.original
+				plot.zone.tmp[plot.zone.tmp > 0] <- plot.zone.tmp[plot.zone.tmp > 0] + i*multiplier
+#cat("\n\nplot.zone.tmp\n");print(plot.zone.tmp)
+				plot.zone.row <- cbind(plot.zone.row,plot.zone.tmp)
+			}
+		}
+		if(j!=0){
+			plot.zone.row[plot.zone.row > 0] <- plot.zone.row[plot.zone.row > 0] + (plot.cols*j*multiplier)
+#cat("\n\nJ row\n");print(plot.zone.row)
+			if(top.down){
+				plot.zone <- rbind(plot.zone,plot.zone.row)
+			}else{
+				plot.zone <- rbind(plot.zone.row, plot.zone)
+			}
+		}else{
+			plot.zone <- plot.zone.row
+		}
+
+	}
+
+	zones <- plot.zone
+
+	zones.widths <- rep(plot.widths,plot.cols)
+	zones.heights <- c(12.5*plot.rows,rep(plot.heights,plot.rows))
+#cat("\nZones before reducing number of areas\n");print(zones)
+	zones[zones > min(n,n.original)*multiplier] <- 0
+	zones <- rbind(min(n,n.original)*multiplier+1,zones)
+#cat("\nZones after reducing number of areas\n");print(zones)
+#cat("\nZone Widths\n");print(zones.widths)
+#cat("\nZone Heights\n");print(zones.heights)
+
+	layout(zones, widths=zones.widths,heights=zones.heights,respect=TRUE)
+}
+
+plot.and.histos <-
+function(
+	x = iris$Sepal.Width, #points.x
+	y = iris$Sepal.Length, #points.y
+	main = "TITLE",
+	x.label = "X Label",
+	y.label = "Y Label",
+	main.cex = 1,
+	points.color = "black",
+	number.of.bars = 10,
+	p.abline = NULL,
+	p.loess = NULL,
+	n = NULL
+){
+
+	xhist <- hist(x, breaks=seq(min(x), max(x), length.out = number.of.bars+1), plot=FALSE)
+	yhist <- hist(y, breaks=seq(min(y), max(y), length.out = number.of.bars+1), plot=FALSE)
+
+#cat("\nxhist\n");print(xhist);cat("\nyhist\n");print(yhist)
+
+	top <- max(c(xhist$counts, yhist$counts))
+		# To make the histograms relative to eachother
+		#    It solves the problem of having the the longest bar in the top plot == 500, while the same length bar in the right plot == 250.
+		#    Now the longest bar in the top plot will be twice as big as the longest bar in right plot.
+
+	xrange <- c(min(xhist$breaks), max(xhist$breaks) )
+	yrange <- c(min(yhist$breaks), max(yhist$breaks) )
+
+### Middle
+	par(mar=c(4,4,0,0))
+	plot(x, y, xlim=xrange, ylim=yrange, xlab=x.label, ylab=y.label, col = points.color)
+
+	if(is.list(p.abline)){
+#cat("\np.abline\n");print(p.abline)
+		abline( p.abline$intercept, p.abline$slope, col = p.abline$color, lwd = 2)
+	}
+
+	if(is.list(p.loess)){
+#cat("\np.loess\n");print(p.loess)
+		lines(loess.smooth(x,y, span = p.loess$span), col = p.loess$color, lwd = 2)
+	}
+
+### Top
+	par(mar=c(0,4,1,0))	# No gap
+	#par(mar=c(1,4,1,0))	# With a gap inbetween plots
+	barplot(xhist$counts, axes=FALSE, ylim=c(0, top), space=0)
+
+### Right
+	par(mar=c(4,0,0,1))	# No gap
+	#par(mar=c(4,1,0,1))	# With a gap inbetween plots
+	barplot(yhist$counts, axes=FALSE, xlim=c(0, top), space=0, horiz=TRUE)	
+	
+### Title
+	par(mar=c(0,0,1,0))
+	plot(1,1,type="l",col="white",xlab="",ylab="",axes=FALSE)
+		#blank plot, serves the purpose of moving on to the next "grid" location
+	
+	if(n != 1) mtext( text = main, side = 3,adj = 1, cex = main.cex, font = 2)
+
+}
+
+
+yyplot <- function(
+	x.column = "Sepal.Width",
+	y.column = "Sepal.Length",
+	split.column = FALSE,
+	data = iris,
+	ratio = 0.8,
+	title.of.all.plots = "TITLE OF EVERYTHING",
+	cex.title = 2,
+	xlab = "X Label",
+	ylab = "Y Label",
+	color.of.middle.plot = color.gen("black","grey25",7), #transparent colors 
+	number.of.bars = 20,
+	abline.list = FALSE,
+	loess.list = FALSE,
+	max.plots = 9,
+	top.down = TRUE
+){
+
+	loess.list <- name.check(loess.list,c("color","span","legend"))
+	abline.list <- name.check(abline.list,c("intercept","slope","color","legend"))
+
+	if(split.column == FALSE){
+		split.column <- rep(1,nrow(data))
+		data <- cbind(data, split.column)
+		split.column <- "split.column"
+	}
+	
+	data.split <- split(data,data[,split.column])
+	names.data.split <- names(data.split)
+	n <- length(names.data.split)
+#cat("\nNumber of Plots\n");print(n)
+
+	fun.zones( n, ratio=ratio, max.sections = max.plots, top.down = top.down)
+		# Generates the grid that the plots are plotted on
+		
+	title.cex <- 0.66
+	if(n <= 4) title.cex <- .83
+	if(n ==1) title.cex <- 1
+#cat("\nTitle.cex\n");print(title.cex)
+	
+	times.through <- 1
+	for(i in names.data.split){
+#cat("\ndata.split[[",i,"]]\n");print(data.split[[i]])
+#cat("\nX Points\n");print(data.split[[i]][,x.column]);cat("\nY Points\n");print(data.split[[i]][,y.column])
+
+		plot.and.histos(
+			x = c(data.split[[i]][,x.column]), 
+			y = c(data.split[[i]][,y.column]), 
+			main = paste(split.column,"=",i,sep=" ",collapse=""), 
+			number.of.bars = number.of.bars, 
+			main.cex = title.cex, 
+			x.label = xlab, 
+			y.label = ylab,
+			points.color = color.of.middle.plot,
+			p.abline = abline.list,
+			p.loess = loess.list,
+			n = n
+		)
+
+		if(times.through/max.plots == floor(times.through/max.plots) & n > max.plots){
+			title.layout(main = title.of.all.plots, p.abline = abline.list, p.loess = loess.list, cex.main = cex.title)
+				# Plots the Overall title of the 'page'
+				# it is ok if 'times.through' does not reach to 'max.plots' (maximum number of sections)
+			fun.zones( n-times.through, ratio=ratio, full.page = TRUE, max.sections = max.plots, top.down = top.down)
+				# Re-Generates the grid for the next 'page' of plots
+		}
+		times.through <- times.through + 1
+	}
+	
+	if(n/max.plots != floor(n/max.plots) | n == max.plots){
+		title.layout(main = title.of.all.plots, p.abline = abline.list, p.loess = loess.list, cex.main = cex.title)
+	}
+
+	reset.layout()
+		# Function to reset the Layout of the graphics
+}

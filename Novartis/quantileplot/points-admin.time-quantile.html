@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Quantile Example</title>
+		<link rel="stylesheet" type="text/css" href="../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../index.html' >Home</a></li>
+					<li><a href='../blocks.html'>Variations</a></li>
+					<li><a href='../boxplot.html'>Box Plot</a></li>
+					<li><a href='../quantileplot.html' class='active'>Quantile Plot</a></li>
+					<li><a href='../scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='../yyplot.html'>Y~Y Plot</a></li>
+					<li><a href='../slug.html'>Slug Plot</a></li>
+					<li><a href='../datasets.html'>Data Sets</a></li>
+					<li><a href='../documents.html'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 0em">
+					<li><a href='../blocks/grid.html' class="active-suggestion">Grid</a></li>
+					<li><a href='../blocks/admin.html' class="active-suggestion">Admin. Time</a></li>
+					<li><a href='../blocks/box.html' class="option">Box'n'Whisker</a></li>
+					<li><a href='../blocks/quantile.html' class="active-suggestion">Quantile</a></li>
+					<li><a href='../blocks/abline.html' class="option">a-b-line</a></li>
+					<li><a href='../blocks/lines.html' class="suggestion">Lines</a></li>
+					<li><a href='../blocks/mean.html' class="option">Mean Line</a></li>
+					<li><a href='../blocks/loess.html' class="option">Loess</a></li>
+					<li><a href='../blocks/confidence.html' class="option">95% CI</a></li>
+					<li><a href='../blocks/points.html' class="active-suggestion">Points</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+		<div class='mid'>
+			<h1>Quantiles</h1>
+			<p class="slogan">Example - Points, Administration Time, and Quantiles</p>
+			<span class="float-correction">   </span>			
+			<a href="points-admin.time-quantile-large.jpg"><img src="points-admin.time-quantile-med.jpg" class="med-picture" align="center"/></a>
+			<h2>Code Used</h2>
+<pre class="code">
+#pdf(file="F:/Website/quantileplot/points-admin.time-quantile-large.pdf", width = 15, height = 7.5)
+### Import Data  
+  data <- infuse
+  split.column <- "DOSE" 
+    
+  data <- data[data$DOSE == 120000,]
+
+  data.select <- data[ data$MDV == 0 & data$AMT == 0, ] 
+    ### Rows where MDV == 0 and AMT == 0  (Good Rows for plotting x,y)
+    
+  data.to.plot <- list()
+  
+  data.to.plot$x <- data.select[,"TIME"]  #x
+  data.to.plot$y <- data.select[,"DV"]  #y
+  data.to.plot$ids <- data.select[,"ID"]  #ids
+  data.to.plot$amt <- data[data$AMT==data$DOSE,c("TIME","ID")]  
+  
+  data.to.plot$criteria <- data.select[,split.column]
+
+  x.min.lim <- 216
+  x.max.lim <- 288
+  y.min.lim <- 0
+  y.max.lim <- max(data.to.plot[["y"]])
+  data.to.plot$x.lim <- c(x.min.lim,x.max.lim)
+  data.to.plot$y.lim <- c(y.min.lim,y.max.lim)
+
+  quan <- infuse[ infuse$MDV == 0 & infuse$AMT == 0, ]
+
+  quan.select <- quan[quan$DOSE == 120000, ]
+
+  quantiles.to.plot <- list()
+
+  quantiles.to.plot$x <- quan.select[,"TIME"]  #x
+  quantiles.to.plot$y <- quan.select[,"DV"]  #y
+  quantiles.to.plot$alpha <- 0.05  #alpha (percent from 0 and 1, i.e. alpha==0.05 for 5% and 95% intervals)
+
+  bw <- TRUE
+
+  library(lattice)
+### End Import
+
+
+### Panel Function
+
+  function.of.panel <- function(
+    x,
+    y,
+    groups = groups,
+    data.to.plot.in.panel = data.to.plot,
+    quantiles.to.plot.in.panel = quantiles.to.plot,
+    black.and.white.in.panel = bw,
+    subscripts
+  ){
+  cat("\n\n\nPacket", packet.number(),"\n")
+  
+  ### Grid
+    plot.grid(
+      x.divisions = 10,
+      y.divisions = 10,
+      grid.color = "grey95",
+      x.limits = data.to.plot.in.panel[["x.lim"]],
+      y.limits = data.to.plot.in.panel[["y.lim"]]
+    )
+
+  #### Administration Line
+    plot.administration.time(
+      data.for.amt = data.to.plot.in.panel,
+      ids = groups,
+      rows.being.used = subscripts,
+      black.and.white = black.and.white.in.panel
+    )
+
+  ### Quantiles
+    plot.quantiles(
+      quantile.data = quantiles.to.plot.in.panel,
+      quantile.type = 7
+    )
+
+  ### Plot Points
+    plot.points(
+      points.x = x,
+      points.y = y,
+      points.symbol = "x",
+      points.size = 1,
+      points.color = "black"
+    )
+
+  }
+      
+### End Panel
+
+
+
+### Make Quantile Plot
+  lat.quantile <- xyplot(
+    y ~ x | as.factor(criteria), 
+      # Remove '| as.factor(criteria)' if you do not want to split the data
+    data = data.to.plot,
+    type = NULL,
+      # Taken Care of in Panel
+    aspect=.5,
+      # X is twice as long as Y
+    groups = ids,
+    xlab = "X Label (Time)",
+    ylab = "Y Label",
+    xlim = c(x.min.lim - 0.03*(x.max.lim-x.min.lim)*0.5,x.max.lim + 0.03*(x.max.lim-x.min.lim)*0.5), 
+      #0.5 is to compensate for the aspect ratio (aspect)
+    ylim = c(y.min.lim - 0.03*(y.max.lim-y.min.lim), y.max.lim + 0.03*(y.max.lim-y.min.lim)),
+    main = "Infuse Data Set\nTime > 215 hr",
+    panel = function.of.panel,
+	
+    key = list(
+      title = "Legend",
+      text = list(
+        c("Administration Line","Quantiles","Points"),
+        col="black"
+      ),
+      points = list(
+        col = c("grey25","grey35","black"),
+        pch = c(15,NA,4),
+        cex = c(1)*0.75
+      ),
+      lines = list(
+        col = c("grey25","grey35","black"),
+        lwd = c(1,2,1)*0.75,
+        lty = c("solid","dashed","blank")
+      ),
+      type = "l",
+      space = "right",
+      cex.title = 1,
+      cex = 0.75
+    )
+
+  )
+
+### Change Color of Trellis Device and Plot Data
+  trellis.device(color = !bw,new = FALSE,retain = FALSE)
+
+### Plot Data
+  print(lat.quantile)
+
+#dev.off()
+</pre>
+		</div>
+		<div class="footer"/>
+		
+	</body>
+</html>

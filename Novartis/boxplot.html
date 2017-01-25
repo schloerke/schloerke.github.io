@@ -1,0 +1,197 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Box and Whisker Plot</title>
+		<link rel="stylesheet" type="text/css" href="style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='index.html' >Home</a></li>
+					<li><a href='blocks.html'>Variations</a></li>
+					<li><a href='boxplot.html' class='active'>Box Plot</a></li>
+					<li><a href='quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='yyplot.html'>Y~Y Plot</a></li>
+					<li><a href='slug.html'>Slug Plot</a></li>
+					<li><a href='datasets.html'>Data Sets</a></li>
+					<li><a href='documents.html'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 0em">
+					<li><a href='blocks/grid.html' class="suggestion">Grid</a></li>
+					<li><a href='blocks/admin.html' class="suggestion">Admin. Time</a></li>
+					<li><a href='blocks/box.html' class="suggestion">Box'n'Whisker</a></li>
+					<li><a href='blocks/quantile.html' class="option">Quantile</a></li>
+					<li><a href='blocks/abline.html' class="option">a-b-line</a></li>
+					<li><a href='blocks/lines.html' class="suggestion">Lines</a></li>
+					<li><a href='blocks/mean.html' class="suggestion">Mean Line</a></li>
+					<li><a href='blocks/loess.html' class="suggestion">Loess</a></li>
+					<li><a href='blocks/confidence.html' class="option">95% CI</a></li>
+					<li><a href='blocks/points.html' class="suggestion">Points</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+		<div class='mid'>
+			<h1>Box and Whisker Plot</h1>
+			<p class="slogan">Basic Form</p>
+			<span class="float-correction">   </span>			
+			<h2>Uses</h2>
+			<span class="small-picture-code">
+				<a href="blocks/box-example.html"><img src="blocks/box-small.jpg" class="small-picture" align="right"/></a>
+			</span>
+			<ul>
+				<li>To display "Box and Whisker Plot" plots according to a time profile</li>
+			</ul>
+			<h2>Notes</h2>
+			<ul>
+				<li>Should be plotted with TIME on the X axis</li>
+				<li>All Data being plotted must satisfy all requirement within the 'Data Sets' tab to work properly</li>
+				<li>MORE NOTES</li>
+			</ul>
+			<h2>Common Examples</h2>
+			<ul>
+				<li><a href="boxplot/points-box.html">Points and Box Plot</a></li>
+				<li><a href="blocks/violin-example.html">Points, Violins, and Box Plot</a></li>
+				<li><a href="boxplot/points-lines-box.html">Points, Lines, and Box Plot</a></li>
+				<li><a href="boxplot/points-meanline-box.html">Points, Mean Line, and Box Plot</a></li>
+				<li><a href="boxplot/points-lines-admin.time-box.html">Points, Lines, Administration Time, and Box Plot</a></li>
+			</ul>
+			<h2>Base Code for All Box Plot Examples</h2>
+<div class="greenbk"><div class="description">Import<br>Data</div><pre class="code">### Import Data
+  data <- warfarin.mdvpk.1
+  split.column <- "AGE"
+  min.required <- 2	# Low number is due to a small data set
+    
+  data <- data[data$DOSE == 120,]
+
+  data.select <- data[ data$MDV == 0 & data$AMT == 0, ] 
+    ### Rows where MDV == 0 and AMT == 0  (Good Rows for plotting x,y)
+    
+  data.to.plot <- list()
+  
+  data.to.plot$x <- data.select[,"TIME"]  #x
+  data.to.plot$y <- data.select[,"DV"]  #y
+  data.to.plot$ids <- data.select[,"ID"]  #ids
+  
+  data.to.plot$criteria <- data.select[,split.column]
+
+  x.min.lim <- 0
+  x.max.lim <- 150
+  y.min.lim <- 0
+  y.max.lim <- max(data.to.plot[["y"]])
+  data.to.plot$x.lim <- c(x.min.lim,x.max.lim)
+  data.to.plot$y.lim <- c(y.min.lim,y.max.lim)
+
+  bw <- FALSE
+
+  library(lattice)
+### End Import</pre></div>
+
+<div class="orangebk"><div class="description">Where the data<br>is plotted</div><pre class="code">### Panel Function
+
+  function.of.panel <- function(
+    x,
+    y,
+    groups = groups,
+    data.to.plot.in.panel = data.to.plot,
+    min.required.in.panel = min.required,
+    black.and.white.in.panel = bw,
+    subscripts
+  ){
+  cat("\n\n\nPacket", packet.number(),"\n")
+  
+  <span class="darkorangebk">#### Grid</span>
+  <span class="darkorangebk">  plot.grid(</span>
+  <span class="darkorangebk">    x.divisions = 10,</span>
+  <span class="darkorangebk">    y.divisions = 10,</span>
+  <span class="darkorangebk">    grid.color = "grey95",</span>
+  <span class="darkorangebk">    x.limits = data.to.plot.in.panel[["x.lim"]],</span>
+  <span class="darkorangebk">    y.limits = data.to.plot.in.panel[["y.lim"]]</span>
+  <span class="darkorangebk">  )</span>
+
+  <span class="darkorangebk">### Plot BWplot</span>
+  <span class="darkorangebk">  plot.box.and.whiskers(</span>
+  <span class="darkorangebk">    points.x = x,</span>
+  <span class="darkorangebk">    points.y = y,</span>
+  <span class="darkorangebk">    minimum.required = min.required.in.panel,</span>
+  <span class="darkorangebk">    black.and.white = black.and.white.in.panel</span>
+  <span class="darkorangebk">  )</span>
+
+  <span class="darkorangebk">### ... More Panel Functions...</span>
+  <span class="darkorangebk">### Will be plotted in the order the functions are performed</span>
+
+  }
+      
+### End Panel</pre></div>
+
+<div class="lightbluebk"><div class="description">Set up the<br>graph</div><pre class="code">### Make Box Plot
+  lat.boxplot <- xyplot(
+    y ~ x | as.factor(criteria), 
+      # Remove '| as.factor(criteria)' if you do not want to split the data
+    data = data.to.plot,
+    type = NULL,
+      # Taken Care of in Panel
+    aspect=.5,
+      # X is twice as long as Y
+    groups = ids,
+    xlab = "X Label",
+    ylab = "Y Label",
+    xlim = c(
+      x.min.lim - 0.03*(x.max.lim-x.min.lim)*0.5,
+      x.max.lim + 0.03*(x.max.lim-x.min.lim)*0.5
+    ), 
+      # *0.5 is to compensate for the aspect ratio (aspect)
+    ylim = c(
+      y.min.lim - 0.03*(y.max.lim-y.min.lim),
+      y.max.lim + 0.03*(y.max.lim-y.min.lim)
+    ),
+    main = "TITLE",
+    panel = <span class="orangebk">function.of.panel</span>,
+	
+    <span class="darkbluebk">### Key contains suggested variations in a recommended plotting order</span>
+    <span class="darkbluebk">key = list(</span>
+    <span class="darkbluebk">  title = "Legend",</span>
+    <span class="darkbluebk">  text = list(</span>
+    <span class="darkbluebk">    c("Administration Range", "Box and Whisker Outliers", "ID Lines",</span>
+    <span class="darkbluebk">      "Mean Line", "Loess Line","Points"),</span>
+    <span class="darkbluebk">    col="black"</span>
+    <span class="darkbluebk">  ),</span>
+    <span class="darkbluebk">  points = list(</span>
+    <span class="darkbluebk">    col = c(</span>
+    <span class="darkbluebk">      if(bw){c("grey25","black", "black","black","black","black")</span>
+    <span class="darkbluebk">      }else{c("green","black",rainbow(1,start=.56,end=.55),"darkred","black","black")}</span>
+    <span class="darkbluebk">    ),</span>
+    <span class="darkbluebk">    pch = c(15,1,NA,NA,NA,4),</span>
+    <span class="darkbluebk">    cex = c(2,1.5,1,1,1,1)*0.75</span>
+    <span class="darkbluebk">  ),</span>
+    <span class="darkbluebk">  lines = list(</span>
+    <span class="darkbluebk">    col = c(</span>
+    <span class="darkbluebk">      if(bw){c("grey25","black","black","black","black","black")</span>
+    <span class="darkbluebk">      }else{c("green","black",rainbow(1,start=.56,end=.55),"darkred","black","black")}</span>
+    <span class="darkbluebk">    ),</span>
+    <span class="darkbluebk">    lwd = c(1,1,1,2,1.4,1)*0.75,</span>
+    <span class="darkbluebk">    lty = c("solid","blank",if(bw){"dashed"}else{"solid"},"dotted","solid","blank")</span>
+    <span class="darkbluebk">  ),</span>
+    <span class="darkbluebk">  type = "l",</span>
+    <span class="darkbluebk">  space = "right",</span>
+    <span class="darkbluebk">  cex.title = 1,</span>
+    <span class="darkbluebk">  cex = 0.75</span>
+    <span class="darkbluebk">)</span>
+
+  )</pre></div>
+
+<div class="purplebk"><div class="description-even">Color of Background</div><pre class="code">### Change Color of Trellis Device and Plot Data
+  trellis.device(color = !bw,new = FALSE,retain = FALSE)</pre></div>
+
+<div class="redbk"><div class="description-even">Print the Plots</div><pre class="code">### Plot Data
+  print(lat.boxplot)</pre></div>
+		</div>
+<div class="footer"/>
+	</body>
+</html>

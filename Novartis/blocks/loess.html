@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Loess Line Variation</title>
+		<link rel="stylesheet" type="text/css" href="../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../index.html' >Home</a></li>
+					<li><a href='../blocks.html' class='active'>Variations</a></li>
+					<li><a href='../boxplot.html'>Box Plot</a></li>
+					<li><a href='../quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='../scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='../yyplot.html'>Y~Y Plot</a></li>
+					<li><a href='../slug.html'>Slug Plot</a></li>
+					<li><a href='../datasets.html'>Data Sets</a></li>
+					<li><a href='../documents.html'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 0em">
+					<li><a href='grid.html'>Grid</a></li>
+					<li><a href='admin.html'>Admin. Time</a></li>
+					<li><a href='box.html'>Box'n'Whisker</a></li>
+					<li><a href='quantile.html'>Quantile</a></li>
+					<li><a href='abline.html'>a-b-line</a></li>
+					<li><a href='lines.html'>Lines</a></li>
+					<li><a href='mean.html'>Mean Line</a></li>
+					<li><a href='loess.html' class='active'>Loess</a></li>
+					<li><a href='confidence.html'>95% CI</a></li>
+					<li><a href='points.html'>Points</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+	  	<div class='mid'>
+			<h1>Loess Line</h1>
+			<p class="slogan">Variation</p>
+			<span class="float-correction">   </span>			
+			<div class="small-picture-code">
+				<a href="loess-example.html"><img src="loess-small.jpg" class="small-picture" align="right"/></a>
+			</div>
+			<h2>Use</h2>
+			<ul>
+				<li>To plot a Loess line</li>
+			</ul>
+			<h2>Arguments</h2>
+			<dl>
+		  	<dt><span class="code">points.x</span></dt>
+					<dd>- All X values of points that will be plotted</dd>
+				<dt><span class="code">points.y</span></dt>
+					<dd>- All Y values of points that will be plotted</dd>
+				<dt><span class="code">line.thickness</span></dt>
+					<dd>- Default to 1.4.  The default when plotting a regular line is 1.</dd>
+				<dt><span class="code">line.style</span></dt>
+					<dd>- Describes the style that the line should be plotted in.  Please refer to the <a href="../documents.html">Documents</a> if you wish to change it.</dd>
+				<dt><span class="code">line.color</span></dt>
+					<dd>- Default is "black"</dd>
+				<dt><span class="code">line.span</span></dt>
+					<dd>- Please refer to the <a href="../documents.html">Documents</a> on Span</dd>
+			</dl>
+  		<h2>Notes</h2>
+				<ul>
+					<li>This is not the same as Lowess line.  Please refer to the <a href="../documents.html">Documents</a> to read about the differences</li>
+				</ul>	
+			<h2>Code</h2>
+<pre class="code">
+'plot.loess' <-
+function(
+  points.x = x,
+  points.y = y,
+  line.thickness = 1.4,
+  line.style = "solid",
+  line.color = "black",
+  line.span = 5/6
+){
+cat("\nPlotting Loess Line\n")
+
+  if(length(points.x) > 1){
+    panel.loess(
+      x = points.x,
+      y = points.y,
+      lwd = line.thickness,
+      lty = line.style,
+      col = line.color,
+      span = line.span
+    )
+  }else{
+    cat("\nNot enought points to plot a Loess line\n")
+  }
+}
+</pre>
+			<h2>Legend Info</h2>
+<pre class="code">
+key = list(
+  title = "Legend",
+  text = list(
+    c("Loess Line"),
+    col="black"
+  ),
+  points = list(
+    col = c("black"),
+    pch = c(NA),
+    cex = c(1)*0.75
+  ),
+  lines = list(
+    col = c("black"),
+    lwd = c(1.4)*0.75,
+    lty = c("solid")
+  ),
+  type = "l",
+  space = "right",
+  cex.title = 1,
+  cex = 0.75
+)
+</pre>
+
+		</div>
+<div class="footer"/>
+	</body>
+</html>

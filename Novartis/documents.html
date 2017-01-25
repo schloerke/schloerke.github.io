@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Documents and Tips</title>
+		<link rel="stylesheet" type="text/css" href="style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='index.html'>Home</a></li>
+					<li><a href='blocks.html'>Variations</a></li>
+					<li><a href='boxplot.html'>Box Plot</a></li>
+					<li><a href='quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='yyplot.html'>Y~Y Plot</a></li>
+					<li><a href='slug.html'>Slug Plot</a></li>
+					<li><a href='datasets.html'>Data Sets</a></li>
+					<li><a href='documents.html' class='active'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<div class="container-sub">
+				<ul id='nav' style="padding-left: 37em">
+					<li><a href='http://search.r-project.org/library/lattice/html/xyplot.html' target="_blank">Lattice Plots</a></li>
+					<li><a href="http://search.r-project.org/library/stats/html/loess.html" target="_blank">Span</a></li>
+					<li><a href='http://search.r-project.org/library/lattice/html/trellis.par.get.html' target="_blank">Par</a></li>
+					<li><a href='http://search.r-project.org/library/stats/html/quantile.html' target="_blank">Quantile</a></li>
+					<li><a href="http://search.r-project.org/library/graphics/html/par.html" target="_blank">lty</a></li>
+				</ul>
+			</div>
+			<div class="container-sub-sub">
+				<ul id='nav' style="padding-left: 42em">
+					<li><a href='documents/lattice-tips.html'>Lattice</a></li>
+					<li><a href='documents/color-gen.html'>Color</a></li>
+					<li><a href='documents/points-pch.html'>pch</a></li>
+					<li><a href='documents/rainbow.html'>Rainbow</a></li>
+				</ul>
+			</div>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+		<div class='mid'>
+			<h1>Documents and Tips</h1>
+			<p class="slogan">Plotting Guide</p>
+			<span class="float-correction">   </span>			
+			<h2>Description</h2>
+			<p>The links below will take you to the corresponding R files.  They contain very useful information. <br><br> Did you know there are nine different ways to calculate quantiles in R? The default method is not even the recommended method! <br><br> Please take a look at them if you get hung up on something.
+			</p>
+			<h2>Documents</h2>
+			
+			<h3><a href="http://search.r-project.org/library/lattice/html/xyplot.html" target="_blank">Lattice Plots</a></h3>
+			<ul>
+				<li>Read the whole document, do not skim this article.  It is relatively short and has very useful information.</li>
+				<li>Contains 'Common Bivariate Trellis Plots'</li>
+				<li>Describes in more detail more arguments that you can use</li>
+				<li>Explains about the 'key' used in each example</li>
+			</ul>
+			<br>
+			<h3><a href="http://search.r-project.org/library/stats/html/loess.html" target="_blank">Loess</a></h3>
+			<ul>
+				<li><a href="http://search.r-project.org/library/stats/html/lowess.html" target="_blank">Lowess</a> is different from Loess
+				</li>
+				<li>Details for 'span' under 'loess' in the package 'stats'
+					<p class="code"><br>Fitting is done locally. That is, for the fit at point x, the fit is made using points in a neighborhood of x, weighted by their distance from x (with differences in 'parametric' variables being ignored when computing the distance). The size of the neighborhood is controlled by 'alpha' (set by span or enp.target). For 'alpha'< 1, the neighbourhood includes proportion 'alpha' of the points, and these have tricubic weighting (proportional to (1 - (dist/maxdist)^3)^3. For 'alpha' > 1, all points are used, with the 'maximum distance' assumed to be 'alpha'^1/p times the actual maximum distance for 'p' explanatory variables.
+<br><br>	For the default family, fitting is by (weighted) least squares. For family="symmetric" a few iterations of an M-estimation procedure with Tukey's biweight are used. Be aware that as the initial value is the least-squares fit, this need not be a very resistant fit.
+					</p>
+				</li>
+			</ul>
+			<br>
+			<h3><a href="http://search.r-project.org/library/lattice/html/trellis.par.get.html" target="_blank">Trellis Par</a></h3>
+			<ul>
+				<li>"Functions used to query, display and modify graphical parameters for fine control of Trellis displays. Modifications are made to the settings for the currently active device only."</li>
+				<li>Traditional way of altering settings
+<pre class="code">
+add.line <- trellis.par.get("add.line")
+
+add.line$col <- "red"
+
+trellis.par.set("add.line", add.line)
+</pre>
+				</li>
+				<li>Type 'trellis.par.get()' to view the full list (very long)</li>
+			</ul>
+			<br>
+			<h3><a href="http://search.r-project.org/library/stats/html/quantile.html" target="blank">Quantile</a></h3>
+			<ul>
+				<li>Explains about the NINE different ways to calculate a quantile</li>
+				<li>"Hyndman and Fan (1996) recommend type 8. The default method is type 7, as used by S and by R < 2.0.0. "</li>
+			</ul>
+			<h3><a href="http://search.r-project.org/library/graphics/html/par.html" target="_blank">Line Type Specification</a></h3>
+			<p>Text from the 'par' document from the graphics package.  It is valid for any function dealing with lines.</p>
+			<ul>
+				<li>Line types can either be specified by giving an index into a small built-in table of line types (1 = solid, 2 = dashed, etc, see lty above) or directly as the lengths of on/off stretches of line. This is done with a string of an even number (up to eight) of characters, namely non-zero (hexadecimal) digits which give the lengths in consecutive positions in the string. For example, the string "33" specifies three units on followed by three off and "3313" specifies three units on followed by three off followed by one on and finally three off. The 'units' here are (on most devices) proportional to lwd, and with lwd = 1 are in pixels or points or 1/96 inch.</li>
+				<li>The five standard dash-dot line types (lty = 2:6) correspond to c("44", "13", "1343", "73", "2262").</li>
+				<li>Note that NA is not a valid value for lty.<br>### Use the value of "0" or type "blank"</li>
+			</ul>
+				
+			<h2>Tips</h2>
+			<h3><a href="documents/lattice-tips.html">Lattice Setup</a></h3>
+			<ul>
+				<li>Explains the general set up of Lattice</li>
+			</ul>
+			<h3><a href="documents/color-gen.html">Color Generator</a></h3>
+			<ul>
+				<li>Function to create 'rgb' colors easily</li>
+			</ul>
+			<h3><a href="documents/points-pch.html">Points - Pch</a></h3>
+			<ul>
+				<li>PDF of major and minor uses of 'pch'</li>
+			</ul>
+			<h3><a href="documents/rainbow.html">Rainbow</a></h3>
+			<ul>
+				<li>Percentages for 'rainbow()'</li>
+			</ul>
+		</div>
+		<div class="footer"/>
+	</body>
+</html>

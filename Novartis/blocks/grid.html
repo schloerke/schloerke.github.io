@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Grid Variation</title>
+		<link rel="stylesheet" type="text/css" href="../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../index.html' >Home</a></li>
+					<li><a href='../blocks.html' class='active'>Variations</a></li>
+					<li><a href='../boxplot.html'>Box Plot</a></li>
+					<li><a href='../quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='../scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='../yyplot.html'>Y~Y Plot</a></li>
+					<li><a href='../slug.html'>Slug Plot</a></li>
+					<li><a href='../datasets.html'>Data Sets</a></li>
+					<li><a href='../documents.html'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 0em">
+					<li><a href='grid.html' class='active'>Grid</a></li>
+					<li><a href='admin.html'>Admin. Time</a></li>
+					<li><a href='box.html'>Box'n'Whisker</a></li>
+					<li><a href='quantile.html'>Quantile</a></li>
+					<li><a href='abline.html'>a-b-line</a></li>
+					<li><a href='lines.html'>Lines</a></li>
+					<li><a href='mean.html'>Mean Line</a></li>
+					<li><a href='loess.html'>Loess</a></li>
+					<li><a href='confidence.html'>95% CI</a></li>
+					<li><a href='points.html'>Points</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+		<div class='mid'>
+			<h1>Grid</h1>
+			<p class="slogan">Variation</p>
+			<span class="float-correction">   </span>			
+			<h2>Use</h2>
+			<ul>
+				<li>To plot a grid in the background</li>
+			</ul>
+			<div class="small-picture-code">
+				<a href="grid-simple-example.html"><img src="grid-simple-small.jpg" class="small-picture" align="right"/></a>
+			</div>
+			<h2>Grid Simple</h2>
+			<h3>Arguments</h3>
+			<dl>
+				<dt><span class="code">x.divisions</span></dt>
+					<dd>- Number of divisions along the X axis</dd>
+				<dt><span class="code">y.divisions</span></dt>
+					<dd>- Number of divisions along the Y axis</dd>
+				<dt><span class="code">grid.color</span></dt>
+				  <dd>- Should be left at "grey95".  It is a very light grey, close to white.</dd>
+			</dl>
+
+  		<h3>Notes</h3>
+  		<ul>
+    		<li>Grid Simple will create the grid according to the final X and Y limits</li>
+    		<li>Having the 3% buffer within the xyplot() function is NOT necessary</li>
+  		</ul>	
+  		<h3>Code</h3>
+<pre class="code">
+'plot.grid.simple' <- 
+function(
+	x.divisions = 10,
+	y.divisions = 10,
+	grid.color = "grey95"
+){
+cat("\nPlotting Simple Grid\n")
+	
+	panel.grid(
+		h = y.divisions,
+		v = x.divisions,
+		col = grid.color
+	)
+}
+</pre>
+			<h2>Legend Info</h2>
+<pre class="code">
+### Not Necessary
+</pre>
+
+<br class="gap">
+			<h2>Grid Buffer</h2>
+			<div class="small-picture-code">
+				<a href="grid-example.html"><img src="grid-small.jpg" class="small-picture" align="right"/><br clear='all'>Code</a>
+			</div>
+			<h3>Arguments</h3>
+			<dl>
+				<dt><span class="code">x.divisions</span></dt>
+					<dd>- Number of divisions along the X axis</dd>
+				<dt><span class="code">y.divisions</span></dt>
+					<dd>- Number of divisions along the Y axis</dd>
+				<dt><span class="code">grid.color</span></dt>
+				  <dd>- Should be left at "grey95".  It is a very light grey, close to white.</dd>
+				<dt><span class="code">x.limits</span></dt>
+					<dd>- The limits of the X range</dd>
+				<dt><span class="code">y.limits</span></dt>
+					<dd>- The limits of the Y range</dd>
+			</dl>
+		<h3>Notes</h3>
+		<ul>
+  		<li>plot.grid will create the grid according to the X and Y limits, before the 3% buffer is added</li>
+  		<li>Having the 3% buffer within the xyplot() function IS necessary</li>
+  		<li>Has a more 'polished' look to it</li>
+		</ul>
+		<h3>Code</h3>
+<pre class="code">
+'plot.grid' <-
+function(
+	x.divisions = 10,
+	y.divisions = 10,
+	grid.color = "grey95",
+	x.limits = data.to.plot.in.panel[["x.lim"]],
+	y.limits = data.to.plot.in.panel[["y.lim"]]
+){
+cat("\nPlotting Grid\n")
+
+	tmp.h <- (0:y.divisions)/y.divisions *(diff(y.limits)) + y.limits[1] 
+	tmp.v <- (0:x.divisions)/x.divisions *(diff(x.limits)) + x.limits[1]
+
+	panel.abline(h = tmp.h,v = tmp.v,col = "grey95")
+}	
+</pre>
+			<h2>Legend Info</h2>
+<pre class="code">
+### Not Necessary
+</pre>
+
+  </div>
+  <div class="footer"/>
+	</body>
+</html>

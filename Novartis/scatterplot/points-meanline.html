@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Scatter Plot Example</title>
+		<link rel="stylesheet" type="text/css" href="../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../index.html' >Home</a></li>
+					<li><a href='../blocks.html'>Variations</a></li>
+					<li><a href='../boxplot.html'>Box Plot</a></li>
+					<li><a href='../quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='../scatterplot.html' class='active'>Scatter Plot</a></li>
+					<li><a href='../yyplot.html'>Y~Y Plot</a></li>
+					<li><a href='../slug.html'>Slug Plot</a></li>
+					<li><a href='../datasets.html'>Data Sets</a></li>
+					<li><a href='../documents.html'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 0em">
+					<li><a href='../blocks/grid.html' class="active-suggestion">Grid</a></li>
+					<li><a href='../blocks/admin.html' class="suggestion">Admin. Time</a></li>
+					<li><a href='../blocks/box.html' class="option">Box'n'Whisker</a></li>
+					<li><a href='../blocks/quantile.html' class="option">Quantile</a></li>
+					<li><a href='../blocks/abline.html' class="option">a-b-line</a></li>
+					<li><a href='../blocks/lines.html' class="suggestion">Lines</a></li>
+					<li><a href='../blocks/mean.html' class="active-suggestion">Mean Line</a></li>
+					<li><a href='../blocks/loess.html' class="suggestion">Loess</a></li>
+					<li><a href='../blocks/confidence.html' class="suggestion">95% CI</a></li>
+					<li><a href='../blocks/points.html' class="active-suggestion">Points</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+		<div class='mid'>
+			<h1>Scatter Plot</h1>
+			<p class="slogan">Example - Points and Mean Line</p>
+			<span class="float-correction">   </span>			
+			<a href="points-meanline-scatter-large.jpg"><img src="points-meanline-scatter-med.jpg" class="med-picture" align="center"/></a>
+			<h2>Code Used</h2>
+<pre class="code">
+#pdf(file="F:/Website/scatterplot/points-meanline-scatter-large.pdf", width = 15, height = 7.5)
+### Import Data  
+  data <- warfarin.mdvpk.1
+  split.column <- "DOSE"
+    
+  data <- data[data$DOSE == 120,]
+
+  data.select <- data[ data$MDV == 0 & data$AMT == 0, ] 
+    ### Rows where MDV == 0 and AMT == 0  (Good Rows for plotting x,y)
+    
+  data.to.plot <- list()
+  
+  data.to.plot$x <- data.select[,"TIME"]  #x
+  data.to.plot$y <- data.select[,"DV"]  #y
+  data.to.plot$ids <- data.select[,"ID"]  #ids
+  
+  data.to.plot$criteria <- data.select[,split.column]
+
+  x.min.lim <- 0
+  x.max.lim <- 150
+  y.min.lim <- 0
+  y.max.lim <- max(data.to.plot[["y"]])
+  data.to.plot$x.lim <- c(x.min.lim,x.max.lim)
+  data.to.plot$y.lim <- c(y.min.lim,y.max.lim)
+
+  bw <- TRUE
+
+  library(lattice)
+### End Import
+
+
+### Panel Function
+
+  function.of.panel <- function(
+    x,
+    y,
+    groups = groups,
+    data.to.plot.in.panel = data.to.plot,
+    black.and.white.in.panel = bw,
+    subscripts
+  ){
+  cat("\n\n\nPacket", packet.number(),"\n")
+  
+  ### Grid
+    plot.grid(
+      x.divisions = 10,
+      y.divisions = 10,
+      grid.color = "grey95",
+      x.limits = data.to.plot.in.panel[["x.lim"]],
+      y.limits = data.to.plot.in.panel[["y.lim"]]
+    )
+
+  ### Plot Mean Line
+    plot.mean.line(
+      points.x = x,
+      points.y = y,
+      minimum.required = 2,
+      line.style = "dotted",
+      black.and.white = black.and.white.in.panel
+    )
+
+  ### Plot Points
+    plot.points(
+      points.x = x, 
+      points.y = y, 
+      points.symbol = "x", 
+      points.size = 1, 
+      points.color = "black"
+    )
+
+  }
+      
+### End Panel
+
+
+
+### Make Scatter Plot
+  lat.scatter <- xyplot(
+    y ~ x | as.factor(criteria), 
+    data = data.to.plot,
+    type = NULL,
+    aspect=.5,
+    groups = ids,
+    xlab = "Time [units]",
+    ylab = "Response [units]",
+    xlim = c(x.min.lim - 0.03*(x.max.lim-x.min.lim)*0.5,x.max.lim + 0.03*(x.max.lim-x.min.lim)*0.5), 
+      #0.5 is to compensate for the aspect ratio (aspect)
+    ylim = c(y.min.lim - 0.03*(y.max.lim-y.min.lim), y.max.lim + 0.03*(y.max.lim-y.min.lim)),
+    main = "Scatter Plot with Points and Mean Line",
+    panel = function.of.panel,
+	
+    key = list(
+      title = "Legend",
+      text = list(
+        c("Mean Line","Points"),
+        col="black"
+      ),
+      points = list(
+        col = c("black"),
+        pch = c(NA,4),
+        cex = c(1)*0.75
+      ),
+      lines = list(
+        col = c("black"),
+        lwd = c(2,1)*0.75,
+        lty = c("dotted","blank")
+      ),
+      type = "l",
+      space = "right",
+      cex.title = 1,
+      cex = 0.75
+    )
+
+  )
+
+### Change Color of Trellis Device and Plot Data
+  trellis.device(color = !bw,new = FALSE,retain = FALSE)
+
+### Plot Data
+  print(lat.scatter)
+
+#dev.off()
+</pre>
+		</div>
+		<div class="footer"/>
+		
+	</body>
+</html>

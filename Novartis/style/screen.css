@@ -1,0 +1,321 @@
+/*/
+/////////  my things ///////////
+/*/
+/* Novartis colors
+Beige: #F3E7CE
+White: #FFFFFF
+Black: #000000
+Dark Yellow: #EFA025
+Orange: #E8792F
+Red: #DB361B
+Maroon: #7E231A
+Brown: #50341F
+Blue: #0F2554
+Petrol: #225554
+Sky: #57C0FB
+Lime: #C1FC2B
+Grass: #388C14
+Carmin: #861527
+*/
+ {
+	margin: 0;
+	padding: 0;
+	font-family: Verdana, Arial, sans-serif;
+	line-height: 1.4em;
+	font-size: 1em;
+}
+code, pre {
+	font-family: "Andale Mono", Courier;
+}
+td {
+	font-size: 0.8em;
+}
+p {
+	color: black
+}
+body {
+	background: url("gradient.gif") bottom repeat-x fixed;
+	color: black;
+	font-family: verdana, sans-serif;
+	font-size: 13px;
+	margin: 0px;
+	padding: 0px;
+	/* width: 39em;
+*/
+}
+
+.logo-picture {
+	position:absolute;
+	width: 163px;
+	height: 55px;
+	right:10px;
+	top: 5px;
+	background: url("novartis-logo-summer.gif") no-repeat top right;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	z-index: 5;
+}
+
+dd {
+	margin-left: 3%;
+}
+ol, ol li, ul, ul li {
+	list-style-position: inside;
+	margin-left: 0;
+	padding-left: 0;
+}
+
+ul ul li, table tr td dl dd, dl dd {
+	margin-left: 1em;
+	font-size: 0.9em;
+	margin-bottom: 0.5em;
+}
+ul {
+	list-style-image: url(petrol-disk.png);
+	list-style-type: disc;
+}
+ul ul {
+	margin: 0 inherit;
+}
+li {
+	margin-bottom: 0.5em;
+	color="black"
+}
+li p {
+	margin-bottom: 0em;
+	margin-top: 0em;
+}
+ul.license li {
+	list-style: none;
+	width: 100%;
+	font-size: 2em;
+	margin: 0;
+	padding: 0;
+}
+a, table tr td a {
+	font-size: 0.9em;
+	font-family: Verdana, Arial, sans-serif;
+	margin-top: 0;
+	padding: 0;
+}
+a:link {
+	color: #0F2554;
+	/*text-decoration: none;
+*/
+}
+a:visited {
+	color: #861527;
+	/*text-decoration: none;
+*/
+}
+a:hover {
+	background-color: #50341F;
+	color: #EFA025;
+}
+#nav, {
+	width: "100%";
+	margin-top: 0;
+	padding: 0 0 0 10px;
+	text-align: center;
+	display: block;
+	margin-left: 0;
+	margin-right: auto;
+}
+#nav li {
+	text-align: center;
+	margin-right: auto;
+	margin-left: auto;
+	padding: 0;
+	display: inline;
+	list-style-type: none;
+}
+#nav a:link, #nav a:visited , #nav a:link.reg, #nav a:visited.reg{
+	float: left;
+	font-size: 11px;
+	line-height: 14px;
+	font-weight: bold;
+	padding: 6px 8px 0px 8px;
+	text-decoration: none;
+	color: #999;
+	background-color: white
+}
+#nav a.active:link, #nav a.active:visited, #nav a:hover{
+	color: black;
+	background: url(tab-peak.gif) no-repeat top center;
+}
+#nav a.option:link, #nav a.option:visited{
+	color: #C0C0C0; /* Light grey (25%) */
+}
+#nav a.suggestion:link, #nav a.suggestion:visited{
+	color: #434343; /* Dark grey (75%) */
+}
+#nav a.active-suggestion:link, #nav a.active-suggestion:visited{
+	color: #434343; /* Dark grey (75%) */
+	background: url(tab-peak.gif) no-repeat top center;
+}
+.newcode {
+	background-color: #57C0FB;
+	color: "grey";
+}
+.blackcode {
+	background-color: black;
+	color: white;
+}
+.colorcode {
+	background-color: #E8792F;
+	color: #0F2554;
+}
+.gridcode {
+	background-color: lightgrey;
+	color: black;
+}
+.mid, .body {
+	padding-right: 0em;
+	position: relative; 
+}
+.mid {
+	margin: 0em auto auto auto;
+	width: 70em;
+	padding-left: 5em;
+}
+.container {
+	padding-bottom: 4px;
+	position: absolute;
+	top: 0;
+}	
+.container-sub {
+	position: absolute;
+	padding-bottom:4px;
+	top: 2.5em;
+}
+
+.container-sub-sub {
+	position: absolute;
+	top: 5em;
+}
+.gap {
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+p.slogan {
+margin: 0 0 2em -4.4444em
+/* -4 / 0.9 */
+	;
+}
+.slogan {
+	line-height: 1em;
+	font-size: 0.9em;
+}
+span.slogan {
+	margin-top: 30px;
+}
+h1 {
+	color: #0F2554;
+	font-size: 4em;
+	font-family: Georgia;
+	font-weight: normal;
+	margin: 1em 0 0 -1em;
+/* -4 / 4 */
+	line-height: 1em;
+}
+h2 {
+	color: #861527;
+	backgroud-color: #7F7F7F;
+	font-weight: normal;
+	font-size: 1.5em;
+	line-height: 1.1em;
+	font-family: Georgia;
+	margin: 1em 0 0 -1.33333em;
+/* -2/1.5 */
+}
+h3 {
+	color: #388C14;
+}
+a.img {
+	border: none;
+}
+.footer {
+	padding-bottom: 5em;
+}
+dl dt, table tr td dl dt {
+	margin-top: .25em;
+}
+.variation-title {
+	margin: 1em 1em 1em 1em;
+	font-size: 3em;
+}
+.yychoice{
+	margin-bottom: 1em ;
+	font-size: 1.75em;
+}
+table tr td {
+	vertical-align: top;
+}
+.small-picture {
+	width: 250px;
+	height: 250px;
+	position: right;
+}
+.small-picture-code{
+	text-align: center;
+	width: 250px;
+/*	height: 270px; */
+	height: 250px;
+	float: right;
+	margin-left: 5px;
+}
+.float-correction{
+	float:right;
+}
+.med-picture {
+	align: center;
+	text-align: center;
+	max-width: 750px;
+	max-height: 375px;
+	margin: 0 0 0 -4em;
+}
+.thirty-five{
+	position: left 35em;
+}
+.orangebk{
+	background-color: #FFCC66;
+}
+.darkorangebk{
+	background-color: #FF8000;
+}
+.greenbk{
+	background-color: #CCFF66;
+}
+.lightbluebk{
+	background-color: #66FFCC;
+}
+.darkbluebk{
+	background-color: #66CCFF;
+}
+.purplebk{
+	background-color: #B75BE5;
+}
+.redbk{
+	background-color: #EB66BF;
+}
+.description {
+	position: absolute;
+	margin-top: 1em;
+	margin-right: 1em;
+	right: 0px;
+	text-align: right;
+	font-size: 2em;
+	font-family: Georgia;
+	font-weight: bold;
+	line-height: 1em;
+}
+.description-even {
+	position: absolute;
+	padding-right: 1em;
+	right: 0px;
+	text-align: right;
+	font-size: 2em;
+	font-family: Georgia;
+	font-weight: bold;
+	line-height: 1em;
+}

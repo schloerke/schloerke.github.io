@@ -1,0 +1,492 @@
+plot.abline <-
+function(
+	intercept = 0,
+	slope = 1,
+	black.and.white = black.and.white.in.panel
+){
+	cat("\nPlotting abline (",intercept,",",slope,")\n")
+	
+	if(black.and.white){
+		line.color = "black"
+		line.style = "dotted"
+		line.thickness = 2
+	}else{		
+		line.color = "darkblue"
+		line.style = "dotted"
+		line.thickness = 2
+	}
+
+	panel.abline(
+		a = intercept,
+		b = slope,
+		col = line.color,
+		lwd = line.thickness,
+		lty = line.style
+	)
+}
+
+
+plot.administration.time.multi <-
+function(
+	data.for.amt = data.to.plot.in.panel,
+	ids = groups,
+	rows.being.used = subscripts,
+	black.and.white = black.and.white.in.panel
+){
+
+	unique.ids <- unique(ids[rows.being.used])
+	amt.data <- data.for.amt[["amt"]]
+
+#cat("\n\nAMT Data\n");print(amt.data)
+	
+	amt.data.select <- c(amt.data[amt.data[,"ID"] %in% unique.ids,"TIME"] )
+		#To select the administration times where the IDs are being plotted
+	
+#cat("\n\nSelected AMT Data\n");print(amt.data.select)
+	
+	if(black.and.white){
+		polygon.color = "grey50" #medium grey
+		amt.color = "grey5" #almost black
+	}else{
+		polygon.color = "green"
+		amt.color = "green"
+	}
+
+	if(length(amt.data.select) > 0){
+		cat("\nPlotting Administration time\n")
+
+		panel.abline(v = unique(amt.data.select),col = amt.color)
+			#Plot the unique times
+			
+	}else{
+		cat("\n There is no AMT times being used. AMT lines will not appear. \n")
+	}
+}
+	
+
+plot.administration.time <-
+function(
+	data.for.amt = data.to.plot.in.panel,
+	ids = groups,
+	rows.being.used = subscripts,
+	black.and.white = black.and.white.in.panel
+){
+
+	unique.ids <- unique(ids[rows.being.used])
+	amt.data <- data.for.amt[["amt"]]
+
+#cat("\n\nAMT Data\n");print(amt.data)
+	
+	amt.data.select <- c(amt.data[amt.data[,"ID"] %in% unique.ids,"TIME"] )
+		#To select the administration times where the IDs are being plotted
+	
+#cat("\n\nSelected AMT Data\n");print(amt.data.select)
+	
+	if(black.and.white){
+		polygon.color = "grey50" #medium grey
+		amt.color = "grey5" #almost black
+	}else{
+		polygon.color = "green"
+		amt.color = "green"
+	}
+
+	if(length(amt.data.select) > 0){
+		cat("\nPlotting Administration time\n")
+
+		amt.range <- range(amt.data.select) 
+
+		if(amt.range[1] == amt.range[2]){
+			panel.abline(v = amt.range[1],col = amt.color)
+		}else{
+			polygon.points <- rbind(
+				c(amt.range[1],y.min.lim),
+				c(amt.range[2],y.min.lim),
+				c(amt.range[2],y.max.lim),
+				c(amt.range[1],y.max.lim)
+			)
+			panel.polygon(polygon.points,col = polygon.color,border = polygon.color)
+		}
+			
+	}else{
+		cat("\n There is no AMT times being used. AMT lines will not appear. \n")
+	}
+}
+
+
+plot.box.and.whiskers <-
+function(
+	points.x = x,
+	points.y = y,
+	minimum.required = 6,
+	black.and.white = black.and.white.in.panel
+){
+cat("\nPlotting Box and Whiskers\n")
+	### Box Plot Box Color (Default color is blue)
+	box.rectangle <- trellis.par.get("box.rectangle")
+	box.rectangle$col <- "black"
+	trellis.par.set("box.rectangle", box.rectangle)
+
+	### Box Plot Outliers
+	outlier.color <- "black"
+	plot.symbol <- trellis.par.get("plot.symbol")
+	plot.symbol$col <- outlier.color
+	plot.symbol$cex <- 1
+	trellis.par.set("plot.symbol", plot.symbol)
+
+	### Box Plot Whiskers
+	whisker.color <- "black"
+	box.umbrella <- trellis.par.get("box.umbrella")
+	box.umbrella$col <- whisker.color
+	trellis.par.set("box.umbrella", box.umbrella)
+
+
+	if(black.and.white){
+		boxfill.color <- "grey 90"
+	}else{
+		boxfill.color <- "light yellow"
+	}
+		
+	table.points.x <- table(points.x)
+	locations.x <- table.points.x[table.points.x >= minimum.required]
+	x.names <- as.numeric(names(locations.x))
+
+	if(length(x.names) > 0){
+		x.box.points <- points.x[points.x %in% x.names]
+		y.box.points <- points.y[points.x %in% x.names]
+			### Select only locations that contained the minimum requirement
+
+#cat("Table of X.Points\n");print(table.points.x)
+#cat("X Points that Passed");print(x.names)
+#cat("x.box.points");print(x.box.points)
+#cat("y.box.points");print(y.box.points)
+
+		panel.bwplot(
+			x = x.box.points,
+			y = y.box.points,
+			horizontal = FALSE,
+			color = "black",	### Color of "dot at median"
+			pch="|",	### Creates a horizontal line at the median, instead of a solid dot
+			fill = boxfill.color
+		)
+	}else{
+		cat("\nWarning!\n\tPlease lower the minimum required for the box and whisker plot to allow boxes to be plotted.\n\t(Only if desired)\n")
+	}
+}
+
+
+plot.grid <-
+function(
+	x.divisions = 10,
+	y.divisions = 10,
+	grid.color = "grey95",	### Really close to white
+	x.limits = data.to.plot.in.panel[["x.lim"]],
+	y.limits = data.to.plot.in.panel[["y.lim"]]
+){
+cat("\nPlotting Grid\n")
+
+	tmp.h <- (0:y.divisions)/y.divisions *(diff(y.limits)) + y.limits[1] 
+	tmp.v <- (0:x.divisions)/x.divisions *(diff(x.limits)) + x.limits[1]
+
+	panel.abline(h = tmp.h,v = tmp.v,col = "grey95")
+}	
+	
+	
+plot.grid.simple <- 
+function(
+	x.divisions = 10,
+	y.divisions = 10,
+	grid.color = "grey95"	### Really close to white
+){
+cat("\nPlotting Simple Grid\n")
+	
+	panel.grid(
+		h = y.divisions,
+		v = x.divisions,
+		col = grid.color
+	)
+}
+
+
+lines.by.id <-
+function(
+	points.x = x,
+	points.y = y,
+	ids = groups,
+	rows.being.plotted = subscripts,
+	black.and.white = black.and.white.in.panel
+){
+cat("\nPlotting Lines Connected by ID\n")
+
+	unique.ids <- unique(ids)
+
+	if(black.and.white){ 
+		colors.unique <- c(rep(1,length(unique.ids) ))
+		line.style <- "dashed"
+	}else{
+		colors.unique <- rainbow( length(unique.ids) ,start = .56,end = .13)
+			#Colors blue to purple to red to orange, no yellow and green
+		line.style <- "solid"
+	}
+	
+  panel.superpose(
+    x = points.x,
+    y = points.y,
+    subscripts = rows.being.plotted,
+    groups = ids,
+    panel.groups = "panel.lines", # Panel used to plot the data
+    col = colors.unique,
+    pch = NA,
+    lty = line.style,
+    type = "l",
+    alpha = 1  # The opacity of the lines
+  )
+}
+
+
+plot.lowess <-
+function(
+	points.x = x,
+	points.y = y,
+	line.thickness = 1.4,
+	line.style = "solid",
+	line.color = "black",
+	line.span = 5/6
+){
+cat("\nPlotting Loess Line\n")
+
+	if(length(points.x) > 1){
+		panel.loess(
+			x = points.x,
+			y = points.y,
+			lwd = line.thickness,
+			lty = line.style,
+			col = line.color,
+			span = line.span
+		)
+	}else{
+		cat("\nNot enough points to plot a Loess line\n")
+	}
+}
+
+
+plot.mean.line <-
+function(
+	points.x = x,
+	points.y = y,
+	line.style = "dotted",
+	minimum.required = 2,
+	black.and.white = black.and.white.in.panel
+){
+	cat("\nPlotting Mean Line\n")
+	
+	if(black.and.white){
+		line.color <- "black"
+		line.thickness <- 2
+	}else{
+		line.color <- "darkred"
+		line.thickness <- 2
+	}
+	
+	
+	table.points.x <- table(points.x)
+	unique.ordered.points.x <- names(table.points.x[table.points.x >= minimum.required])
+#cat("\ntable.points.x\n");print(table.points.x >= minimum.required)
+#cat("\nunique.ordered.points.x\n");print(unique.ordered.points.x)
+
+	avg.y.points <- sapply(unique.ordered.points.x,function(x,s.points.y = points.y, s.points.x = points.x){
+		s.points.mean <- mean( s.points.y[s.points.x %in% x] )
+		return(s.points.mean)
+	})
+	
+#cat("\navg.y.points\n");print(avg.y.points)
+	if(length(unique.ordered.points.x > 0)){
+		panel.lines(x = unique.ordered.points.x, y = avg.y.points, lwd = line.thickness, lty = line.style, col = line.color)
+	}else{
+		cat("\nWarning!\n\tPlease lower the minimum required for the mean line to allow the line to be plotted.\n\t(Only if desired)\n")
+	}
+}
+
+
+plot.points <- 
+function( 
+	points.x = x, 
+	points.y = y, 
+	points.symbol = "x", 
+	points.size = 1, 
+	points.color = "black"
+){
+cat("\nPlotting Points\n")
+
+	panel.xyplot(
+		x = points.x,
+		y = points.y,
+		pch = points.symbol,
+		cex = points.size,
+		col = points.color
+	)
+}
+
+
+plot.quantiles <- 
+function(
+	quantile.data = quantiles.to.plot.in.panel,
+	quantile.type = 7
+){
+cat("\nPlotting Quantiles\n")
+
+	quan.x <- quantile.data$x
+	quan.y <- quantile.data$y
+	quan.alpha <- quantile.data$alpha
+		
+	fifty.percent.line <- tapply(quan.y, quan.x, quantile, probs = 0.5, type = quantile.type)
+	nintyfive.percent.line <- tapply(quan.y, quan.x, quantile, probs = (1-quan.alpha), type = quantile.type)
+	five.percent.line <- tapply(quan.y, quan.x, quantile, probs = (quan.alpha), type = quantile.type)
+
+#cat("\n\n50% Line\n");print(fifty.percent.line)
+
+		quantile.colors <- c("grey35","grey35")
+		quantile.lty <- c("dashed","longdash")
+
+	panel.lines(names(five.percent.line),(five.percent.line), col=quantile.colors[1],lty=quantile.lty[1],lwd=2)
+	panel.lines(names(fifty.percent.line),(fifty.percent.line), col=quantile.colors[2],lty=quantile.lty[2],lwd=2)
+	panel.lines(names(nintyfive.percent.line),(nintyfive.percent.line), col=quantile.colors[1],lty=quantile.lty[1],lwd=2)
+
+}
+
+'plot.violin' <-
+function(
+  points.x = x,
+  points.y = y,
+  cut.off = 0,
+  violin.color = "transparent",
+  violin.ghost = .5
+){
+cat("\nPlotting Violin Plot\n")
+
+  ### Violin Color and Alpha (Default color is blue; Default alpha is 1)
+  viol <- trellis.par.get("plot.polygon")
+  viol$col <- violin.color
+  viol$alpha <- violin.ghost
+  trellis.par.set("plot.polygon", viol)
+    
+  panel.violin(
+    x = points.x,
+    y = points.y,
+    horizontal = FALSE,
+    cut=cut.off
+  )
+}
+
+'plot.ci95.whisker' <- 
+function(
+  points.x = x, 
+  points.y = y, 
+  distribution = "t", #"normal"
+  y.limits = NULL,
+  ci95.ghost = 1,
+  whiskers.and.outliers = FALSE
+){
+cat("\nPlotting 95% Confidence Interval\n")
+  
+  if(is.null(y.limits)) stop("\n\n\ty.limits was not supplied\n\n")
+
+  y.split <- split(points.y,points.x)
+  x.locations <- as.numeric(names(y.split))
+
+  for( i in x.locations){
+    x <- i    
+    y <- y.split[[as.character(x)]]
+    a <- mean(y)
+    s <- sd(y)
+    n <- length(y)
+    if(distribution == "t") error <- qt(0.975,df=n-1)*s/sqrt(n)
+    if(distribution == "normal") error <- qnorm(0.975)*s/sqrt(n)
+    
+    top.ci <- a + error
+    bot.ci <- a - error
+
+    ### Plot Lower Interval
+    lsegments(
+      x0 = x,  # X Start
+      y0 = bot.ci,  #Y Start
+      x1 = x,  # X Finish
+      y1 = min(a,c(a - 0.02*diff(y.limits))),  # Y Finish, with 2% buffer away from center point (creates white space)
+      col = "black",
+      lty = 1,
+      lwd = 8,
+      alpha = .25
+    )
+    
+    ### Plot Upper Interval
+    lsegments(
+      x0 = x,
+      y0 = top.ci,
+      x1 = x,
+      y1 = max(a,c(a + 0.02*diff(y.limits))),
+      col = "black",
+      lty = 1,
+      lwd = 8,
+      alpha = .25
+    )
+    
+    ### Plot Mean Dot
+    lpoints(
+      x = x, 
+      y = a,
+      pch = 16, # Solid Circle
+      col = "black",
+      cex = .75,
+      alpha = ci95.ghost
+    )
+
+    ### Write how many points there are at the bottom
+    ltext(
+      x = x,
+      y = c(y.limits[1]-diff(y.limits)*0),  # To have the text written in the 3% buffer
+      offset = 0,
+      labels = c(paste("N =",n,sep=" ",collapse="")),
+      cex = .5,
+      srt = 90,  # Rotate text 90 degrees
+    )
+
+    
+    ### Make Box Plot Box Color Transparent
+    box.rectangle <- trellis.par.get("box.rectangle")
+    box.rectangle$col <- "transparent"
+    trellis.par.set("box.rectangle", box.rectangle)
+
+    ### Make Box Plot Outliers Circles
+    outlier.color <- "black"
+    plot.symbol <- trellis.par.get("plot.symbol")
+    plot.symbol$col <- outlier.color
+    plot.symbol$cex <- 1
+    trellis.par.set("plot.symbol", plot.symbol)
+
+    ### Make Box Plot Whiskers Black, Solid, and See Through
+    whisker.color <- "black"
+    box.umbrella <- trellis.par.get("box.umbrella")
+    box.umbrella$alpha <- ci95.ghost
+    box.umbrella$col <- whisker.color
+    box.umbrella$lty <- "solid"
+    trellis.par.set("box.umbrella", box.umbrella)
+
+    ### Make Whiskers and Outliers
+    if(whiskers.and.outliers){
+      panel.bwplot(
+        x = rep(x,length(y)),
+        y = y,
+        horizontal = FALSE,
+        color = "white",  ### Best way known how to remove the dot
+        pch=".", ### Best way known how to remove the dot
+        cex = 0.000001, ### Best way known how to remove the dot
+        fill = "transparent",  # Makes box see-through
+        box.width = 0 # Makes whisker top line disappear
+      )
+    }
+
+#cat("\n\n\nX");print(x);cat("a");print(a);cat("s");print(s);cat("n");print(n);cat("error");print(error);cat("top.ci");print(top.ci);cat("bot.ci");print(bot.ci);cat("diff");print(0.02*diff(y.limits))
+
+  }
+  
+}
+

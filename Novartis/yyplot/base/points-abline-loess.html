@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Y~Y Plot Example - Base</title>
+		<link rel="stylesheet" type="text/css" href="../../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../../index.html'>Home</a></li>
+					<li><a href='../../blocks.html'>Variations</a></li>
+					<li><a href='../../boxplot.html'>Box Plot</a></li>
+					<li><a href='../../quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='../../scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='../../yyplot.html' class='active'>Y~Y Plot</a></li>
+					<li><a href='../../slug.html'>Slug Plot</a></li>
+					<li><a href='../../datasets.html'>Data Sets</a></li>
+					<li><a href='../../documents.html'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 28em">
+					<li><a href='../yyplot-lattice.html'>Lattice</a></li>
+					<li><a href='../yyplot-base.html' class="active">Base</a></li>
+				</ul>
+			</span>
+			<span class="container-sub-sub">
+				<ul id='nav' style="padding-left: 23em">
+					<li><a href='points.html'>Points</a></li>
+					<li><a href='points-abline.html'>a-b-line</a></li>
+					<li><a href='points-loess.html'>Loess</a></li>
+					<li><a href='points-abline-loess.html' class="active">Both</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+		<div class="mid">
+			<h1>Y~Y Plot</h1>
+			<p class="slogan">Example - Points, a-b-line, Loess, and Histogram</p>
+			<span class="float-correction">   </span>			
+			<table width="100%"><tr><td align="center"><a href="baseyy-points-abline-loess-large.jpg"><img src="baseyy-points-abline-loess-med.jpg" class="med-picture" align="center"/></a></td></tr></table>
+			<h2>Code Used</h2>
+<pre class="code">
+### Using a toy data set due to example data sets not having more than one Y variable
+
+#pdf(file="F:/Website/yyplot/base/baseyy-points-abline-loess-large.pdf", width = 8.5, height = 11)</pre>
+<div class="greenbk"><div class="description-even">Import<br>Data</div><pre class="code">### Import Data
+require(datasets)
+head(OrchardSprays)
+### End Import</pre></div>
+
+<div class="lightbluebk"><div class="description">Set up/Plot<br>the graph</div><pre class="code">### Make Y~Y Plot
+ yyplot(
+  x.column = "treatment",
+  y.column = "decrease",
+  <span class="newcode">split.column = "rowpos",</span>
+  data=OrchardSprays,
+  title.of.all.plots = "OrchardSprays Data Set",
+  xlab="Treatment",
+  ylab="Decrease",
+  <span class="newcode">color.of.middle.plot = color.gen("darkgreen","grey75",5),</span>
+  <span class="newcode">number.of.bars = 40,</span>
+  <span class="newcode">abline.list = list(</span>
+  <span class="newcode">  intercept = c(0),</span>
+  <span class="newcode">  slope = c(10),</span>
+  <span class="newcode">  color = "red",</span>
+  <span class="newcode">  legend = "(0,10) Line"</span>
+  <span class="newcode">),</span>
+  <span class="newcode">loess.list = list(</span>
+  <span class="newcode">  color = "blue",</span>
+  <span class="newcode">  span = c(5/6),</span>
+  <span class="newcode">  legend = "Loess Line"</span>
+  <span class="newcode">),</span>
+  <span class="newcode">top.down = FALSE</span>
+)</pre></div>
+<pre class="code">#dev.off()
+</pre>
+		</div>
+		<div class="footer"/>
+		
+	</body>
+</html>

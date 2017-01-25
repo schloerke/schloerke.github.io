@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Administration Range Variation</title>
+		<link rel="stylesheet" type="text/css" href="../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../index.html' >Home</a></li>
+					<li><a href='../blocks.html' class='active'>Variations</a></li>
+					<li><a href='../boxplot.html'>Box Plot</a></li>
+					<li><a href='../quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='../scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='../yyplot.html'>Y~Y Plot</a></li>
+					<li><a href='../slug.html'>Slug Plot</a></li>
+					<li><a href='../datasets.html'>Data Sets</a></li>
+					<li><a href='../documents.html'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 0em">
+					<li><a href='grid.html'>Grid</a></li>
+					<li><a href='admin.html' class='active'>Admin. Time</a></li>
+					<li><a href='box.html'>Box'n'Whisker</a></li>
+					<li><a href='quantile.html'>Quantile</a></li>
+					<li><a href='abline.html'>a-b-line</a></li>
+					<li><a href='lines.html'>Lines</a></li>
+					<li><a href='mean.html'>Mean Line</a></li>
+					<li><a href='loess.html'>Loess</a></li>
+					<li><a href='confidence.html'>95% CI</a></li>
+					<li><a href='points.html'>Points</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+	  	<div class='mid'>
+  			<h1>Administration Range</h1>
+  			<p class="slogan">Variation</p>
+			<span class="float-correction">   </span>			
+			<h2>Administration Time, Single Dose</h2>
+			<div class="small-picture-code">
+				<a href="admin-example.html"><img src="admin-small.jpg" class="small-picture" align="right"/></a>
+			</div>
+			<h3>Use</h3>
+			<ul>
+	   		<li>To plot the range of administration times for a single dose</li>
+			</ul>
+			<h3>Arguments</h3>
+			<dl>
+				<dt><span class="code">data.for.admin.time</span></dt>
+					<dd>- List that contains a matrix of administration times and IDs</dd>
+				<dt><span class="code">ids</span></dt>
+					<dd>- Equals 'groups'</dd>
+					<dd>- Supplied from the 'groups' in <span class="code">xyplot()</span></dd>
+				<dt><span class="code">rows.being.used</span></dt>
+					<dd>- Equals 'subscripts'</dd>
+					<dd>- Supplied from <span class="code">xyplot()</span></dd>
+				<dt><span class="code">black.and.white</span></dt>
+					<dd>- Logical, Describes whether the line should be for grey scale or color output</dd>
+			</dl>
+			<h2>Notes</h2>
+			<ul>
+				<li>Please click on the picture/code above to see how the "data.for.admin.time" is collected</li>
+  				<li>Remove the '#' before the <span class="code">cat</span>s to see what the function is doing</li>
+			</ul>	
+			<h2>Code</h2>
+<pre class="code">
+'plot.administration.time' <-
+function(
+  data.for.admin.time = data.to.plot.in.panel,
+  ids = groups,
+  rows.being.used = subscripts,
+  black.and.white = black.and.white.in.panel
+){
+
+  unique.ids <- unique(ids[rows.being.used])
+  admin.time.data <- data.for.amt[["admin.time"]]
+
+#cat("\n\nAdmin. Time Data\n");print(amt.data)
+
+  admin.time.data.select <- c(admin.time.data[admin.time.data[,"ID"] %in% unique.ids,"TIME"] )
+    #To select the administration times where the IDs are being plotted
+
+#cat("\n\nSelected Admin. Time Data\n");print(amt.data.select)
+
+  if(black.and.white){
+    polygon.color = "grey50" #medium grey
+    amt.color = "grey5" #almost black
+  }else{
+    polygon.color = "green"
+    amt.color = "green"
+  }
+
+  if(length(admin.time.data.select) > 0){
+    cat("\nPlotting Administration time\n")
+
+    admin.time.range <- range(admin.time.data.select) 
+
+    if(amt.range[1] == amt.range[2]){
+      panel.abline(v = amt.range[1],col = amt.color)
+    }else{
+      polygon.points <- rbind(
+        c(admin.time.range[1],y.min.lim),
+        c(admin.time.range[2],y.min.lim),
+        c(admin.time.range[2],y.max.lim),
+        c(admin.time.range[1],y.max.lim)
+      )
+      panel.polygon(polygon.points,col = polygon.color,border = polygon.color)
+    }
+
+  }else{
+    cat("\n There is no Administration Times being used. Administration lines will not appear. \n")
+  }
+}
+</pre>
+
+<br class="gap">
+
+			<h2>Administration Range, Multiple Doses</h2>
+			<span class="small-picture-code">
+				<a href="admin-multi-example.html"><img src="admin-multi-small.jpg" class="small-picture" align="right"/></a>
+			</span>
+			<h3>Use</h3>
+			<ul>
+	   		<li>To plot the individual administration times for a multiple doses</li>
+			</ul>
+			<h3>Arguments</h3>
+			<dl>
+				<dt><span class="code">data.for.admin.time</span></dt>
+					<dd>- List that contains a matrix of administration times and IDs</dd>
+				<dt><span class="code">ids</span></dt>
+					<dd>- Equals 'groups'</dd>
+					<dd>- Supplied from the 'groups' in <span class="code">xyplot()</span></dd>
+				<dt><span class="code">rows.being.used</span></dt>
+					<dd>- Equals 'subscripts'</dd>
+					<dd>- Supplied from <span class="code">xyplot()</span></dd>
+				<dt><span class="code">black.and.white</span></dt>
+					<dd>- Logical, Describes whether the line should be for grey scale or color output</dd>
+			</dl>
+			<h2>Notes</h2>
+			<ul>
+				<li>Please click on the picture/code above to see how the "data.for.admin.time" is collected</li>
+  				<li>Remove the '#' before the <span class="code">cat</span>s to see what the function is doing</li>
+			</ul>	
+			<h2>Code</h2>
+<pre class="code">
+plot.administration.time.multi <-
+function(
+  data.for.amt = data.to.plot.in.panel,
+  ids = groups,
+  rows.being.used = subscripts,
+  black.and.white = black.and.white.in.panel
+){
+
+  unique.ids <- unique(ids[rows.being.used])
+  amt.data <- data.for.amt[["amt"]]
+
+#cat("\n\nAMT Data\n");print(amt.data)
+  
+  amt.data.select <- c(amt.data[amt.data[,"ID"] %in% unique.ids,"TIME"] )
+    #To select the administration times where the IDs are being plotted
+  
+cat("\n\nSelected AMT Data\n");print(amt.data.select)
+  
+  if(black.and.white){
+    polygon.color = "grey50" #medium grey
+    amt.color = "grey5" #almost black
+  }else{
+    polygon.color = "green"
+    amt.color = "green"
+  }
+
+  if(length(amt.data.select) > 0){
+    cat("\nPlotting Administration time\n")
+
+    panel.abline(v = unique(amt.data.select),col = amt.color)
+      #Plot the unique times
+      
+  }else{
+    cat("\n There is no AMT times being used. AMT lines will not appear. \n")
+  }
+}
+</pre>
+
+
+
+			<h2>Legend Info</h2>
+<pre class="code">
+key = list(
+  title = "Administration Range",
+  text = list(
+    c("Points"),
+    col="black"
+  ),
+  points = list(
+    col = c(if(bw){c("grey25")}else{c("green")}),
+    pch = c(15),
+    cex = c(2)*0.75
+  ),
+  lines = list(
+    col = c(if(bw){c("grey25")}else{c("green")}),
+    lwd = c(1)*0.75,
+    lty = c("solid")
+  ),
+  type = "l",
+  space = "right",
+  cex.title = 1,
+  cex = 0.75
+)
+</pre>
+
+		</div>
+<div class="footer"/>
+	</body>
+</html>

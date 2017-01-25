@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Documents and Tips</title>
+		<link rel="stylesheet" type="text/css" href="../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../index.html'>Home</a></li>
+					<li><a href='../blocks.html'>Variations</a></li>
+					<li><a href='../boxplot.html'>Box Plot</a></li>
+					<li><a href='../quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='../scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='../yyplot.html'>Y~Y Plot</a></li>
+					<li><a href='../slug.html'>Slug Plot</a></li>
+					<li><a href='../datasets.html'>Data Sets</a></li>
+					<li><a href='../documents.html' class='active'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 37em">
+					<li><a href='http://search.r-project.org/library/lattice/html/xyplot.html' target="_blank">Lattice Plots</a></li>
+					<li><a href="http://search.r-project.org/library/stats/html/loess.html" target="_blank">Span</a></li>
+					<li><a href='http://search.r-project.org/library/lattice/html/trellis.par.get.html' target="_blank">Par</a></li>
+					<li><a href='http://search.r-project.org/library/stats/html/quantile.html' target="_blank">Quantile</a></li>
+					<li><a href="http://search.r-project.org/library/graphics/html/par.html" target="_blank">lty</a></li>
+				</ul>
+			</span>
+			<span class="container-sub-sub">
+				<ul id='nav' style="padding-left: 42em">
+					<li><a href='lattice-tips.html' class="active">Lattice</a></li>
+					<li><a href='color-gen.html'>Color</a></li>
+					<li><a href='points-pch.html'>pch</a></li>
+					<li><a href='rainbow.html'>Rainbow</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+		<div class='mid'>
+			<h1>Lattice</h1>
+			<p class="slogan">Tips</p>
+			<span class="float-correction">   </span>
+			<h2>Description</h2>
+				<ul>
+					<li>"Implementation of Trellis Graphics in R"</li>
+				</ul>
+			<h2>Note</h2>
+			<p>High level Lattice functions (like xyplot) are different from conventional R graphics functions because they don't actually draw anything. Instead, they return an object of class "trellis" which has to be then printed or plotted to create the actual plot. This is normally done automatically, but not when the high level functions are called inside another function (most often source) or other contexts where automatic printing is suppressed (e.g. for or while loops). In such situations, an <b>explicit call to print or plot is required</b>.<br><br>
+Lattice plots are highly customizable via user-modifiable settings. However, these are completely unrelated to base graphics settings; in particular, <b>changing par() settings usually have no effect on lattice plots</b>.</p>
+			<p>Information taken from '?lattice' within R</p>
+			<h2>Deepayan's Short Description</h2>
+			<p>"I have written and maintain an R package called Lattice which implements Trellis Graphics in R. It is for the most part a clone of the Trellis library in S-PLUS, and is built using the Grid add-on package by Paul Murrell."</p>
+			<h2>Links</h2>
+			<p>Deepayan wrote a book (see below) and included all of his graphic codes on the internet.  It is a huge resource of different plots.  The bad part is that the code is not documented as to what he is doing.  Make sure you take a look at the <a href="http://dsarkar.fhcrc.org/lattice/book/figures.html" target="_blank">Figures and Code</a></p>
+			<h2>Recommendations</h2>
+			<p>Buy the book that Deepayan Sarkar has written, "Lattice: Multivariate Data Visualization with R (Use R) (Paperback)".(<a href="http://www.amazon.com/Lattice-Multivariate-Data-Visualization-Use/dp/0387759689" target="_blank">USA Link</a>, <a href="http://www.amazon.de/Lattice-Multivariate-Data-Visualization-Use/dp/0387759689/" target="_blank">Basel Link</a>)<br><br>
+It contains a lot of useful references, better than the web, and the book takes you through the learning stages of how Lattice works.  (It will ease any transition pain that may occur, :-D )</p>
+		</div>
+		<div class="footer"/>
+	</body>
+</html>

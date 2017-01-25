@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Quantile Lines Variation</title>
+		<link rel="stylesheet" type="text/css" href="../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../index.html' >Home</a></li>
+					<li><a href='../blocks.html' class='active'>Variations</a></li>
+					<li><a href='../boxplot.html'>Box Plot</a></li>
+					<li><a href='../quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='../scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='../yyplot.html'>Y~Y Plot</a></li>
+					<li><a href='../slug.html'>Slug Plot</a></li>
+					<li><a href='../datasets.html'>Data Sets</a></li>
+					<li><a href='../documents.html'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 0em">
+					<li><a href='grid.html'>Grid</a></li>
+					<li><a href='admin.html'>Admin. Time</a></li>
+					<li><a href='box.html'>Box'n'Whisker</a></li>
+					<li><a href='quantile.html' class='active'>Quantile</a></li>
+					<li><a href='abline.html'>a-b-line</a></li>
+					<li><a href='lines.html'>Lines</a></li>
+					<li><a href='mean.html'>Mean Line</a></li>
+					<li><a href='loess.html'>Loess</a></li>
+					<li><a href='confidence.html'>95% CI</a></li>
+					<li><a href='points.html'>Points</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+		<div class='mid'>
+			<h1>Quantiles</h1>
+			<p class="slogan">Variation</p>
+			<span class="float-correction">   </span>			
+			<div class="small-picture-code">
+				<a href="quantile-example.html"><img src="quantile-small.jpg" class="small-picture" align="right"/></a>
+			</div>
+			<h2>Use</h2>
+			<ul>
+				<li>To plot a lower, 50%, and upper quantile</li>
+			</ul>
+			<h2>Arguments</h2>
+			<dl>
+  				<dt><span class="code">quantile.data</span></dt>
+					<dd>- A List including:
+        				<dl>
+            				<dt><span class="code">x</span></dt>
+							   <dd>- All X values of points that will be plotted</dd>
+      						<dt><span class="code">y</span></dt>
+      							<dd>- All Y values of points that will be plotted</dd>
+      						<dt><span class="code">alpha</span></dt>
+      							<dd>- A percentage from 0 and 1</dd>
+            					<dd>- Ex. <span class="code">alpha == .05</span>, the quantiles produced are 5%, 50%, 95%.</dd>
+						</dl>
+					</dd>
+				<dt>quantile.type</dt>
+					<dd>- Specifies what method should be used for calculating the quantiles.  See the <a href="../documents.html">Documents</a> for more information.</dd>
+			</dl>
+			
+			<h2>Notes</h2>
+				<ul>
+					<li><span class="code">quantile.data</span> must be supplied in the panel function.</li>
+					<li>The X and Y data may be from a different data set than the data being plotted in the other panel functions</li>
+					<li>Quantile data does NOT need to have the same amount of lines as the rest of the data being plotted</li>
+					<li>Quantile data does NOT need to have all of the necessary columns</li>
+					<li>Quantile data is NOT packet dependent, therefore each packet has the same plot.quantiles() output</li>
+				</ul>	
+			<h2>Code</h2>
+<pre class="code">
+'plot.quantiles' <- 
+function(
+  quantile.data = quantiles.to.plot.in.panel,
+  quantile.type = 7
+){
+cat("\nPlotting Quantiles\n")
+
+  quan.x <- quantile.data$x
+  quan.y <- quantile.data$y
+  quan.alpha <- quantile.data$alpha
+    
+  fifty.percent.line <- tapply(quan.y, quan.x, quantile, probs = 0.5, type = quantile.type)
+  nintyfive.percent.line <- tapply(quan.y, quan.x, quantile, probs = (1-quan.alpha), type = quantile.type)
+  five.percent.line <- tapply(quan.y, quan.x, quantile, probs = (quan.alpha), type = quantile.type)
+
+  quantile.colors <- c("grey35","grey35")
+  quantile.lty <- c("dashed","longdash")
+
+  panel.lines(names(five.percent.line),(five.percent.line), col=quantile.colors[1],lty=quantile.lty[1],lwd=2)
+  panel.lines(names(fifty.percent.line),(fifty.percent.line), col=quantile.colors[2],lty=quantile.lty[2],lwd=2)
+  panel.lines(names(nintyfive.percent.line),(nintyfive.percent.line), col=quantile.colors[1],lty=quantile.lty[1],lwd=2)
+
+}
+</pre>
+			<h2>Legend Info</h2>
+<pre class="code">
+key = list(
+  title = "Legend",
+  text = list(
+    c("Quantiles"),
+    col="black"
+  ),
+  points = list(
+    col = c("grey35"),
+    pch = c(NA),
+    cex = c(1)*0.75
+  ),
+  lines = list(
+    col = c("grey35"),
+    lwd = c(2)*0.75,
+    lty = c("dashed")
+  ),
+  type = "l",
+  space = "right",
+  cex.title = 1,
+  cex = 0.75
+)
+</pre>
+
+		</div>
+<div class="footer"/>
+	</body>
+</html>

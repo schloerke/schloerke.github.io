@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Documents and Tips</title>
+		<link rel="stylesheet" type="text/css" href="../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../index.html'>Home</a></li>
+					<li><a href='../blocks.html'>Variations</a></li>
+					<li><a href='../boxplot.html'>Box Plot</a></li>
+					<li><a href='../quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='../scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='../yyplot.html'>Y~Y Plot</a></li>
+					<li><a href='../slug.html'>Slug Plot</a></li>
+					<li><a href='../datasets.html'>Data Sets</a></li>
+					<li><a href='../documents.html' class='active'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 37em">
+					<li><a href='http://search.r-project.org/library/lattice/html/xyplot.html' target="_blank">Lattice Plots</a></li>
+					<li><a href="http://search.r-project.org/library/stats/html/loess.html" target="_blank">Span</a></li>
+					<li><a href='http://search.r-project.org/library/lattice/html/trellis.par.get.html' target="_blank">Par</a></li>
+					<li><a href='http://search.r-project.org/library/stats/html/quantile.html' target="_blank">Quantile</a></li>
+					<li><a href="http://search.r-project.org/library/graphics/html/par.html" target="_blank">lty</a></li>
+				</ul>
+			</span>
+			<span class="container-sub-sub">
+				<ul id='nav' style="padding-left: 42em">
+					<li><a href='lattice-tips.html'>Lattice</a></li>
+					<li><a href='color-gen.html'>Color</a></li>
+					<li><a href='points-pch.html' class="active">pch</a></li>
+					<li><a href='rainbow.html'>Rainbow</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+		<div class='mid'>
+			<h1>Point's Pch</h1>
+			<p class="slogan">Tips</p>
+			<span class="float-correction">   </span>			
+			<h2>Description</h2>
+				<ul>
+					<li>Generates a PDF file of major and minor values of 'pch'</li>
+					<li><a href="points-pch.pdf">Output</a></li>
+					<li>Altered form of 'pchShow()' from 'examples(pch)'</li>
+				</ul>
+			<h2>Function</h2>
+<pre class="code">
+pchShow2 <- function(
+  extras = c(0:25),
+  cex = 1.5, ## good for both .Device=="postscript" and "x11"
+  col = "red3",
+  bg = "gold",
+  coltext = "brown",
+  cextext = 1.2,
+  main = paste("plot symbols :	points (...	pch = *, cex =", cex,")")
+){
+  nex <- length(extras)
+  np	<- nex
+  ipch <- 0:(np-1)
+  k <- floor(sqrt(np))
+  dd <- c(-1,1)/2
+  rx <- dd + range(ix <- ipch %/% k)
+  ry <- dd + range(iy <- 3 + (k-1)- ipch %% k)
+  pch <- as.list(ipch) # list with integers & strings
+  if(nex > 0) pch[1:nex] <- as.list(extras)
+  plot(rx, ry, type="n", axes = FALSE, xlab = "", ylab = "", main = main)
+  abline(v = ix, h = iy, col = "lightgray", lty = "dotted")
+  for(i in 1:np) {
+    pc <- pch[[i]]
+    ## 'col' symbols with a 'bg'-colored interior (where available) :
+    points(ix[i], iy[i], pch = pc, col = col, bg = bg, cex = cex)
+    if(cextext > 0)
+      text(ix[i] - .3, iy[i], pc, col = coltext, cex = cextext)
+    }
+}
+
+pdf(file="pch points.pdf",width=10,height=10)
+pchShow2(extras=c(0:25),main="Plot Symbols 0:25; cex=3",cex=3,cextext=0.7)
+pchShow2(extras=c(33:126),main="Plot Symbols 33:126; cex=3",cex=3,cextext=0.7)
+pchShow2(extras=c(161:191),main="Plot Symbols 161:191; cex=3",cex=3,cextext=0.7)
+pchShow2(extras=c(192:221),main="Plot Symbols 192:221; cex=3",cex=3,cextext=0.7)
+pchShow2(extras=c(222:255),main="Plot Symbols 222:255; cex=3",cex=3,cextext=0.7)
+#pchShow2(extras=c(256:382),main="Plot Symbols 256:382",cex=1,cextext=0.7)
+#pchShow2(extras=c(383:451),main="Plot Symbols 383:451",cex=1,cextext=0.7)
+#pchShow2(extras=c(452:511),main="Plot Symbols 452:511",cex=1,cextext=0.7)
+#pchShow2(extras=c(512:567),main="Plot Symbols 512:567",cex=1,cextext=0.7)
+#pchShow2(extras=c(592:687),main="Plot Symbols 592:687",cex=1,cextext=0.7)
+# Even more, but stopped
+dev.off()
+</pre>
+		</div>
+		<div class="footer"/>
+	</body>
+</html>

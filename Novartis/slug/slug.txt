@@ -1,0 +1,276 @@
+### A graph for presenting individual growth with time in a population with:
+### Histograms of size distribution with time,
+### Quantiles for the median and 5% / 95% percentiles,
+### A graph quantile residuals using boxplots around the median model.
+
+plot.slug <- function(
+	column.x = NULL,
+	column.y = NULL,
+	outlier.ids = FALSE,
+	data = NULL,
+	quantile.data = NULL,
+	quantile.lines = "calculate",
+	quantile.type = 7,
+	number.of.bars = 80,
+	barscale = .35,
+	barcol = "gray90",
+	boxwex = .15,
+	points.mean = TRUE,
+	xlab1 = "",
+	ylab1 = "",
+	ylab2 = "",
+	main="",
+	line.types = c(2, 1, 2)
+){
+	x <- data[column.x]
+	y <- data[column.y]
+
+	### Adjust the limits to allow for ID numbers
+	xlimits <- range(x)
+	x.min <- xlimits[1]
+	x.min <- x.min - 0.02*diff(xlimits)
+	x.max <- xlimits[2]
+	x.max <- x.max + 0.02*diff(xlimits)
+	xlimits <- c(x.min,x.max)
+	ylimits <- range(y)
+	y.min <- ylimits[1]
+	y.min <- y.min - 0.02*diff(ylimits)
+	y.max <- ylimits[2]
+	y.max <- y.max + 0.02*diff(ylimits)
+	ylimits <- c(y.min,y.max)
+
+#cat("\nxlimits\n");print(xlimits);cat("\nylimits\n");print(ylimits)
+
+	x.and.y <- cbind(x,y)
+
+#cat("\nDATA\n");print(x.and.y)
+
+	y.split <- split(x.and.y[,2],x.and.y[,1]) # split y by x
+	y.split.names <- names(y.split)
+	x.locations <- as.numeric(y.split.names)
+
+	## Check for Quantile Lines
+	plot.quan.lines <- TRUE
+	if(length(quantile.lines)==1){
+		if(quantile.lines %in% "calculate"){
+			cat("\nCalculating Quantile Lines\n\n")
+			y.quantile <- t( sapply( y.split, function(x, q.type = quantile.type){quantile( x, probs=c(.05,.5,.95), type = q.type ) } ) )
+			c.05 = y.quantile[,1]
+			c.50 = y.quantile[,2] 
+			c.95 = y.quantile[,3]
+			
+		}else{
+			plot.quan.lines <- FALSE
+		}
+	}else{
+		
+		if(length(quantile.lines) == 3 & is.character(quantile.lines) ){
+			cat("\nUsing defined quantile lines: Lower =",quantile.lines[1]," Middle =",quantile.lines[2]," Upper =",quantile.lines[3],"\n\n")
+	
+			col.check <- colnames(quantile.data) %in% quantile.lines
+
+#cat("\nQuantile Data Lower\n");print(quantile.data[,1])
+#cat("\nQuantile Data Column Names\n");print(colnames(quantile.data))
+#cat("\nQuantile Column Names Present\n");print(col.check)
+
+			if(FALSE %in% col.check){
+				stop("\n\n\tSomething is wrong with the quantile lines.  Please check to make sure that the correct column names were used and that a 'quantile.data' matrix was supplied correctly.\n\n\n")
+			}
+	
+			c.05 = c(quantile.data[,as.character(quantile.lines[1])])
+			c.50 = c(quantile.data[,as.character(quantile.lines[2])])
+			c.95 = c(quantile.data[,as.character(quantile.lines[3])])
+
+#print(c.05);print(c.50);print(c.95);print(length(c.05))
+
+			if(length(c.05) < 2 | length(c.50) < 2 | length(c.95) < 2){
+				stop("Please check your quantile.data, as there was an error.  Not enough data points were supplied.")
+			}
+		}else{
+			plot.quan.lines <- FALSE
+		}
+	}
+	
+	if (!plot.quan.lines) 
+		stop("\n\n'quantile.lines' did not follow the set guidelines.  It must either be\n\n\t'calculate': Have the computer caculate the 0.05, 0.50, 0.95 quantile intervals\n\n\t\tor\n\n\tc('lower.column.name','middle.column.name','upper.column.name'): a vector containing the lower, middle, and upper column names\n\n") 
+
+	curves = data.frame(c.05, c.50, c.95) 
+
+#print(curves)
+
+	# Create a layout for the histograms and the boxplots and the title
+	nf <- layout(matrix(c(3,2,1),3,1,byrow = TRUE), widths = 7, heights = c(.25, 2, 5), respect = TRUE)
+#	layout.show(nf) 
+
+	par(mar = c(5, 4, 0, 2), lab = c(5, 5, 7)) 
+		# Regular bottom, left, and right; top == 0
+
+	# Draw the curves
+		par(new = FALSE) 
+		matplot(x.locations, curves, type = "l", xaxs = "i", lty = line.types, col = 1, lwd = 2, 
+	        bty = "l", xlim = xlimits, ylim = ylimits, ylab = ylab1, xlab = xlab1, las = 1)
+	# Name outliers
+		if(is.character(outlier.ids)){
+			outlier.t.f <- outlier.ids %in% colnames(data)
+			if(!outlier.t.f){
+				stop("\n\n\tPlease supply the correct ID column, or set 'outlier.ids = FALSE' \n\n")
+			}
+			y.split.check.bot <- split(data[,c(column.y,outlier.ids)],x.and.y[,1])
+			y.split.check.up <- split(data[,c(column.y,outlier.ids)],x.and.y[,1])
+#print(y.split.check.bot)
+
+			for(i in 1:length(x.locations)){
+				X <- x.locations[i]
+				y.split.check.bot.tmp <- y.split.check.bot[[as.character(X)]]
+				y.split.check.bot.0 <- y.split.check.bot.tmp[,1] - curves[i,1]
+				y.bot.y.ids <- y.split.check.bot.tmp[y.split.check.bot.0 < 0,]
+				
+				if(length(y.bot.y.ids[,1]) > 0){
+					text(
+						as.character(y.bot.y.ids[,2]),
+						x = rep(c(X-diff(range(xlimits))*.01),length(y.bot.y.ids[,1])),
+						y = y.bot.y.ids[,1],
+						cex = .5
+					)
+cat("\nX, Y, and IDs Outside Lower Interval\n");print(cbind(X,y.bot.y.ids))
+				}
+				
+				y.split.check.up.tmp <- y.split.check.up[[as.character(X)]]
+				y.split.check.up.0 <- y.split.check.up.tmp[,1] - curves[i,3]
+				y.up.y.ids <- y.split.check.up.tmp[y.split.check.up.0 > 0,]
+				
+				if(length(y.up.y.ids[,1]) > 0){
+					text(
+						as.character(y.up.y.ids[,2]),
+						x = rep(c(X-diff(range(xlimits))*.01),length(y.up.y.ids[,1])),
+						y = y.up.y.ids[,1],
+						cex=.5
+					)
+cat("\nX, Y, and IDs Outside Upper Interval\n");print(cbind(X,y.up.y.ids))
+				}
+				
+			}
+			
+		}
+			
+	### Calculate Histograms
+	y.hist <- lapply(y.split, function(x){ 
+		hist(
+			x,
+			breaks = seq(ylimits[1],ylimits[2],length.out = number.of.bars+1),
+			plot = FALSE
+		)
+	})
+	
+#cat("\nY.hist\n");print(y.hist)
+	
+	y.hist.max.count <- sapply(names(y.hist),function(x,y.hist.counts = y.hist){
+		tmp <- y.hist.counts[[x]]
+		max(tmp$counts)
+	})
+
+#cat("\nY.hist.count\n");print(y.hist.max.count)
+	y.hist.max.count <- max(y.hist.max.count)
+#cat("\nMax Count\n");print(y.hist.max.count)
+
+
+	# Draw the histograms
+	for (i in 1:length(x.locations)){ 
+		par(new = TRUE)
+		xmin <- xlimits[1] - x.locations[i]
+		xmax <- xlimits[2] - x.locations[i]
+
+		y.hist.tmp <- y.hist[[as.character(x.locations[i] ) ]]
+		y.hist.tmp.counts <- y.hist.tmp$counts 
+		bars <- y.hist.tmp.counts/y.hist.max.count * barscale 
+		
+		bars <- as.numeric(bars)
+
+		names(bars) <- y.hist.tmp$mids
+		barplot(
+			bars,
+			horiz = TRUE,
+			axes = FALSE,
+			xlim = c(xmin, xmax), # Defined in loop
+			ylim = c(ylimits - ylimits[1]), # allows plot to be plotted in the correct location, Do not mess with this
+			col = barcol,
+			space = 0,
+			width = c(as.numeric(names(bars[2])) - as.numeric(names(bars[1])) ),
+			axisnames = FALSE
+		)
+
+#if(i < 2 ){
+#	cat("\nx.locations[i]");print(x.locations[i]);
+#	cat("\nY.hist.tmp\n");print(y.hist.tmp)
+#	cat("\nbarplot matrix\n");print(bars)
+#}
+
+	}
+
+	# Subtract from 50% line
+	y.split.top <- y.split
+	for (i in 1:length(y.split.names)) 
+		y.split.top[[y.split.names[i] ]] <- y.split.top[[y.split.names[i] ]] - curves[i,2]
+
+	# Draw it
+	par(mar = c(1, 4, 1, 2), lab = c(5, 3, 7)) 
+		# margin lines of bottom, left, top, right; 5 x ticks, 3 y ticks, 7 digits long (max)
+
+	matplot(
+		x.locations,
+		curves - curves[, 2],
+		type = "l",
+		xaxs = "i", # makes plot be viewed in the same range as the top plot
+		xaxt = "n", # makes the x axis not be 'ticked' or labeled
+		lty = line.types,
+		col = 1,
+		lwd = 2,
+		bty = "l",
+		xlim = xlimits,
+ 		ylim = c(
+			min(
+				min(curves[,1]-curves[2]),
+				min(range(y.split.top))
+			),
+			max(
+				max(curves[,3]-curves[2]),
+				max(range(y.split.top))
+			)
+		),
+		ylab = ylab2,
+		las = 1 # number are horizontal in orientation
+	)
+
+	# Draw tick marks for the X axis
+	axis(1, labels = FALSE) 
+
+	boxplot(
+		y.split.top,
+		col = "gray90",
+		boxwex = boxwex,
+        range = 1.5,
+		add = TRUE,
+		at = x.locations,
+		lty="solid",
+		axes=FALSE,
+		medcol="black"
+	)
+	
+	if(points.mean){
+		lapply(y.split.names,function(x,y.split = y.split.top){
+			points(as.numeric(x),mean(y.split[[x]]),pch=16)
+		})
+	}
+	
+	### Title
+		par(mar= c(0,0,0,0))
+		#produce a buffer of 0 lines from the top of the 'page'
+		plot(1,1,type="l",col="white",xlab="",ylab="",axes=FALSE)
+		#Moves the plotting area to the 'title' area of the 'page'
+	mtext(main, cex = 1.5,side = 3, adj = .5,line= -(1.5 + 1.5), font = 2)
+		# Write the title of the 'page', at cex.main size, on the top, in the middle, with a 1.5 line buffer, in bold
+ 
+
+}
+
+

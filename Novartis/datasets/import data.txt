@@ -1,0 +1,43 @@
+theophylline <- read.csv(file.choose())		### theophylline_data.txt
+
+theophylline <- cbind(theophylline,0,0)		### Due to not having a MDV and DOSE column
+
+col.name <- colnames(theophylline)
+colnames(theophylline) <- c(col.name[1],"DOSE",col.name[3:5],"MDV","AMT")		### Rename column
+
+theophylline[is.na(theophylline["DV"]),"MDV"] <- 1		### If DV="." then MDV=1
+theophylline[is.na(theophylline["DV"]),"AMT"] <- theophylline[is.na(theophylline["DV"]),"DOSE"]
+
+theophylline
+
+#########
+
+warfarin <- read.csv(file.choose())		### warfarin_data.txt
+warfarin[is.na(warfarin["AMT"]),"AMT"] <- 0
+
+tmp <- as.character(warfarin$ID)
+tmp.split <- split(warfarin,warfarin["ID"])
+
+final <- NULL
+for( i in unique(tmp)){
+	section <- rep(tmp.split[[i]][1,"AMT"],nrow(tmp.split[[i]]))
+	final <- c(final,section)
+}
+DOSE <- final
+warfarin <- cbind(warfarin, DOSE)
+
+warfarin[ warfarin$MDVPK==0,] -> warfarin.mdvpk.0  #No AMT.data
+warfarin[ warfarin$MDVPK==1,] -> warfarin.mdvpk.1
+
+
+
+
+warfarin
+
+
+
+##########
+
+head(theophylline)
+
+head(warfarin)

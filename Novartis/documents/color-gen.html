@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Documents and Tips</title>
+		<link rel="stylesheet" type="text/css" href="../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../index.html'>Home</a></li>
+					<li><a href='../blocks.html'>Variations</a></li>
+					<li><a href='../boxplot.html'>Box Plot</a></li>
+					<li><a href='../quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='../scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='../yyplot.html'>Y~Y Plot</a></li>
+					<li><a href='../slug.html'>Slug Plot</a></li>
+					<li><a href='../datasets.html'>Data Sets</a></li>
+					<li><a href='../documents.html' class='active'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 37em">
+					<li><a href='http://search.r-project.org/library/lattice/html/xyplot.html' target="_blank">Lattice Plots</a></li>
+					<li><a href="http://search.r-project.org/library/stats/html/loess.html" target="_blank">Span</a></li>
+					<li><a href='http://search.r-project.org/library/lattice/html/trellis.par.get.html' target="_blank">Par</a></li>
+					<li><a href='http://search.r-project.org/library/stats/html/quantile.html' target="_blank">Quantile</a></li>
+					<li><a href="http://search.r-project.org/library/graphics/html/par.html" target="_blank">lty</a></li>
+				</ul>
+			</span>
+			<span class="container-sub-sub">
+				<ul id='nav' style="padding-left: 42em">
+					<li><a href='lattice-tips.html'>Lattice</a></li>
+					<li><a href='color-gen.html' class="active">Color</a></li>
+					<li><a href='points-pch.html'>pch</a></li>
+					<li><a href='rainbow.html'>Rainbow</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+		<div class='mid'>
+			<h1>Color Generator</h1>
+			<p class="slogan">Tips</p>
+			<span class="float-correction">   </span>			
+			<h2>Description</h2>
+				<ul>
+					<li>Generates the hexadecimal color codes between the two colors supplied, in n intervals</li>
+					<li><a href="color-gen.pdf">Output</a></li>
+					<li>Idea from 'examples(rgb)'</li>
+					<li>Do not finish with white.  You will be 'missing' some points. This will be very "visible" when you look at the output.  </li>
+				</ul>
+			<h2>Function</h2>
+<pre class="code">
+color.gen <- function(
+  color.start = "black",
+  color.finish = "grey75",
+  number = 5
+){
+  ramp <- colorRamp(c(color.start,color.finish))
+  colors <- rgb( ramp( seq(0,1, length = number)), max = 255)
+  return(colors)
+}</pre>
+			<h2>Output</h2>
+<pre class = "code">
+color.grid <- expand.grid(
+  list(
+    x=c(1:4),
+    y=c(1,2),
+    start=c("black","red","orange","yellow","green","blue","purple","grey"),
+    end=c("white","grey75","grey50","grey25","black")
+  )
+)
+
+
+function.of.panel <- function(
+  x,
+  y,
+  subscripts,
+  data = color.grid){
+
+  colors.being.used <- data[subscripts[1],c("start","end")]
+  colors.of.plot <- color.gen(
+    color.start = as.character(colors.being.used[1,1]),
+    color.finish = as.character(colors.being.used[1,2]),
+    number = 8
+  )
+
+#cat("\ndata\n");print(data[subscripts,])
+#cat("\ncolors\n");print(colors.being.used)  
+#cat("\ncolors\n");print(colors.of.plot)
+  
+  panel.points(
+    x,
+    y,
+    col = colors.of.plot
+  )
+
+}
+
+
+lat.color <- xyplot(
+  y ~ x | as.factor(start) + as.factor(end),
+  data = color.grid,
+  panel = function.of.panel,
+  ylim = c(-1,4),
+  xlim = c(-1,6),
+  asp ="iso", 
+    # Units have the same interval length on the X and Y axis
+  xlab = NULL,
+  ylab = NULL,
+  main = "Color Generator",
+  scales = list(draw=FALSE),
+    # Do not produce axis labels or ticks
+
+#  key=list(
+#    text=list(
+#      c("Start","End"),
+#      col=c("#FFE6CB","#C9FECC"),
+#        # Hexadecimal colors may be used, as long as they are in quotes
+#      font = 2
+#        # Bold Font
+#    ),
+#    space="right",
+#    background="black"
+#      # Color behind text
+#    
+#  )  
+  # Did not produce this key, as it may be confusing.
+  # It did use some new 'techniques' though, so it was left commented out
+    
+)
+
+
+pdf("color.gen.pdf",width=10,height=10)
+  #Another way to produce the PDF output
+    #1. Do all of the work
+    #2. Start the PDF
+    #3. Print the output
+    #4. Close the PDF
+    
+print(lat.color)
+  
+dev.off()
+</pre>
+		</div>
+		<div class="footer"/>
+	</body>
+</html>

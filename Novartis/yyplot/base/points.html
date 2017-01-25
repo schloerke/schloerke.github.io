@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Y~Y Plot Example - Base</title>
+		<link rel="stylesheet" type="text/css" href="../../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../../index.html'>Home</a></li>
+					<li><a href='../../blocks.html'>Variations</a></li>
+					<li><a href='../../boxplot.html'>Box Plot</a></li>
+					<li><a href='../../quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='../../scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='../../yyplot.html' class='active'>Y~Y Plot</a></li>
+					<li><a href='../../slug.html'>Slug Plot</a></li>
+					<li><a href='../../datasets.html'>Data Sets</a></li>
+					<li><a href='../../documents.html'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 28em">
+					<li><a href='../yyplot-lattice.html'>Lattice</a></li>
+					<li><a href='../yyplot-base.html' class="active">Base</a></li>
+				</ul>
+			</span>
+			<span class="container-sub-sub">
+				<ul id='nav' style="padding-left: 23em">
+					<li><a href='points.html' class="active">Points</a></li>
+					<li><a href='points-abline.html'>a-b-line</a></li>
+					<li><a href='points-loess.html'>Loess</a></li>
+					<li><a href='points-abline-loess.html'>Both</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+		<div class="mid">
+			<h1>Y~Y Plot</h1>
+			<p class="slogan">Example - Points and Histogram</p>
+			<span class="float-correction">   </span>			
+			<table width="100%"><tr><td align="center"><a href="baseyy-points-large.jpg"><img src="baseyy-points-med.jpg" class="med-picture" align="center"/></a></td></tr></table>
+			<h2>Code Used</h2>
+<pre class="code">
+### Using a toy data set due to example data sets not having more than one Y variable
+
+#pdf(file="F:/Website/yyplot/base/baseyy-points-large.pdf", width = 8.5, height = 11)</pre>
+<div class="greenbk"><div class="description-even">Import<br>Data</div><pre class="code">### Import Data  
+require(datasets)
+head(swiss)
+### End Import</pre></div>
+
+<div class="lightbluebk"><span class="description">Set up/Plot<br>the graph</span><pre class="code">### Make Y~Y Plot
+yyplot(
+  x.column = "Examination",
+  y.column = "Infant.Mortality",
+  data=swiss,
+  title.of.all.plots = "Swiss Dataset",
+  xlab="Examination",
+  ylab="Infant Mortality",
+  color.of.middle.plot = color.gen("black","grey",3)
+)
+</pre></div>
+<pre class="code">#dev.off()
+</pre>
+		</div>
+		<div class="footer"/>
+		
+	</body>
+</html>

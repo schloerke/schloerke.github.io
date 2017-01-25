@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Points Variation</title>
+		<link rel="stylesheet" type="text/css" href="../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../index.html' >Home</a></li>
+					<li><a href='../blocks.html' class='active'>Variations</a></li>
+					<li><a href='../boxplot.html'>Box Plot</a></li>
+					<li><a href='../quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='../scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='../yyplot.html'>Y~Y Plot</a></li>
+					<li><a href='../slug.html'>Slug Plot</a></li>
+					<li><a href='../datasets.html'>Data Sets</a></li>
+					<li><a href='../documents.html'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 0em">
+					<li><a href='grid.html'>Grid</a></li>
+					<li><a href='admin.html'>Admin. Time</a></li>
+					<li><a href='box.html'>Box'n'Whisker</a></li>
+					<li><a href='quantile.html'>Quantile</a></li>
+					<li><a href='abline.html'>a-b-line</a></li>
+					<li><a href='lines.html'>Lines</a></li>
+					<li><a href='mean.html'>Mean Line</a></li>
+					<li><a href='loess.html'>Loess</a></li>
+					<li><a href='confidence.html'>95% CI</a></li>
+					<li><a href='points.html' class='active'>Points</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+		<div class='mid'>
+			<h1>Points</h1>
+			<p class="slogan">Variation</p>
+			<span class="float-correction">   </span>			
+			<div class="small-picture-code">
+				<a href="points-example.html"><img src="points-small.jpg" class="small-picture" align="right"/></a>
+			</div>
+			<h2>Use</h2>
+			<ul>
+				<li>To plot the points on the graph</li>
+			</ul>
+			<h2>Arguments</h2>
+			<dl>
+ 	 			<dt><span class="code">points.x</span></dt>
+					<dd>- All X values of points that will be plotted</dd>
+				<dt><span class="code">points.y</span></dt>
+					<dd>- All Y values of points that will be plotted</dd>
+				<dt><span class="code">points.symbol</span></dt>
+					<dd>- Defaulted to "x".  The default when plotting a regular plot is "o".</dd>
+				<dt><span class="code">points.size</span></dt>
+					<dd>- Default is 1</dd>
+				<dt><span class="code">points.color</span></dt>
+					<dd>- Default is "black".  May be replaced with rgb() or color system.</dd>
+			</dl>
+			<h2>Notes</h2>
+				<ul>
+					<li>Almost always plotted last, unless under an a-b-line</li>
+				</ul>
+			<h2>Code</h2>
+<pre class="code">
+'plot.points' <-
+function( 
+  points.x = x, 
+  points.y = y, 
+  points.symbol = "x", 
+  points.size = 1, 
+  points.color = "black"
+){
+cat("\nPlotting Points\n")
+
+  panel.xyplot(
+    x = points.x,
+    y = points.y,
+    pch = points.symbol,
+    cex = points.size,
+    col = points.color
+  )
+}
+</pre>
+			<h2>Legend Info</h2>
+<pre class="code">
+key = list(
+  title = "Legend",
+  text = list(
+    c("Points"),
+    col="black"
+  ),
+  points = list(
+    col = c("black"),
+    pch = c(4),
+    cex = c(1)*0.75
+  ),
+  lines = list(
+    col = c("black"),
+    lwd = c(1)*0.75,
+    lty = c("blank")
+  ),
+  type = "l",
+  space = "right",
+  cex.title = 1,
+  cex = 0.75
+)
+</pre>
+
+		</div>
+<div class="footer"/>
+	</body>
+</html>

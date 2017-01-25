@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Theophylline - Data Sets</title>
+		<link rel="stylesheet" type="text/css" href="../style/screen.css" />
+	</head>
+	<body>
+		<div class='mid'>
+			<span class="container">
+				<ul id='nav'>
+					<li><a href='../index.html' >Home</a></li>
+					<li><a href='../blocks.html'>Variations</a></li>
+					<li><a href='../boxplot.html'>Box Plot</a></li>
+					<li><a href='../quantileplot.html'>Quantile Plot</a></li>
+					<li><a href='../scatterplot.html'>Scatter Plot</a></li>
+					<li><a href='../yyplot.html'>Y~Y Plot</a></li>
+					<li><a href='../slug.html'>Slug Plot</a></li>
+					<li><a href='../datasets.html' class='active'>Data Sets</a></li>
+					<li><a href='../documents.html'>Documents & Tips</a></li>
+				</ul>
+			</span>
+			<span class="container-sub">
+				<ul id='nav' style="padding-left: 34em">
+					<li><a href='theophylline.html' class='active'>Theophylline</a></li>
+					<li><a href='warfarin.html'>Warfarin</a></li>
+					<li><a href='monolix.html'>Monolix</a></li>
+				</ul>
+			</span>
+		</div>
+		<br clear="all">
+		<br class="gap">
+		<div class="logo-picture"></div>
+		<div class='mid'>
+			<h1>Theophylline</h1>
+			<p class="slogan">Data Sets</p>
+			<span class="float-correction">   </span>			
+			<h2>Info</h2>
+			<ul>
+				<li>12 different ID's with 11 entries each.</li>
+				<li>The "AMT" is at time = 0 for each ID (missing "DV" variable)</li>
+				<li>The "DOSE" is understood by "AMT"</li>
+				<li>No "MDV" (Missing Dependent Variable)</li>
+			</ul>
+			<h2>Original Form</h2>
+			<p>Original Data Set</p>
+				<a href="theophylline.original.txt">Download theophylline (Original)</a>
+<pre class="code">
+> head(theophylline)
+  ID  AMT TIME    DV WEIGHT
+1  1 4.02 0.00    NA   79.6
+2  1 4.02 0.25  2.84   79.6
+3  1 4.02 0.57  6.57   79.6
+4  1 4.02 1.12 10.50   79.6
+5  1 4.02 2.02  9.66   79.6
+6  1 4.02 3.82  8.58   79.6
+</pre>
+				<h2>Massage Data</h2>
+				<p>Changes that NEED to be made</p>
+				<ul>
+					<li>Replace "AMT" with "DOSE"</li>
+					<li>Add two columns of 0's: "MDV", "AMT"</li>
+					<li>Find all rows where "DV"==NA and replace the 0 in "MDV" with 1</li>
+					<li>Find all rows where "DV"==NA and replace the 0 in "AMT" with the "DOSE" of that row</li>
+				</ul>
+				
+				<h2>Final Form</h2>
+				<a href="theophylline.txt">Download theophylline (Final)</a>(Source the file)
+<pre class="code">
+> head(theophylline)
+  ID DOSE TIME    DV WEIGHT MDV  AMT
+1  1 4.02 0.00    NA   79.6   1 4.02
+2  1 4.02 0.25  2.84   79.6   0 0.00
+3  1 4.02 0.57  6.57   79.6   0 0.00
+4  1 4.02 1.12 10.50   79.6   0 0.00
+5  1 4.02 2.02  9.66   79.6   0 0.00
+6  1 4.02 3.82  8.58   79.6   0 0.00
+</pre>
+
+				<h2>Code</h2>
+				<p>Code to alter Theophylline to fit the requests above</p>
+<pre class="code">
+theophylline <- read.csv(file.choose())		### theophylline.txt
+
+theophylline <- cbind(theophylline,0,0)		### Due to not having a MDV and DOSE column
+
+col.name <- colnames(theophylline)
+colnames(theophylline) <- c(col.name[1],"DOSE",col.name[3:5],"MDV","AMT")		### Rename columns
+
+theophylline[is.na(theophylline["DV"]),"MDV"] <- 1
+theophylline[is.na(theophylline["DV"]),"AMT"] <- theophylline[is.na(theophylline["DV"]),"DOSE"]
+
+theophylline
+</pre>
+
+		</div>
+		<div class="footer"/>
+	</body>
+</html>
