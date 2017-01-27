@@ -1,4 +1,4 @@
 Personal Website points to schloerke.com.
 
 All repo files work as CNAME entries.
-  i.e. repo: "vita" will work with "vita.schloerke.com" as if it was "schloerke.github.io/vita/"
+  i.e. repo: "vita" will work with "vita.schloerke.com/*" as if it was "schloerke.github.io/vita/*"
