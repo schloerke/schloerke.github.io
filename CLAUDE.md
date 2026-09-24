@@ -25,10 +25,20 @@ or change an approach below, update this file in the same change.
 - `merged_prs` / `repos`: GitHub search for merged PRs by schloerke, one query per year
   (search caps results at 1000).
 - `packages`: repos with ≥ `MIN_PRS` merged PRs that contain an R package (`DESCRIPTION`,
-  `pkg-r/DESCRIPTION`) or a Python package (`pyproject.toml`, `pkg-py/pyproject.toml`, `setup.cfg`).
-  Monthly downloads for the last 6 full months come from cranlogs (R) or pypistats (Python).
+  `pkg-r/DESCRIPTION`), a Python package (`pyproject.toml`, `pkg-py/pyproject.toml`, `setup.cfg`),
+  or a TypeScript package (non-private `package.json` / `pkg-js/package.json` that mentions `typescript`).
+  Monthly downloads for the last 6 full months come from cranlogs (R), pypistats (Python), or npm.
+  `role` is maintainer / author / contributor: R `cre` / `aut` in `Authors@R`, Python
+  `maintainers` / `authors`, npm `maintainers` / `author`. Every package in a repo gets the
+  strongest role found in any of its manifests (e.g. shinyreact's `cre` in R covers its npm package).
+  Hand overrides live at the top of the script: `HIDE` (repos to leave out, e.g. react-ace) and
+  `ROLE` (a minimum role when the manifests don't list you, e.g. py-shiny → author).
   6 months because pypistats keeps only 180 days. A package counts as published if it has
   any downloads in that window, including the current month, so new releases show as "new".
+  `reviews` per package: search count of `reviewed-by:schloerke -author:schloerke` in that repo.
+- `other`: every other public repo with ≥ `MIN_PRS` merged PRs (not a listed package's repo,
+  not a talk), with its GitHub description. Private repos are skipped so their names stay off the site,
+  and forks (e.g. `schloerke/leaflet`) are skipped. `HIDE_OTHER` hand-lists repos to leave out.
 - `contributions`: GitHub GraphQL contribution calendar (needs a token).
 - `talks`: `schloerke/presentation-*` and `workshop-*` repos. The date comes from the repo
   name. The title is the repo description, then the README's first `# ` heading, then the name
