@@ -48,7 +48,9 @@ or change an approach below, update this file in the same change.
 
 cranlogs and pypistats don't send CORS headers, which is why the data is fetched at build time
 rather than in the browser. `.github/workflows/data.yml` runs `make data` nightly and commits
-`data.json`.
+`data.json`. Its `keepalive` job re-enables the workflow via the API each run, because GitHub
+disables scheduled workflows after 60 days without non-bot activity. The job fails after a
+hard-coded date on purpose; bump it yearly.
 
 ## Commands
 

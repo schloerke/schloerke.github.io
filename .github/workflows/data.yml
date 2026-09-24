@@ -24,3 +24,23 @@ jobs:
           git config user.email "41898319+github-actions[bot]@users.noreply.github.com"
           git add data.json
           git diff --cached --quiet || (git commit -m "Refresh data.json" && git push)
+
+  # GitHub disables scheduled workflows after 60 days without repo activity,
+  # and bot commits don't count. Re-enabling resets the timer. (Same call
+  # gautamkrishnar/keepalive-workflow made; that repo is now blocked.)
+  keepalive:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/data.yml/enable"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Fail loudly once a year so a human confirms this is still wanted.
+      # Bump the date to keep going.
+      - run: |
+          if [[ "$(date -u +%F)" > "2027-10-01" ]]; then
+            echo "::error::Keepalive expired. Bump the date in .github/workflows/data.yml."
+            exit 1
+          fi
