@@ -23,6 +23,7 @@ USER = "schloerke"
 NAME = "Schloerke"  # matched against package author fields for `role`
 ROLES = ["contributor", "author", "maintainer"]
 HIDE = {"securingsincity/react-ace"}  # repos to leave out of the package table
+HIDE_OTHER = {"rstudio/shinycoreci-apps"}  # repos to leave out of the other work table
 ROLE = {"posit-dev/py-shiny": "author"}  # role when the manifests don't list me
 MIN_PRS = 3  # repos with fewer merged PRs are drive-by fixes
 MONTHS = 6  # pypistats only keeps 180 days
@@ -186,6 +187,20 @@ def packages(pr_counts):
     return sorted(out, key=lambda p: -p["prs"])
 
 
+def other_work(pr_counts, pkgs):
+    """Repos with >= MIN_PRS merged PRs not already shown as a package or talk."""
+    shown = {p["repo"] for p in pkgs}
+    out = []
+    for repo, prs in pr_counts.items():
+        if prs < MIN_PRS or repo in shown | HIDE_OTHER or re.match(rf"{USER}/(presentation|workshop)-", repo):
+            continue
+        info = gh(f"repos/{repo}")
+        if not info or info["private"] or info["fork"]:
+            continue  # private: keep names off the site; fork: my copy of someone else's repo
+        out.append({"repo": info["full_name"], "prs": prs, "description": info["description"] or ""})
+    return sorted(out, key=lambda r: -r["prs"])
+
+
 def contributions():
     q = """query($u:String!){user(login:$u){contributionsCollection{
       contributionCalendar{totalContributions weeks{contributionDays{date contributionCount}}}}}}"""
@@ -216,14 +231,16 @@ def talks():
 
 
 pr_counts = merged_pr_counts()
+pkgs = packages(pr_counts)
 data = {
     "updated": dt.date.today().isoformat(),
     "merged_prs": sum(pr_counts.values()),
     "repos": len(pr_counts),
-    "packages": packages(pr_counts),
+    "packages": pkgs,
+    "other": other_work(pr_counts, pkgs),
     "contributions": contributions(),
     "talks": talks(),
 }
 with open("data.json", "w") as f:
     json.dump(data, f, separators=(",", ":"))
-print(f"wrote data.json: {len(data['packages'])} packages, {len(data['talks'])} talks")
+print(f"wrote data.json: {len(pkgs)} packages, {len(data['other'])} other, {len(data['talks'])} talks")

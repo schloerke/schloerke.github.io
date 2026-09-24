@@ -64,7 +64,8 @@
     td.lang { padding-right: .6rem; }
     td.lang + td { padding-right: 1rem; }
     td.lang svg { display: block; width: 14px; height: 14px; fill: var(--muted); }
-    #pkgs:not(.all) tbody tr:nth-child(n+13) { display: none; }
+    table:not(.all) tbody tr:nth-child(n+13) { display: none; }
+    td.about { color: var(--text-2); padding-left: 1rem; }
     button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
     .controls { display: flex; gap: .25rem; margin: 0 0 .75rem; }
     .controls button { font-size: .85rem; padding: .15rem .6rem; border-radius: 999px; border: 1px solid var(--rule); color: var(--text-2); }
@@ -175,6 +176,17 @@
       <p class="note">Merged PRs are mine; reviews are others' PRs I reviewed; downloads are everyone's (CRAN via cranlogs, PyPI via pypistats, npm).
         Role comes from each package's author list.
         Each sparkline has its own scale, so read them for shape. Hover for monthly values.</p>
+
+      <h2 id="other-h">Other work</h2>
+      <table id="other" aria-labelledby="other-h">
+        <thead><tr>
+          <th>Repository</th>
+          <th class="num">My PRs</th>
+          <th class="spark-h">About</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+      <button id="other-more" class="more"></button>
 
       <h2 id="cal-h">GitHub activity</h2>
       <p id="cal-summary" style="margin-top:-.5rem;color:var(--text-2)"></p>
@@ -345,6 +357,25 @@
       render();
     }
 
+    // repos with merged PRs that aren't a package or a talk
+    function other(repos) {
+      const table = document.getElementById("other");
+      const more = document.getElementById("other-more");
+      for (const r of repos) {
+        const name = el("td");
+        name.append(el("a", { href: `https://github.com/${r.repo}` }, r.repo));
+        const prs = el("td", { class: "num" });
+        prs.append(el("a", { href: `https://github.com/${r.repo}/pulls?q=is%3Apr+is%3Amerged+author%3Aschloerke` }, r.prs));
+        const tr = el("tr");
+        tr.append(name, prs, el("td", { class: "about" }, r.description));
+        table.tBodies[0].append(tr);
+      }
+      const label = () => (more.textContent = table.classList.contains("all") ? "Show fewer" : `Show all ${repos.length}`);
+      more.hidden = repos.length <= 12;
+      label();
+      more.addEventListener("click", () => { table.classList.toggle("all"); label(); });
+    }
+
     function calendar({ total, days }) {
       document.getElementById("cal-summary").textContent =
         `${fmt.format(total)} contributions in the last year`;
@@ -396,6 +427,7 @@
         document.getElementById("hero-label").textContent =
           `merged pull requests across ${d.repos} GitHub repositories`;
         packages(d.packages);
+        other(d.other);
         calendar(d.contributions);
         talks(d.talks);
         document.getElementById("updated").textContent = `Data updated ${d.updated} ·`;
