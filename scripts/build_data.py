@@ -10,6 +10,7 @@ directly; this runs nightly in GitHub Actions instead. Needs GITHUB_TOKEN.
 """
 
 import datetime as dt
+import html
 import json
 import os
 import re
@@ -164,6 +165,20 @@ def talks():
     return sorted(out, key=lambda t: t["date"], reverse=True)
 
 
+def blog_posts():
+    # opensource.posit.co ports the Shiny, RStudio, and tidyverse blogs, and its people
+    # page links every post I (co-)authored as <a href="/blog/YYYY-MM-DD_slug/" title="...">
+    site = "https://opensource.posit.co"
+    page = fetch(f"{site}/people/barret-schloerke/", raw=True)
+    posts = {href: title for href, title in
+             re.findall(r'<a href="(/blog/\d{4}-\d{2}-\d{2}_[^"]+)" title="([^"]+)"', page)}
+    if not posts:
+        raise RuntimeError("no blog posts found; did the people page markup change?")
+    out = [{"date": href[6:16], "title": html.unescape(title), "url": site + href}
+           for href, title in posts.items()]
+    return sorted(out, key=lambda p: p["date"], reverse=True)
+
+
 pr_counts = merged_pr_counts()
 data = {
     "updated": dt.date.today().isoformat(),
@@ -172,7 +187,9 @@ data = {
     "packages": packages(pr_counts),
     "contributions": contributions(),
     "talks": talks(),
+    "posts": blog_posts(),
 }
 with open("data.json", "w") as f:
     json.dump(data, f, separators=(",", ":"))
-print(f"wrote data.json: {len(data['packages'])} packages, {len(data['talks'])} talks")
+print(f"wrote data.json: {len(data['packages'])} packages, {len(data['talks'])} talks, "
+      f"{len(data['posts'])} posts")

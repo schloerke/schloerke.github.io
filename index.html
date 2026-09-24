@@ -117,6 +117,7 @@
       <a href="https://github.com/schloerke">GitHub</a>
       <a href="http://vita.schloerke.com/">CV</a>
       <a href="#talks">Talks</a>
+      <a href="#posts">Posts</a>
       <a href="#numbers">Numbers</a>
     </nav>
   </header>
@@ -177,6 +178,11 @@
       <details><summary>All talks</summary>
         <ul class="plain talks" id="talks-all" style="list-style:none;padding:0"></ul>
       </details>
+    </section>
+
+    <section id="posts" aria-labelledby="posts-h">
+      <h2 id="posts-h">Blog posts</h2>
+      <ul class="plain talks" id="posts-list" style="list-style:none;padding:0"></ul>
     </section>
 
     <section aria-labelledby="papers-h">
@@ -369,6 +375,11 @@
         packages(d.packages);
         calendar(d.contributions);
         talks(d.talks);
+        for (const p of d.posts) {
+          const li = el("li");
+          li.append(el("time", { datetime: p.date }, p.date.slice(0, 7)), el("a", { href: p.url }, p.title));
+          document.getElementById("posts-list").append(li);
+        }
         document.getElementById("updated").textContent = `Data updated ${d.updated} ·`;
       });
   </script>

@@ -33,6 +33,9 @@ or change an approach below, update this file in the same change.
 - `talks`: `schloerke/presentation-*` and `workshop-*` repos. The date comes from the repo
   name. The title is the repo description, then the README's first `# ` heading, then the name
   slug. Markdown and HTML are stripped out.
+- `posts`: blog posts scraped from `opensource.posit.co/people/barret-schloerke/`. That site
+  ports the shiny-dev-center, RStudio, and tidyverse blogs, so it's the one source
+  (py-shiny-site has no authored posts). Fails loudly if the page markup stops matching.
 
 cranlogs and pypistats don't send CORS headers, which is why the data is fetched at build time
 rather than in the browser. `.github/workflows/data.yml` runs `make data` nightly and commits
