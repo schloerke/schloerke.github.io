@@ -1,526 +1,359 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Barret Schloerke</title>
+  <meta name="description" content="Barret Schloerke — software engineer at Posit working on Shiny for R and Python.">
+  <link rel="icon" href="favicon.ico">
+  <style>
+    :root {
+      color-scheme: light;
+      /* contrast on --bg: accent 7.3:1 (AAA), text-2 7.2:1, muted 5.9:1 */
+      --bg: #f5f4f0;
+      --text: #0b0b0b;
+      --text-2: #52514e;
+      --muted: #5f5e59;
+      --rule: #dddcd6;
+      --empty: #e8e7e1;
+      --accent: #174e9c;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --bg: #1a1a19;
+        --text: #ffffff;
+        --text-2: #c3c2b7;
+        --muted: #a3a299;
+        --rule: #333331;
+        --empty: #262625;
+        --accent: #8ab8f2; /* 8.5:1 on --bg (AAA) */
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto;
+      max-width: 42rem;
+      padding: 4rem 1.25rem 3rem;
+      background: var(--bg);
+      color: var(--text);
+      font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    a { color: var(--accent); text-underline-offset: 2px; }
+    h1 { font-size: 2rem; line-height: 1.2; margin: 0; }
+    h2 { font-size: 1rem; margin: 3rem 0 .75rem; }
+    code, .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .9em; }
+    .tagline { color: var(--text-2); margin: .25rem 0 1rem; }
+    .links { display: flex; gap: 1rem; flex-wrap: wrap; margin: 0 0 2rem; }
+    .note { color: var(--muted); font-size: .85rem; margin: .25rem 0 0; }
+    ul.plain { padding-left: 1.1rem; }
+    ul.plain li { margin: .35rem 0; }
 
-<html class="no-js"> <!--<![endif]-->
-  <head>
-    <title>Schloerke</title>
+    /* hero figure */
+    .hero { font-size: 3rem; font-weight: 600; line-height: 1; margin: 0; }
+    .hero-label { color: var(--text-2); margin: .35rem 0 1.25rem; }
 
-    <!-- meta -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    /* package table */
+    table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+    th { text-align: left; font-weight: 500; color: var(--muted); font-size: .8rem; padding: 0 0 .35rem; }
+    td { padding: .3rem 0; border-top: 1px solid var(--rule); vertical-align: middle; }
+    .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    td.spark { width: 40%; padding: .3rem 1rem; }
+    th.spark-h { padding-left: 1rem; }
+    .lang { color: var(--muted); font-size: .75rem; margin-left: .4rem; }
+    #pkgs:not(.all) tbody tr:nth-child(n+13) { display: none; }
+    button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+    .controls { display: flex; gap: .25rem; margin: 0 0 .75rem; }
+    .controls button { font-size: .85rem; padding: .15rem .6rem; border-radius: 999px; border: 1px solid var(--rule); color: var(--text-2); }
+    .controls button[aria-pressed="true"] { border-color: var(--text); color: var(--text); }
+    th .sort { font-weight: 500; color: var(--muted); }
+    th .sort[aria-pressed="true"] { color: var(--text); }
+    th .sort[aria-pressed="true"]::after { content: " ↓"; }
+    .more { color: var(--accent); font-size: .9rem; margin-top: .5rem; }
+    td.spark svg { display: block; width: 100%; height: 24px; overflow: visible; }
+    .spark path { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+    .spark circle { fill: var(--accent); stroke: var(--bg); stroke-width: 2; }
+    .spark .hit { fill: transparent; }
 
-    <!-- stylesheets -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/font_icon/css/pe-icon-7-stroke.css">
-    <link rel="stylesheet" href="assets/font_icon/css/helper.css">
-    <!-- <link rel="stylesheet" href="assets/css/owl.carousel.css">
-    <link rel="stylesheet" href="assets/css/owl.theme.css"> -->
-    <!-- <link rel="stylesheet" href="assets/css/animate.css"> -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    /* contribution heatmap */
+    .cal { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 1fr); gap: 2px; }
+    .cal span { aspect-ratio: 1; border-radius: 2px; background: var(--empty); }
+    .cal span[data-l="1"] { background: color-mix(in oklab, var(--accent) 30%, var(--empty)); }
+    .cal span[data-l="2"] { background: color-mix(in oklab, var(--accent) 55%, var(--empty)); }
+    .cal span[data-l="3"] { background: color-mix(in oklab, var(--accent) 78%, var(--empty)); }
+    .cal span[data-l="4"] { background: var(--accent); }
+    .cal-months { display: flex; justify-content: space-between; color: var(--muted); font-size: .75rem; margin-top: .25rem; }
 
-    <!-- google fonts -->
-    <link href='https://fonts.googleapis.com/css?family=Dosis:200,300,400,500|Lato:300,400,700,900,300italic,400italic,700italic,900italic|Raleway:400,200,300,500,100|Titillium+Web:400,200,300italic,300,200italic' rel='stylesheet' type='text/css'>
+    /* talks timeline */
+    .timeline { position: relative; height: 56px; margin: .5rem 0 0; }
+    .timeline .axis { position: absolute; left: 0; right: 0; top: 24px; border-top: 1px solid var(--rule); }
+    .timeline a {
+      position: absolute; top: 16px; width: 16px; height: 16px; margin-left: -8px;
+      display: grid; place-items: center;
+    }
+    .timeline a::after {
+      content: ""; width: 9px; height: 9px; border-radius: 50%;
+      background: var(--accent); box-shadow: 0 0 0 2px var(--bg);
+    }
+    .timeline a:hover::after, .timeline a:focus-visible::after { transform: scale(1.5); }
+    .timeline .yr { position: absolute; top: 34px; transform: translateX(-50%); color: var(--muted); font-size: .75rem; }
+    .talks li { display: flex; gap: .75rem; }
+    .talks time { color: var(--muted); flex: none; width: 5.5rem; font-variant-numeric: tabular-nums; }
+    details summary { cursor: pointer; color: var(--text-2); margin-top: .5rem; }
 
-    <script src="assets/js/modernizr.js"></script>
+    #tip {
+      position: fixed; pointer-events: none; z-index: 10; display: none;
+      background: var(--text); color: var(--bg); font-size: .8rem; line-height: 1.35;
+      padding: .35rem .5rem; border-radius: 4px; max-width: 18rem;
+    }
+    footer { margin-top: 4rem; color: var(--muted); font-size: .85rem; }
+    footer a { color: inherit; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Barret Schloerke</h1>
+    <p class="tagline mono">code[c("architect", "manager", "philosopher")]</p>
+    <nav class="links">
+      <a href="https://github.com/schloerke">GitHub</a>
+      <a href="http://vita.schloerke.com/">CV</a>
+      <a href="#talks">Talks</a>
+      <a href="#numbers">Numbers</a>
+    </nav>
+  </header>
 
-  </head>
-  <body id="body">
-    <!--[if lt IE 7]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
+  <main>
+    <p>
+      I'm a software engineer at <a href="https://posit.co">Posit</a>, where I build and
+      maintain tools in the Shiny ecosystem for both R and Python, including
+      <a href="https://github.com/rstudio/shiny">shiny</a>,
+      <a href="https://github.com/posit-dev/py-shiny">py-shiny</a>,
+      <a href="https://github.com/rstudio/shinytest2">shinytest2</a>,
+      <a href="https://github.com/posit-dev/shinylive">shinylive</a>,
+      <a href="https://github.com/rstudio/plumber">plumber</a>, and
+      <a href="https://github.com/rstudio/reactlog">reactlog</a>.
+      Lately that means OpenTelemetry for Shiny, LLM-powered apps, and custom UI with React.
+    </p>
+    <p>
+      I also maintain <a href="https://ggobi.github.io/ggally">GGally</a>, a ggplot2 extension
+      I started in grad school. I received my PhD in Statistics from Purdue University,
+      advised by Ryan Hafen and William Cleveland, working on large data visualization.
+      Before that I studied computer engineering at Iowa State.
+    </p>
 
-    <!-- Header area -->
-    <header id="header">
-      <div class="center text-center">
-        <h1 class="bigheadline">Barret<br/>Schloerke</h1>
-        <h4 class="subheadline">code[c("architect", "manager", "philosopher")]</h4>
-        <h4 class="subheadline">data[c("wrangler", "explorer", "visualizer")]</h4>
+    <section id="numbers" aria-labelledby="numbers-h">
+      <h2 id="numbers-h">By the numbers</h2>
+      <p class="hero" id="hero">—</p>
+      <p class="hero-label" id="hero-label">merged pull requests</p>
+
+      <h2 id="pkgs-h">R &amp; Python packages I've contributed to</h2>
+      <div class="controls" id="lang-filter" role="group" aria-label="Language">
+        <button aria-pressed="true" value="">All</button>
+        <button aria-pressed="false" value="R">R</button>
+        <button aria-pressed="false" value="Python">Python</button>
       </div>
-      <div class="bottom">
-        <a data-scroll href="#navigation" class="scrollDown animated pulse" id="scrollToContent"><i class="pe-7s-angle-down-circle pe-va"></i></a>
-      </div>
-    </header>
+      <table id="pkgs" aria-labelledby="pkgs-h">
+        <thead><tr>
+          <th>Package</th>
+          <th class="num"><button class="sort" value="prs" aria-pressed="true">My PRs</button></th>
+          <th class="spark-h">Downloads, last 6 months</th>
+          <th class="num"><button class="sort" value="downloads" aria-pressed="false">Last month</button></th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+      <button id="more" class="more"></button>
+      <p class="note">Merged PRs are mine; downloads are everyone's (CRAN via cranlogs, PyPI via pypistats).
+        Each sparkline has its own scale, so read them for shape. Hover for monthly values.</p>
 
-    <!-- Navigation area -->
-    <section id="navigation">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-6">
-                    <div class="logo"><a data-scroll href="#body" class="logo-text">Schloerke</a></div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="nav">
-                        <a href="#" data-placement="bottom" title="Menu" class="menu" data-toggle="dropdown"><i class="pe-7s-menu"></i></a>
-                         <div class="dropdown-menu">
-                             <div class="arrow-up"></div>
-                             <ul>
-                                 <li><a data-scroll href="#body">Home <i class="pe-7s-home"></i></a><span class="menu-effect"></span></li>
-                                 <li><a data-scroll href="#about_me">About Me <i class="pe-7s-config"></i></a><span class="menu-effect"></span></li>
-                                 <li><a data-scroll href="#education">Education <i class="pe-7s-study"></i></a><span class="menu-effect"></span></li>
-                                 <li><a data-scroll href="#papers">Papers <i class="pe-7s-paperclip"></i></a><span class="menu-effect"></span></li>
-                                 <li><a data-scroll href="#presentations">Presentations <i class="pe-7s-display2"></i></a><span class="menu-effect"></span></li>
-                                 <li><a data-scroll href="#packages">R Packages <i class="pe-7s-plugin"></i><span class="menu-effect"></span></a></li>
-                                 <!-- <li><a data-scroll href="#contact">Contact <i class="pe-7s-help1"></i></a><span class="menu-effect"></span></li> -->
-                             </ul>
-                         </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
+      <h2 id="cal-h">GitHub activity</h2>
+      <p id="cal-summary" style="margin-top:-.5rem;color:var(--text-2)"></p>
+      <div class="cal" id="cal" role="img" aria-labelledby="cal-summary"></div>
+      <div class="cal-months" id="cal-months"></div>
     </section>
 
-    <!-- Content Area -->
+    <section id="talks" aria-labelledby="talks-h">
+      <h2 id="talks-h">Talks &amp; workshops</h2>
+      <div class="timeline" id="timeline"><div class="axis"></div></div>
+      <ul class="plain talks" id="talks-recent" style="list-style:none;padding:0"></ul>
+      <details><summary>All talks</summary>
+        <ul class="plain talks" id="talks-all" style="list-style:none;padding:0"></ul>
+      </details>
+    </section>
 
-    <!-- About Me section -->
-    <section id="about_me" class="service-area">
-        <div class="container">
-            <h2 class="block_title">About Me</h2>
-            <!-- <div class="row"> -->
-            <p><span class="about_hello">`hello()`</span>! 
-              Dr. Barret Schloerke is a Software Engineer at RStudio. 
-              He currently develops and maintains many R packages in the Shiny ecosystem at RStudio including 
-              <a href="https://github.com/rstudio/shiny">shiny</a>, 
-              <a href="https://github.com/rstudio/reactlog">reactlog</a>, 
-              <a href="https://github.com/trestletech/plumber">plumber</a>, 
-              <a href="https://github.com/rstudio/learnr">learnr</a>, 
-              <a href="https://github.com/rstudio/leaflet">leaflet</a>, and 
-              <a href="https://github.com/rstudio/shinyloadtest">shinyloadtest</a>.  
-              Dr. Schloerke received his PhD in Statistics from Purdue University under the direction of Dr. Ryan Hafen and Dr. William Cleveland, specializing in Large Data Visualization.
-          </p>
-              <br />
-              <br />
-              <br />
-            <p><a href="http://vita.schloerke.com/"><i class="pe-7s-news-paper pe-dj pe-va" style="font-size:60px"></i> Please look at my CV</a> for more links and citations. </p>
-            <!-- </div> -->
-        </div>
-    </section><!-- About Me -->
+    <section aria-labelledby="papers-h">
+      <h2 id="papers-h">Papers</h2>
+      <ul class="plain">
+        <li><a href="https://journal.r-project.org/archive/2016/RJ-2016-044/index.html">Escape from Boxland: Generating a Library of High-Dimensional Geometric Shapes</a> — <i>R Journal</i>, 2016</li>
+        <li><a href="http://vita.had.co.nz/papers/gpp.pdf">The Generalized Pairs Plot</a> — <i>JCGS</i>, 2013</li>
+        <li><a href="http://amstat.tandfonline.com/doi/abs/10.1198/jcgs.2011.3de">Delayed, Canceled, on Time, Boarding… Flying in the USA</a> — <i>JCGS</i>, 2011</li>
+        <li><a href="http://chance.amstat.org/files/2010/12/Visually.pdf">Monitoring the 2008 Election Visually</a> — <i>Chance</i>, 2010</li>
+      </ul>
+    </section>
+  </main>
 
-    <!-- Education section -->
-    <section id="education" class="portfolio-area">
-      <div class="container">
-        <h2 class="block_title">Education</h2>
-        <div class="row">
+  <footer>
+    <span id="updated"></span>
+    <a href="https://github.com/schloerke/schloerke.github.io">Source</a>
+  </footer>
 
-          <div class="col-md-4 col-sm-6">
-            <div class="services">
-                <div class="service-wrap">
-                    <i class="pe-7s-study pe-dj pe-va"></i>
-                    <h3><a href = "http://www.stat.purdue.edu/">Purdue University</a></h3>
-                    <p>Doctor of Philosophy in Statistics</p>
-                    <p>Large Data Visualization</p>
-                    <p>2013/8 - 2017/12</p>
-                </div>
-            </div>
-          </div>
+  <div id="tip" role="tooltip"></div>
 
-          <div class="col-md-4 col-sm-6">
-            <div class="services">
-              <div class="service-wrap">
-                <i class="pe-7s-exapnd2 pe-dj pe-va"></i>
-                <h3><a href = "http://www.stat.purdue.edu/">Purdue University</a></h3>
-                <p>Masters of Science<br/>in Mathematical Statistics</p>
-                <p>2013/8 - 2014/8</p>
-              </div>
-            </div>
-          </div>
+  <script>
+    const fmt = new Intl.NumberFormat("en-US");
+    const monthName = (ym) => new Date(ym + "-15").toLocaleString("en-US", { month: "short", year: "numeric" });
+    const el = (tag, attrs = {}, text) => {
+      const e = document.createElement(tag);
+      for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+      if (text != null) e.textContent = text;
+      return e;
+    };
+    const svg = (tag, attrs) => {
+      const e = document.createElementNS("http://www.w3.org/2000/svg", tag);
+      for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+      return e;
+    };
 
-          <div class="col-md-4 col-sm-6">
-            <div class="services">
-              <div class="service-wrap">
-                <i class="pe-7s-science pe-dj pe-va"></i>
-                <h3><a href = "http://www.engineering.iastate.edu/">Iowa State University</a></h3>
-                <p>Bachelor of Science<br/>in Computer Engineering</p>
-                <p>2006/8 - 2010/12</p>
-              </div>
-            </div>
-          </div>
+    // one shared tooltip for anything with data-tip
+    const tip = document.getElementById("tip");
+    const showTip = (target, x, y) => {
+      tip.textContent = target.dataset.tip;
+      tip.style.display = "block";
+      const w = tip.offsetWidth;
+      tip.style.left = Math.min(x + 12, innerWidth - w - 8) + "px";
+      tip.style.top = (y - tip.offsetHeight - 10) + "px";
+    };
+    document.addEventListener("pointermove", (e) => {
+      const t = e.target.closest("[data-tip]");
+      t ? showTip(t, e.clientX, e.clientY) : (tip.style.display = "none");
+    });
+    document.addEventListener("focusin", (e) => {
+      const t = e.target.closest("[data-tip]");
+      if (!t) return;
+      const r = t.getBoundingClientRect();
+      showTip(t, r.left, r.top);
+    });
+    document.addEventListener("focusout", () => (tip.style.display = "none"));
 
-        </div>
-      </div>
-    </section><!-- Education -->
+    function sparkline(monthly) {
+      const W = 100, H = 24, n = monthly.length;
+      const vals = monthly.map((m) => m.downloads);
+      const lo = Math.min(...vals), hi = Math.max(...vals);
+      const x = (i) => (i / (n - 1)) * W;
+      const y = (v) => H - 2 - ((v - lo) / (hi - lo || 1)) * (H - 4);
+      const s = svg("svg", { viewBox: `0 0 ${W} ${H}`, preserveAspectRatio: "none", class: "spark", "aria-hidden": "true" });
+      s.append(svg("path", { d: vals.map((v, i) => `${i ? "L" : "M"}${x(i)},${y(v)}`).join(""), "vector-effect": "non-scaling-stroke" }));
+      // hit targets wider than the line, one per month
+      monthly.forEach((m, i) => {
+        s.append(svg("rect", {
+          class: "hit", x: x(i) - W / n / 2, y: -4, width: W / n, height: H + 8,
+          "data-tip": `${monthName(m.month)}: ${fmt.format(m.downloads)}`,
+        }));
+      });
+      return s;
+    }
 
+    function packages(pkgs) {
+      const table = document.getElementById("pkgs");
+      const more = document.getElementById("more");
+      const state = { lang: "", sort: "prs" };
+      const last = (p) => p.monthly.at(-1).downloads;
+      const press = (group, value) =>
+        group.forEach((b) => b.setAttribute("aria-pressed", b.value === value));
 
-    <!-- Portfolio Area -->
-    <section id="papers" class="portfolio-area">
-      <div class="container">
-        <h2 class="block_title">Papers</h2>
-        <div class="row port cs-style-3">
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="https://journal.r-project.org/archive/2016/RJ-2016-044/index.html">
-              <figure>
-                <img src="assets/images/paper-boxland.png" alt="paper-boxland" />
-                <figcaption>
-                  <h3>Escape from Boxland: Generating a Library of High-Dimensional Geometric Shapes - R Journal</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
+      function render() {
+        const rows = pkgs
+          .filter((p) => !state.lang || p.lang === state.lang)
+          .sort((a, b) => (state.sort === "prs" ? b.prs - a.prs : last(b) - last(a)));
+        const tbody = table.tBodies[0];
+        tbody.replaceChildren();
+        for (const p of rows) {
+          const href = p.lang === "R" ? `https://cran.r-project.org/package=${p.name}` : `https://pypi.org/project/${p.name}/`;
+          const name = el("td");
+          name.append(el("a", { href }, p.name), el("span", { class: "lang" }, p.lang === "R" ? "R" : "Py"));
+          const prs = el("td", { class: "num" });
+          prs.append(el("a", { href: `https://github.com/${p.repo}/pulls?q=is%3Apr+is%3Amerged+author%3Aschloerke` }, p.prs));
+          const spark = el("td", { class: "spark" });
+          // released after the last full month: no history to plot yet
+          const isNew = p.monthly.every((m) => m.downloads === 0);
+          const count = isNew
+            ? el("td", { class: "num", "data-tip": `${fmt.format(p.recent)} downloads since release`, tabindex: 0 }, "new")
+            : el("td", { class: "num" }, fmt.format(last(p)));
+          if (!isNew) spark.append(sparkline(p.monthly));
+          const tr = el("tr");
+          tr.append(name, prs, spark, count);
+          tbody.append(tr);
+        }
+        more.hidden = rows.length <= 12;
+        more.textContent = table.classList.contains("all") ? "Show fewer" : `Show all ${rows.length}`;
+      }
 
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="http://vita.had.co.nz/papers/gpp.pdf">
-              <figure>
-                <img src="assets/images/paper-gpairs.png" alt="paper-gpairs" />
-                <figcaption>
-                  <h3>The Generalized Pairs Plot - JCGS</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
+      const langButtons = document.querySelectorAll("#lang-filter button");
+      langButtons.forEach((b) => b.addEventListener("click", () => {
+        state.lang = b.value; press(langButtons, b.value); render();
+      }));
+      const sortButtons = document.querySelectorAll("#pkgs .sort");
+      sortButtons.forEach((b) => b.addEventListener("click", () => {
+        state.sort = b.value; press(sortButtons, b.value); render();
+      }));
+      more.addEventListener("click", () => { table.classList.toggle("all"); render(); });
+      render();
+    }
 
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="http://amstat.tandfonline.com/doi/abs/10.1198/jcgs.2011.3de">
-              <figure>
-                <img src="assets/images/paper-delayed.png" alt="paper-delayed" />
-                <figcaption>
-                  <h3>Delayed, Canceled, on Time, Boarding… Flying in the USA - JCGS</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
+    function calendar({ total, days }) {
+      document.getElementById("cal-summary").textContent =
+        `${fmt.format(total)} contributions in the last year`;
+      // quartiles of non-zero days -> 4 sequential steps of one hue
+      const nz = days.map((d) => d[1]).filter(Boolean).sort((a, b) => a - b);
+      const q = [0.25, 0.5, 0.75].map((p) => nz[Math.floor(p * (nz.length - 1))] ?? 0);
+      const level = (c) => (c === 0 ? 0 : c <= q[0] ? 1 : c <= q[1] ? 2 : c <= q[2] ? 3 : 4);
+      const cal = document.getElementById("cal");
+      cal.style.gridTemplateColumns = `repeat(${Math.ceil(days.length / 7)}, 1fr)`;
+      // pad so the first column starts on Sunday
+      const pad = new Date(days[0][0] + "T00:00").getDay();
+      for (let i = 0; i < pad; i++) cal.append(el("span", { style: "visibility:hidden" }));
+      for (const [date, c] of days) {
+        const nice = new Date(date + "T00:00").toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+        cal.append(el("span", { "data-l": level(c), "data-tip": `${c || "No"} contribution${c === 1 ? "" : "s"} on ${nice}` }));
+      }
+      const months = document.getElementById("cal-months");
+      const first = days[0][0].slice(0, 7), last = days.at(-1)[0].slice(0, 7);
+      months.append(el("span", {}, monthName(first)), el("span", {}, monthName(last)));
+    }
 
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="http://chance.amstat.org/files/2010/12/Visually.pdf">
-              <figure>
-                <img src="assets/images/paper-election.png" alt="paper-election" />
-                <figcaption>
-                  <h3>Monitoring the 2008 Election Visually - Chance</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
+    function talks(list) {
+      const tl = document.getElementById("timeline");
+      const t0 = new Date(list.at(-1).date).getFullYear(), t1 = new Date().getFullYear() + 1;
+      const pos = (d) => ((new Date(d) - new Date(`${t0}-01-01`)) / (new Date(`${t1}-01-01`) - new Date(`${t0}-01-01`))) * 100;
+      for (let y = t0; y < t1; y += 2) {
+        tl.append(el("span", { class: "yr", style: `left:${pos(`${y}-07-01`)}%` }, y));
+      }
+      const item = (t) => {
+        const li = el("li");
+        li.append(el("time", { datetime: t.date }, t.date.slice(0, 7)));
+        li.append(el("a", { href: t.url }, t.title));
+        return li;
+      };
+      for (const t of list) {
+        tl.append(el("a", {
+          href: t.url, style: `left:${pos(t.date)}%`,
+          "data-tip": `${t.date.slice(0, 7)} · ${t.title}`, "aria-label": t.title,
+        }));
+        document.getElementById("talks-all").append(item(t));
+      }
+      list.slice(0, 6).forEach((t) => document.getElementById("talks-recent").append(item(t)));
+    }
 
-        </div>
-      </div><!-- container -->
-    </section><!-- Papers -->
-
-
-
-
-
-
-
-
-
-    <!-- Portfolio Area -->
-    <section id="presentations" class="portfolio-area">
-      <div class="container">
-        <h2 class="block_title">Presentations</h2>
-        <div class="row port cs-style-3">
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="https://github.com/schloerke/defense-schloerke">
-              <figure>
-                <img src="assets/images/presentation-defense.png" alt="presentation-defense" />
-                <figcaption>
-                  <h3>Thesis Defense - Generalized Plot Matrices, Automatic Cognostics, and Efficient Data Exploration</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="https://github.com/schloerke/r-for-data-science-purdue">
-              <figure>
-                <img src="assets/images/presentation-r4ds-purdue.png" alt="presentation-r4ds-purdue" />
-                <figcaption>
-                  <h3>R for Data Science - Purdue</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="https://github.com/schloerke/presentation-2017_01_26-tidyverse">
-              <figure>
-                <img src="assets/images/presentation-gso-tidyverse.png" alt="presentation-gso-tidyverse" />
-                <figcaption>
-                  <h3>tidyverse[c("magrittr", "dplyr", "tidyr")] - Purdue GSO Seminar</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="https://github.com/schloerke/presentation-2016_08_03_cognostics">
-              <figure>
-                <img src="assets/images/presentation-jsm-2016.png" alt="presentation-jsm-2016" />
-                <figcaption>
-                  <h3>Cognostics: Metrics enabling detailed interactive visualization of big data - JSM</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="https://github.com/schloerke/presentation-2016_06_30-ggduo">
-              <figure>
-                <img src="assets/images/presentation-user-2016.png" alt="presentation-user-2016" />
-                <figcaption>
-                  <h3>ggduo: Pairs plot for two group data - UseR!</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="https://slides.com/schloerke/tessera-src-2016-5-25">
-              <figure>
-                <img src="assets/images/presentation-spring_research-tessera.png" alt="presentation-spring_research-tessera" />
-                <figcaption>
-                  <h3>High Performance Computing for High-Resolution Analysis of Big Data and Small - Spring Research Conference</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="http://slides.com/schloerke/tessera-purdue-2016-4-7">
-              <figure>
-                <img src="assets/images/presentation-gso-tessera.png" alt="presentation-gso-tessera" />
-                <figcaption>
-                  <h3>Analysis and Visualization of Large Complex Data with Tessera - Purdue, ISU, Monash</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="https://github.com/schloerke/presentation-2016_02_18-graphql">
-              <figure>
-                <img src="assets/images/presentation-wombat-2016.png" alt="presentation-wombat-2016" />
-                <figcaption>
-                  <h3>GraphQL: An R server implementation - Wombat2016</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="https://github.com/schloerke/presentation-2015_10_20-web_scraping">
-              <figure>
-                <img src="assets/images/presentation-webscraping.png" alt="presentation-webscraping" />
-                <figcaption>
-                  <h3>Web Scraping with R - American Credit Acceptance</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="https://github.com/schloerke/presentation-2015_02_24-trelliscope">
-              <figure>
-                <img src="assets/images/presentation-fields-trelliscope.png" alt="presentation-fields-trelliscope" />
-                <figcaption>
-                  <h3>Trelliscope: D&amp;R visualization tool - Big Data Visualization, Fields Institute</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="https://github.com/schloerke/presentation-2014_10_21-ggplot2_spatial_statistics">
-              <figure>
-                <img src="assets/images/presentation-spatial_seminar-ggplot2.png" alt="presentation-spatial_seminar-ggplot2" />
-                <figcaption>
-                    <h3>ggplot2: displaying spatial and temporal data - Spatial Seminar</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="https://github.com/schloerke/presentation-2014_02_14-minimize-work-inefficiencies">
-              <figure>
-                <img src="assets/images/presentation-gso-minimize.png" alt="presentation-gso-minimize" />
-                <figcaption>
-                    <h3>Reducing Working Environment Inefficiencies - Purdue GSO Seminar</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-        </div>
-      </div><!-- container -->
-    </section><!-- portfolio -->
-
-    <!-- Packages Area -->
-    <section id="packages" class="portfolio-area">
-      <div class="container">
-        <h2 class="block_title"><a href = "https://www.rdocumentation.org/collaborators/name/Barret%20Schloerke">R Packages</a></h2>
-        <div class="row port cs-style-3">
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="https://github.com/schloerke/autocogs">
-              <figure>
-                <img src="assets/images/package-autocogs.png" alt="package-autocogs" />
-                <figcaption>
-                  <h3>autocogs - Automatic visualization cognostics</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="https://github.com/schloerke/gqlr">
-              <figure>
-                <img src="assets/images/package-gqlr.png" alt="package-gqlr" />
-                <figcaption>
-                  <h3>gqlr - GraphQL server for R</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="https://github.com/schloerke/graphql">
-              <figure>
-                <img src="assets/images/package-graphql.png" alt="package-graphql" />
-                <figcaption>
-                  <h3>graphql: Bindings to the 'libgraphqlparser' C++ library</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="http://ggobi.github.io/ggally">
-              <figure>
-                <img src="assets/images/package-ggally.png" alt="package-ggally" />
-                <figcaption>
-                  <h3>GGally - extension of ggplot2</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="http://hafen.github.io/trelliscopejs">
-              <figure>
-                <img src="assets/images/package-trelliscopejs.png" alt="package-trelliscopejs" />
-                <figcaption>
-                  <h3>trelliscopejs - visualizing large data in the web browser</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="https://github.com/hafen/lazyrmd/">
-              <figure>
-                <img src="assets/images/package-lazyrmd.png" alt="package-lazyrmd" />
-                <figcaption>
-                  <h3>lazyrmd - lazy load html R markdown chunks</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="http://hafen.github.io/packagedocs/">
-              <figure>
-                <img src="assets/images/package-packagedocs.png" alt="package-packagedocs" />
-                <figcaption>
-                  <h3>packagedocs - Build a website of package documentation for GitHub</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="http://hafen.github.io/rbokeh/">
-              <figure>
-                <img src="assets/images/package-rbokeh2.png" alt="package-rbokeh2" />
-                <figcaption>
-                  <h3>rbokeh - R interface for Bokeh</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="https://github.com/ggobi/cranvas">
-              <figure>
-                <img src="assets/images/package-cranvas.png" alt="package-cranvas" />
-                <figcaption>
-                  <h3>cranvas - Interactive graphqics in R using Qt interfaces, a descendant of ggobi software</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="https://github.com/ggobi/DescribeDisplay">
-              <figure>
-                <img src="assets/images/package-discribedisplay.png" alt="package-discribedisplay" />
-                <figcaption>
-                  <h3>DescribeDisplay - An Interface to the DescribeDisplay GGobi Plugin</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="https://github.com/ggobi/tourr">
-              <figure>
-                <img src="assets/images/package-tourr.png" alt="package-tourr" />
-                <figcaption>
-                  <h3>tourr - A implementation of tour algorithms in R</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-          <div class="col-md-3 col-sm-4 col-xs-6 item-space">
-            <a href="http://schloerke.github.io/geozoo">
-              <figure>
-                <img src="assets/images/package-geozoo.png" alt="package-geozoo" />
-                <figcaption>
-                  <h3>geozoo - Zoo of Geometric Objects</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </div>
-
-        </div>
-      </div><!-- container -->
-    </section><!-- packages -->
-
-    <!-- pokemon Area -->
-    <section id="pokemon" class="pokemon">
-      <a href="http://ryanhafen.com/blog/pokemon">
-        <div id="pokemon-area" title="http://ryanhafen.com/blog/pokemon">
-          <div class="container">
-            <br />
-          </div><!-- container -->
-        </div><!-- pokemon-area -->
-      </a>
-    </section><!-- pokemon -->
-
-    <!-- Footer Area -->
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-6">
-            <!-- © Copyright 2017  -->
-            <p class="copyright">Schloerke Analytics LLC</p>
-          </div>
-        </div>
-      </div>
-    </footer>
-
-    <!-- Necessery scripts -->
-    <script src="assets/js/jquery-2.1.3.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script> -->
-    <script src="assets/js/jquery.actual.min.js"></script>
-    <script src="assets/js/smooth-scroll.js"></script>
-    <!-- <script src="assets/js/owl.carousel.js"></script> -->
-    <script src="assets/js/script.js"></script>
-
-  </body>
+    fetch("data.json")
+      .then((r) => r.json())
+      .then((d) => {
+        document.getElementById("hero").textContent = fmt.format(d.merged_prs);
+        document.getElementById("hero-label").textContent =
+          `merged pull requests across ${d.repos} GitHub repositories`;
+        packages(d.packages);
+        calendar(d.contributions);
+        talks(d.talks);
+        document.getElementById("updated").textContent = `Data updated ${d.updated} ·`;
+      });
+  </script>
+</body>
 </html>

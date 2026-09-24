@@ -1,0 +1,12 @@
+"$schema" = "https://conductor.build/schemas/settings.repo.schema.json"
+
+[scripts]
+# Each workspace serves on its own CONDUCTOR_PORT, so previews can run side by side.
+run_mode = "concurrent"
+auto_run_after_setup = true
+
+[scripts.run.site]
+available_in = [ "local" ]
+command = "make serve PORT=$CONDUCTOR_PORT"
+default = true
+icon = "globe"
