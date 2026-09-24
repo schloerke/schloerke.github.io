@@ -164,6 +164,16 @@ def npm(name):
     return monthly((d["day"], d["downloads"]) for d in res["downloads"]) if res else ([], 0)
 
 
+def feedstock(lang, name):
+    """conda-forge feedstock repo for a Python package, if one exists."""
+    if lang != "Python":
+        return None
+    name = name.lower().replace("_", "-")
+    for cand in [f"py-{name}", name]:
+        if gh(f"repos/conda-forge/{cand}-feedstock"):
+            return f"conda-forge/{cand}-feedstock"
+
+
 def packages(pr_counts):
     # (lang, name) -> (prs, repo); forks of the same package keep the busiest repo
     found, role = {}, Counter()
@@ -183,7 +193,8 @@ def packages(pr_counts):
         if recent == 0:
             continue  # not published
         out.append({"name": name, "lang": lang, "repo": repo, "prs": prs, "role": ROLES[role[repo]],
-                    "reviews": reviews(repo), "monthly": series, "recent": recent})
+                    "reviews": reviews(repo), "monthly": series, "recent": recent,
+                    "feedstock": feedstock(lang, name)})
     return sorted(out, key=lambda p: -p["prs"])
 
 
