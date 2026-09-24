@@ -45,7 +45,13 @@ def fetch(url, body=None, auth=False, raw=False):
 
 
 def gh(path):
-    return fetch(f"https://api.github.com/{path}", auth=True)
+    try:
+        return fetch(f"https://api.github.com/{path}", auth=True)
+    except urllib.error.HTTPError as e:
+        if e.code not in (403, 429) or not (reset := e.headers.get("x-ratelimit-reset")):
+            raise
+        time.sleep(max(int(reset) - time.time(), 0) + 1)  # rate limited: wait for the window
+        return fetch(f"https://api.github.com/{path}", auth=True)
 
 
 def month_range():
@@ -99,6 +105,13 @@ def r_role(txt):
 
 def listed_role(maintainers, authors):
     return "maintainer" if NAME in str(maintainers) else "author" if NAME in str(authors) else "contributor"
+
+
+def reviews(repo):
+    """PRs by others that I reviewed."""
+    time.sleep(2)  # search API: 30 req/min
+    q = f"reviewed-by:{USER}+-author:{USER}+type:pr+repo:{repo}"
+    return gh(f"search/issues?q={q}&per_page=1")["total_count"]
 
 
 def manifests(repo):
@@ -169,7 +182,7 @@ def packages(pr_counts):
         if recent == 0:
             continue  # not published
         out.append({"name": name, "lang": lang, "repo": repo, "prs": prs, "role": ROLES[role[repo]],
-                    "monthly": series, "recent": recent})
+                    "reviews": reviews(repo), "monthly": series, "recent": recent})
     return sorted(out, key=lambda p: -p["prs"])
 
 

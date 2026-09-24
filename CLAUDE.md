@@ -35,6 +35,7 @@ or change an approach below, update this file in the same change.
   `ROLE` (a minimum role when the manifests don't list you, e.g. py-shiny → author).
   6 months because pypistats keeps only 180 days. A package counts as published if it has
   any downloads in that window, including the current month, so new releases show as "new".
+  `reviews` per package: search count of `reviewed-by:schloerke -author:schloerke` in that repo.
 - `contributions`: GitHub GraphQL contribution calendar (needs a token).
 - `talks`: `schloerke/presentation-*` and `workshop-*` repos. The date comes from the repo
   name. The title is the repo description, then the README's first `# ` heading, then the name
