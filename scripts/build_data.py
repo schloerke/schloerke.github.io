@@ -155,7 +155,10 @@ def talks():
         if not m:
             continue
         kind, y, mo, d, slug = m.groups()
-        title = r["description"] or slug.replace("-", " ").replace("_", " ")
+        readme = fetch(f"https://raw.githubusercontent.com/{r['full_name']}/HEAD/README.md", raw=True)
+        h1 = re.search(r"^# (.+)", readme or "", re.M)
+        title = r["description"] or (h1 and h1.group(1)) or slug.replace("-", " ").replace("_", " ")
+        title = re.sub(r"<.*|[`*]", "", title).strip()  # plain text: drop html + markdown
         out.append({"date": f"{y}-{mo}-{d or '01'}", "kind": kind, "title": title,
                     "url": r["homepage"] or r["html_url"]})
     return sorted(out, key=lambda t: t["date"], reverse=True)

@@ -30,7 +30,8 @@ or change an approach below, update this file in the same change.
   any downloads in that window, including the current month, so new releases show as "new".
 - `contributions`: GitHub GraphQL contribution calendar (needs a token).
 - `talks`: `schloerke/presentation-*` and `workshop-*` repos. The date comes from the repo
-  name; the title is the repo description, or the name slug if there's no description.
+  name. The title is the repo description, then the README's first `# ` heading, then the name
+  slug. Markdown and HTML are stripped out.
 
 cranlogs and pypistats don't send CORS headers, which is why the data is fetched at build time
 rather than in the browser. `.github/workflows/data.yml` runs `make data` nightly and commits
