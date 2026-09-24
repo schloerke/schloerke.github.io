@@ -11,7 +11,8 @@ or change an approach below, update this file in the same change.
 - Simple like hadley.nz: one column, plain prose, system fonts, no framework.
 - Data-rich like samuelbharti.com: stats and small charts, all driven by `data.json`.
 - No build step for the page. `index.html` holds all markup, CSS, and JS.
-- Colors are CSS custom properties in `:root`, with a dark mode via `prefers-color-scheme`.
+- Colors are CSS custom properties in `:root` using `light-dark()`. They follow the system
+  by default; the button in the page's top-right corner cycles system (◐) → light (☀) → dark (☾), setting `data-theme` on `<html>` and saves it in `localStorage.theme`.
   Link/accent blue must stay **WCAG AAA (≥ 7:1)** against `--bg` in both modes.
   Current ratios are noted in comments next to the variables. Recheck them when changing colors.
 - Charts follow the dataviz skill: one hue, thin 2px lines, a hover tooltip on every mark
