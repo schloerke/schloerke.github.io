@@ -6,30 +6,26 @@
   <title>Barret Schloerke</title>
   <meta name="description" content="Barret Schloerke — software engineer at Posit working on Shiny for R and Python.">
   <link rel="icon" href="favicon.ico">
+  <script>
+    // Apply a saved theme before paint; no saved choice = follow the system.
+    if (localStorage.theme) document.documentElement.dataset.theme = localStorage.theme;
+  </script>
   <style>
+    /* light-dark(light, dark); follows the system unless data-theme is set */
     :root {
-      color-scheme: light;
-      /* contrast on --bg: accent 7.3:1 (AAA), text-2 7.2:1, muted 5.9:1 */
-      --bg: #f5f4f0;
-      --text: #0b0b0b;
-      --text-2: #52514e;
-      --muted: #5f5e59;
-      --rule: #dddcd6;
-      --empty: #e8e7e1;
-      --accent: #174e9c;
+      color-scheme: light dark;
+      /* contrast on --bg: accent 7.3:1 light / 8.5:1 dark (AAA), text-2 7.2:1, muted 5.9:1 */
+      --bg: light-dark(#f5f4f0, #1a1a19);
+      --text: light-dark(#0b0b0b, #ffffff);
+      --text-2: light-dark(#52514e, #c3c2b7);
+      --muted: light-dark(#5f5e59, #a3a299);
+      --rule: light-dark(#dddcd6, #333331);
+      --empty: light-dark(#e8e7e1, #262625);
+      --accent: light-dark(#174e9c, #8ab8f2);
     }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        color-scheme: dark;
-        --bg: #1a1a19;
-        --text: #ffffff;
-        --text-2: #c3c2b7;
-        --muted: #a3a299;
-        --rule: #333331;
-        --empty: #262625;
-        --accent: #8ab8f2; /* 8.5:1 on --bg (AAA) */
-      }
-    }
+    :root[data-theme="light"] { color-scheme: light; }
+    :root[data-theme="dark"] { color-scheme: dark; }
+    #theme { position: absolute; top: 1rem; right: 1.25rem; font-size: 1.1rem; color: var(--text-2); }
     * { box-sizing: border-box; }
     body {
       margin: 0 auto;
@@ -111,6 +107,7 @@
   </style>
 </head>
 <body>
+  <button id="theme" type="button" aria-label="Theme: system">◐</button>
   <header>
     <h1>Barret Schloerke</h1>
     <p class="tagline mono">code[c("architect", "manager", "philosopher")]</p>
@@ -199,6 +196,23 @@
   <div id="tip" role="tooltip"></div>
 
   <script>
+    // Cycle system → light → dark → system; "" means follow the system.
+    const themeBtn = document.getElementById("theme");
+    const themes = { "": ["◐", "system"], light: ["☀", "light"], dark: ["☾", "dark"] };
+    const showTheme = (t) => {
+      const [icon, name] = themes[t];
+      themeBtn.textContent = icon;
+      themeBtn.setAttribute("aria-label", `Theme: ${name}`);
+      themeBtn.dataset.tip = `Theme: ${name}`;
+    };
+    showTheme(localStorage.theme || "");
+    themeBtn.addEventListener("click", () => {
+      const next = { "": "light", light: "dark", dark: "" }[localStorage.theme || ""];
+      if (next) localStorage.theme = document.documentElement.dataset.theme = next;
+      else { localStorage.removeItem("theme"); delete document.documentElement.dataset.theme; }
+      showTheme(next);
+    });
+
     const fmt = new Intl.NumberFormat("en-US");
     const monthName = (ym) => new Date(ym + "-15").toLocaleString("en-US", { month: "short", year: "numeric" });
     const el = (tag, attrs = {}, text) => {
