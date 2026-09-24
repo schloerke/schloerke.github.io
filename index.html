@@ -106,6 +106,7 @@
     .timeline .yr { position: absolute; top: 34px; transform: translateX(-50%); color: var(--muted); font-size: .75rem; }
     .talks li { display: flex; gap: .75rem; }
     .talks time { color: var(--muted); flex: none; width: 5.5rem; font-variant-numeric: tabular-nums; }
+    .talks .note-inline { color: var(--muted); font-size: .85rem; white-space: nowrap; }
     details summary { cursor: pointer; color: var(--text-2); margin-top: .5rem; }
     summary.h2-summary { color: inherit; margin: 3rem 0 .75rem; }
     summary.h2-summary h2 { display: inline; }
@@ -127,8 +128,10 @@
     <nav class="links">
       <a href="https://github.com/schloerke">GitHub</a>
       <a href="http://vita.schloerke.com/">CV</a>
+      <a href="https://bsky.app/profile/schloerke.com">Bluesky</a>
+      <a href="https://orcid.org/0000-0001-9986-114X">ORCID</a>
       <a href="#talks">Talks</a>
-      <a href="#posts">Posts</a>
+      <a href="#writing">Writing</a>
       <a href="#numbers">Numbers</a>
     </nav>
   </header>
@@ -205,11 +208,18 @@
       <details><summary>All talks</summary>
         <ul class="plain talks" id="talks-all" style="list-style:none;padding:0"></ul>
       </details>
+
+      <h2 id="videos-h">Videos</h2>
+      <p id="videos-summary" style="margin-top:-.5rem;color:var(--text-2)"></p>
+      <ul class="plain talks" id="videos-recent" style="list-style:none;padding:0"></ul>
+      <details><summary>All videos</summary>
+        <ul class="plain talks" id="videos-all" style="list-style:none;padding:0"></ul>
+      </details>
     </section>
 
-    <section id="posts" aria-labelledby="posts-h">
-      <h2 id="posts-h">Blog posts</h2>
-      <ul class="plain talks" id="posts-list" style="list-style:none;padding:0"></ul>
+    <section id="writing" aria-labelledby="writing-h">
+      <h2 id="writing-h">Writing</h2>
+      <ul class="plain talks" id="posts" style="list-style:none;padding:0"></ul>
     </section>
 
     <section aria-labelledby="papers-h">
@@ -413,6 +423,26 @@
       months.append(el("span", {}, monthName(first)), el("span", {}, monthName(last)));
     }
 
+    // dated link row shared by talks, videos, and posts
+    const item = (t, note) => {
+      const li = el("li");
+      li.append(el("time", { datetime: t.date }, t.date.slice(0, 7)));
+      const a = el("span");
+      a.append(el("a", { href: t.url }, t.title));
+      if (note) a.append(el("span", { class: "note-inline" }, ` · ${note}`));
+      li.append(a);
+      return li;
+    };
+
+    function videos(list) {
+      const views = list.reduce((s, v) => s + v.views, 0);
+      document.getElementById("videos-summary").textContent =
+        `${list.length} recordings, ${fmt.format(views)} views on YouTube`;
+      const note = (v) => `${v.minutes} min · ${fmt.format(v.views)} views`;
+      list.forEach((v) => document.getElementById("videos-all").append(item(v, note(v))));
+      list.slice(0, 6).forEach((v) => document.getElementById("videos-recent").append(item(v, note(v))));
+    }
+
     function talks(list) {
       const tl = document.getElementById("timeline");
       const t0 = new Date(list.at(-1).date).getFullYear(), t1 = new Date().getFullYear() + 1;
@@ -420,12 +450,6 @@
       for (let y = t0; y < t1; y += 2) {
         tl.append(el("span", { class: "yr", style: `left:${pos(`${y}-07-01`)}%` }, y));
       }
-      const item = (t) => {
-        const li = el("li");
-        li.append(el("time", { datetime: t.date }, t.date.slice(0, 7)));
-        li.append(el("a", { href: t.url }, t.title));
-        return li;
-      };
       for (const t of list) {
         tl.append(el("a", {
           href: t.url, style: `left:${pos(t.date)}%`,
@@ -446,11 +470,8 @@
         other(d.other);
         calendar(d.contributions);
         talks(d.talks);
-        for (const p of d.posts) {
-          const li = el("li");
-          li.append(el("time", { datetime: p.date }, p.date.slice(0, 7)), el("a", { href: p.url }, p.title));
-          document.getElementById("posts-list").append(li);
-        }
+        videos(d.videos);
+        d.posts.forEach((p) => document.getElementById("posts").append(item(p)));
         document.getElementById("updated").textContent = `Data updated ${d.updated} ·`;
       });
   </script>

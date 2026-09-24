@@ -10,10 +10,12 @@ directly; this runs nightly in GitHub Actions instead. Needs GITHUB_TOKEN.
 """
 
 import datetime as dt
-import html
 import json
 import os
+import pathlib
 import re
+import subprocess
+import tempfile
 import time
 import tomllib
 import urllib.error
@@ -22,6 +24,8 @@ from collections import Counter
 
 USER = "schloerke"
 NAME = "Schloerke"  # matched against package author fields for `role`
+FULL_NAME = "Barret Schloerke"  # matched against opensource.posit.co `people` / `people-hidden`
+OSS_REPO = "https://github.com/posit-dev/open-source-website"
 ROLES = ["contributor", "author", "maintainer"]
 HIDE = {"securingsincity/react-ace"}  # repos to leave out of the package table
 HIDE_OTHER = {"rstudio/shinycoreci-apps"}  # repos to leave out of the other work table
@@ -242,22 +246,60 @@ def talks():
     return sorted(out, key=lambda t: t["date"], reverse=True)
 
 
-def blog_posts():
-    # opensource.posit.co ports the Shiny, RStudio, and tidyverse blogs, and its people
-    # page links every post I (co-)authored as <a href="/blog/YYYY-MM-DD_slug/" title="...">
+def credited(path):
+    """True if a Hugo page's front matter lists me in `people` or `people-hidden`."""
+    fm = path.read_text(errors="replace").split("\n---", 1)[0] + "\n"
+    if not fm.startswith("---"):
+        return False
+    for inline, items in re.findall(r"^people(?:-hidden)?:[ \t]*(.*)\n((?:[ \t]*- .*\n)*)", fm, re.M):
+        names = re.findall(r"[^\[\],'\"]+", inline) + re.findall(r"- (.*)", items)
+        if FULL_NAME in (n.strip(" '\"") for n in names):
+            return True
+    return False
+
+
+def opensource():
+    """Blog posts and videos crediting me on opensource.posit.co.
+
+    Credit comes from the source front matter (the site's JSON has no `people-hidden`),
+    display fields from the site's item-index.json, joined by permalink.
+    """
+    with tempfile.TemporaryDirectory() as tmp:
+        git = lambda *a: subprocess.run(["git", "-C", tmp, *a], check=True, capture_output=True)
+        git("clone", "-q", "--depth=1", "--filter=blob:none", "--no-checkout", "--sparse", OSS_REPO, ".")
+        git("sparse-checkout", "set", "--no-cone", "/content/blog/**/index.md",
+            "/content/blog/**/index.markdown", "/content/blog/**/index.html", "/content/resources/videos/*/_index.md")
+        git("checkout", "-q")
+        root = pathlib.Path(tmp, "content")
+        mine = set()
+        for f in (root / "resources/videos").glob("*/_index.md"):
+            if credited(f):
+                mine.add(f"/resources/videos/{f.parent.name}/")
+        for f in (root / "blog").rglob("index.*"):
+            if f.suffix in (".md", ".markdown", ".html") and credited(f):
+                fm = f.read_text(errors="replace")
+                date = re.search(r"^date:\s*['\"]?(\d{4}-\d{2}-\d{2})", fm, re.M)
+                slug = re.search(r"^slug:\s*['\"]?([^'\"\n]+)", fm, re.M)
+                if date:  # permalink rule from the site's hugo.toml
+                    mine.add(f"/blog/{date[1]}_{slug[1].strip() if slug else f.parent.name}/".lower())
     site = "https://opensource.posit.co"
-    page = fetch(f"{site}/people/barret-schloerke/", raw=True)
-    posts = {href: title for href, title in
-             re.findall(r'<a href="(/blog/\d{4}-\d{2}-\d{2}_[^"]+)" title="([^"]+)"', page)}
-    if not posts:
-        raise RuntimeError("no blog posts found; did the people page markup change?")
-    out = [{"date": href[6:16], "title": html.unescape(title), "url": site + href}
-           for href, title in posts.items()]
-    return sorted(out, key=lambda p: p["date"], reverse=True)
+    posts = [{"date": p["date"], "title": p["title"], "url": site + p["permalink"]}
+             for p in fetch(f"{site}/blog/item-index.json") if p["permalink"].lower() in mine]
+    videos = []
+    for v in fetch(f"{site}/resources/videos/item-index.json"):
+        if v["permalink"] in mine:
+            # YouTube titles repeat the speaker and channel: "Barret Schloerke | Talk | RStudio (2022)"
+            title = re.sub(rf"^{FULL_NAME}\s*[-:]\s*|\s*\({FULL_NAME}[^)]*\)", "", v["title"])
+            parts = [p.strip() for p in re.split(rf"\s+\|\|?\s+|\s+-\s+(?={FULL_NAME})", title)]
+            parts = [p for p in parts if FULL_NAME not in p and not re.match(r"RStudio|Posit\b|posit::conf|Data Science Lab", p)]
+            videos.append({"date": v["date"], "title": " · ".join(parts) or title, "url": site + v["permalink"],
+                           "minutes": round(v["duration"] / 60), "views": v["views"]})
+    return posts, videos
 
 
 pr_counts = merged_pr_counts()
 pkgs = packages(pr_counts)
+posts, videos = opensource()
 data = {
     "updated": dt.date.today().isoformat(),
     "merged_prs": sum(pr_counts.values()),
@@ -266,9 +308,10 @@ data = {
     "other": other_work(pr_counts, pkgs),
     "contributions": contributions(),
     "talks": talks(),
-    "posts": blog_posts(),
+    "videos": videos,
+    "posts": posts,
 }
 with open("data.json", "w") as f:
     json.dump(data, f, separators=(",", ":"))
 print(f"wrote data.json: {len(pkgs)} packages, {len(data['other'])} other, {len(data['talks'])} talks, "
-      f"{len(data['posts'])} posts")
+      f"{len(videos)} videos, {len(posts)} posts")

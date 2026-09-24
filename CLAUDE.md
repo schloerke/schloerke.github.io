@@ -45,9 +45,15 @@ or change an approach below, update this file in the same change.
 - `talks`: `schloerke/presentation-*` and `workshop-*` repos. The date comes from the repo
   name. The title is the repo description, then the README's first `# ` heading, then the name
   slug. Markdown and HTML are stripped out.
-- `posts`: blog posts scraped from `opensource.posit.co/people/barret-schloerke/`. That site
-  ports the shiny-dev-center, RStudio, and tidyverse blogs, so it's the one source
-  (py-shiny-site has no authored posts). Fails loudly if the page markup stops matching.
+- `videos` / `posts`: pages on opensource.posit.co that credit `FULL_NAME` in their front matter
+  `people:` or `people-hidden:` list (the second is added in posit-dev/open-source-website#415).
+  The site repo is 2 GB, so the script does a shallow, blobless, sparse `git clone` that fetches only
+  `content/blog/**/index.{md,markdown,html}` and `content/resources/videos/*/_index.md` (a few seconds).
+  Titles, dates, durations, and YouTube view counts come from the site's `blog/item-index.json` and
+  `resources/videos/item-index.json`, joined by permalink. Blog permalinks are rebuilt with the site's
+  `hugo.toml` rule `/blog/<date>_<slug or dir>/`, lowercased. The site's JSON has no `people-hidden`,
+  which is why credit comes from the source files. Links go to the opensource.posit.co page, not YouTube.
+  Video titles have the speaker name and channel ("| RStudio", "| Posit") removed.
 
 cranlogs and pypistats don't send CORS headers, which is why the data is fetched at build time
 rather than in the browser. `.github/workflows/data.yml` runs `make data` nightly and commits
@@ -67,5 +73,5 @@ In Conductor, `.conductor/settings.toml` defines a `site` run script (`make serv
 
 ## Hand-edited content
 
-The bio, papers list, and nav links are hand-written in `index.html`.
+The bio, papers list, and nav links (GitHub, CV, Bluesky, ORCID) are hand-written in `index.html`.
 Papers are low priority, so that section is a `<details>` that starts collapsed.
