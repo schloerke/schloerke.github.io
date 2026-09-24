@@ -54,6 +54,7 @@
     th { text-align: left; font-weight: 500; color: var(--muted); font-size: .8rem; padding: 0 0 .35rem; }
     td { padding: .3rem 0; border-top: 1px solid var(--rule); vertical-align: middle; }
     .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    th.num, td.num { padding-left: 1rem; }
     td.spark { width: 40%; padding: .3rem 1rem; }
     th.spark-h { padding-left: 1rem; }
     .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -164,13 +165,14 @@
           <th>Package</th>
           <th>Role</th>
           <th class="num"><button class="sort" value="prs" aria-pressed="true">My PRs</button></th>
+          <th class="num"><button class="sort" value="reviews" aria-pressed="false">Reviews</button></th>
           <th class="spark-h">Downloads, last 6 months</th>
           <th class="num"><button class="sort" value="downloads" aria-pressed="false">Last month</button></th>
         </tr></thead>
         <tbody></tbody>
       </table>
       <button id="more" class="more"></button>
-      <p class="note">Merged PRs are mine; downloads are everyone's (CRAN via cranlogs, PyPI via pypistats, npm).
+      <p class="note">Merged PRs are mine; reviews are others' PRs I reviewed; downloads are everyone's (CRAN via cranlogs, PyPI via pypistats, npm).
         Role comes from each package's author list.
         Each sparkline has its own scale, so read them for shape. Hover for monthly values.</p>
 
@@ -297,7 +299,7 @@
       function render() {
         const rows = pkgs
           .filter((p) => !state.lang || p.lang === state.lang)
-          .sort((a, b) => (state.sort === "prs" ? b.prs - a.prs : last(b) - last(a)));
+          .sort((a, b) => (state.sort === "downloads" ? last(b) - last(a) : b[state.sort] - a[state.sort]));
         const tbody = table.tBodies[0];
         tbody.replaceChildren();
         for (const p of rows) {
@@ -314,6 +316,8 @@
           name.append(el("a", { href }, p.name));
           const prs = el("td", { class: "num" });
           prs.append(el("a", { href: `https://github.com/${p.repo}/pulls?q=is%3Apr+is%3Amerged+author%3Aschloerke` }, p.prs));
+          const reviews = el("td", { class: "num" });
+          reviews.append(el("a", { href: `https://github.com/${p.repo}/pulls?q=is%3Apr+reviewed-by%3Aschloerke+-author%3Aschloerke` }, fmt.format(p.reviews)));
           const spark = el("td", { class: "spark" });
           // released after the last full month: no history to plot yet
           const isNew = p.monthly.every((m) => m.downloads === 0);
@@ -322,7 +326,7 @@
             : el("td", { class: "num" }, fmt.format(last(p)));
           if (!isNew) spark.append(sparkline(p.monthly));
           const tr = el("tr");
-          tr.append(lang, name, el("td", { class: "role" }, p.role), prs, spark, count);
+          tr.append(lang, name, el("td", { class: "role" }, p.role), prs, reviews, spark, count);
           tbody.append(tr);
         }
         more.hidden = rows.length <= 12;
