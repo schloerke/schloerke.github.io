@@ -14,11 +14,16 @@ import json
 import os
 import re
 import time
+import tomllib
 import urllib.error
 import urllib.request
 from collections import Counter
 
 USER = "schloerke"
+NAME = "Schloerke"  # matched against package author fields for `role`
+ROLES = ["contributor", "author", "maintainer"]
+HIDE = {"securingsincity/react-ace"}  # repos to leave out of the package table
+ROLE = {"posit-dev/py-shiny": "author"}  # role when the manifests don't list me
 MIN_PRS = 3  # repos with fewer merged PRs are drive-by fixes
 MONTHS = 6  # pypistats only keeps 180 days
 TOKEN = os.environ["GITHUB_TOKEN"]
@@ -74,26 +79,50 @@ def merged_pr_counts():
         while True:
             q = f"author:{USER}+type:pr+is:merged+merged:{year}-01-01..{year}-12-31"
             res = gh(f"search/issues?q={q}&per_page=100&page={page}")
+            time.sleep(2)  # search API: 30 req/min
             for item in res["items"]:
                 counts[item["repository_url"].split("/repos/")[1]] += 1
             if len(res["items"]) < 100:
                 break
             page += 1
-        time.sleep(2)  # search API: 30 req/min
     return counts
 
 
+def r_role(txt):
+    if re.search(rf"^Maintainer:.*{NAME}", txt, re.M):
+        return "maintainer"
+    if (i := txt.find(NAME)) < 0:
+        return "contributor"
+    roles = txt[i:].split("person(")[0]  # this person's entry in Authors@R
+    return "maintainer" if '"cre"' in roles else "author" if '"aut"' in roles else "contributor"
+
+
+def listed_role(maintainers, authors):
+    return "maintainer" if NAME in str(maintainers) else "author" if NAME in str(authors) else "contributor"
+
+
 def manifests(repo):
-    """Yield (lang, package name) for R / Python packages in a repo."""
+    """Yield (lang, package name, role) for R / Python / TypeScript packages in a repo."""
     raw = lambda p: fetch(f"https://raw.githubusercontent.com/{repo}/HEAD/{p}", raw=True)
     for path in ["DESCRIPTION", "pkg-r/DESCRIPTION"]:
         if (txt := raw(path)) and (m := re.search(r"^Package:\s*(\S+)", txt, re.M)):
-            yield "R", m.group(1)
+            yield "R", m.group(1), r_role(txt)
             break
-    for path in ["pyproject.toml", "pkg-py/pyproject.toml", "setup.cfg"]:
-        if (txt := raw(path)) and (m := re.search(r"^name\s*=\s*\"?([\w.-]+)", txt, re.M)):
-            yield "Python", m.group(1)
+    for path in ["pyproject.toml", "pkg-py/pyproject.toml"]:
+        if (txt := raw(path)) and (proj := tomllib.loads(txt).get("project", {})).get("name"):
+            yield "Python", proj["name"], listed_role(proj.get("maintainers"), proj.get("authors"))
             break
+    else:
+        if (txt := raw("setup.cfg")) and (m := re.search(r"^name\s*=\s*([\w.-]+)", txt, re.M)):
+            yield "Python", m.group(1), listed_role(re.findall(r"^maintainer\s*=.*", txt, re.M),
+                                                     re.findall(r"^author\s*=.*", txt, re.M))
+    for path in ["package.json", "pkg-js/package.json"]:
+        # ponytail: TypeScript only; plain JS packages are skipped until one needs an icon
+        if (txt := raw(path)) and '"typescript"' in txt:
+            pkg = json.loads(txt)
+            if pkg.get("name") and not pkg.get("private"):
+                yield "TypeScript", pkg["name"], listed_role(pkg.get("maintainers"), pkg.get("author"))
+                break
 
 
 def cran(names):
@@ -115,23 +144,32 @@ def pypi(name):
     return monthly((d["date"], d["downloads"]) for d in res["data"]) if res else ([], 0)
 
 
+def npm(name):
+    start, _ = month_range()
+    res = fetch(f"https://api.npmjs.org/downloads/range/{start}:{dt.date.today()}/{name}")
+    return monthly((d["day"], d["downloads"]) for d in res["downloads"]) if res else ([], 0)
+
+
 def packages(pr_counts):
     # (lang, name) -> (prs, repo); forks of the same package keep the busiest repo
-    found = {}
+    found, role = {}, Counter()
     for repo, prs in pr_counts.items():
-        if prs < MIN_PRS or re.match(rf"{USER}/(presentation|workshop)-", repo):
+        if prs < MIN_PRS or repo in HIDE or re.match(rf"{USER}/(presentation|workshop)-", repo):
             continue
-        for key in manifests(repo):
-            if key not in found or found[key][0] < prs:
-                found[key] = (prs, repo)
+        for lang, name, r in manifests(repo):
+            # a repo's packages share a role: the strongest one any manifest gives
+            role[repo] = max(role[repo], ROLES.index(r), ROLES.index(ROLE.get(repo, "contributor")))
+            if (lang, name) not in found or found[lang, name][0] < prs:
+                found[lang, name] = (prs, repo)
     r_dl = cran(name for lang, name in found if lang == "R")
+    downloads = {"R": lambda n: r_dl.get(n, ([], 0)), "Python": pypi, "TypeScript": npm}
     out = []
     for (lang, name), (prs, repo) in found.items():
-        series, recent = r_dl.get(name, ([], 0)) if lang == "R" else pypi(name)
+        series, recent = downloads[lang](name)
         if recent == 0:
             continue  # not published
-        out.append({"name": name, "lang": lang, "repo": repo, "prs": prs, "monthly": series,
-                    "recent": recent})
+        out.append({"name": name, "lang": lang, "repo": repo, "prs": prs, "role": ROLES[role[repo]],
+                    "monthly": series, "recent": recent})
     return sorted(out, key=lambda p: -p["prs"])
 
 
