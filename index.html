@@ -96,6 +96,8 @@
     .talks li { display: flex; gap: .75rem; }
     .talks time { color: var(--muted); flex: none; width: 5.5rem; font-variant-numeric: tabular-nums; }
     details summary { cursor: pointer; color: var(--text-2); margin-top: .5rem; }
+    summary.h2-summary { color: inherit; margin: 3rem 0 .75rem; }
+    summary.h2-summary h2 { display: inline; }
 
     #tip {
       position: fixed; pointer-events: none; z-index: 10; display: none;
@@ -178,13 +180,14 @@
     </section>
 
     <section aria-labelledby="papers-h">
-      <h2 id="papers-h">Papers</h2>
+      <details><summary class="h2-summary"><h2 id="papers-h">Papers</h2></summary>
       <ul class="plain">
         <li><a href="https://journal.r-project.org/archive/2016/RJ-2016-044/index.html">Escape from Boxland: Generating a Library of High-Dimensional Geometric Shapes</a> — <i>R Journal</i>, 2016</li>
         <li><a href="http://vita.had.co.nz/papers/gpp.pdf">The Generalized Pairs Plot</a> — <i>JCGS</i>, 2013</li>
         <li><a href="http://amstat.tandfonline.com/doi/abs/10.1198/jcgs.2011.3de">Delayed, Canceled, on Time, Boarding… Flying in the USA</a> — <i>JCGS</i>, 2011</li>
         <li><a href="http://chance.amstat.org/files/2010/12/Visually.pdf">Monitoring the 2008 Election Visually</a> — <i>Chance</i>, 2010</li>
       </ul>
+      </details>
     </section>
   </main>
 

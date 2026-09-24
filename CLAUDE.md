@@ -51,3 +51,4 @@ In Conductor, `.conductor/settings.toml` defines a `site` run script (`make serv
 ## Hand-edited content
 
 The bio, papers list, and nav links are hand-written in `index.html`.
+Papers are low priority, so that section is a `<details>` that starts collapsed.
