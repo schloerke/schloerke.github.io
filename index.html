@@ -46,8 +46,9 @@
     ul.plain li { margin: .35rem 0; }
 
     /* hero figure */
-    .hero { font-size: 3rem; font-weight: 600; line-height: 1; margin: 0; }
-    .hero-label { color: var(--text-2); margin: .35rem 0 1.25rem; }
+    h2.big { font-size: 1.5rem; }
+    .hero { font-size: 1.25rem; font-weight: 600; color: var(--text); }
+    .hero-label { color: var(--text-2); margin: 0 0 1.25rem; }
 
     /* package table */
     table { width: 100%; border-collapse: collapse; font-size: .95rem; }
@@ -156,11 +157,10 @@
     </p>
 
     <section id="numbers" aria-labelledby="numbers-h">
-      <h2 id="numbers-h">By the numbers</h2>
-      <p class="hero" id="hero">—</p>
-      <p class="hero-label" id="hero-label">merged pull requests</p>
+      <h2 id="numbers-h" class="big">Open source</h2>
+      <p class="hero-label"><span class="hero" id="hero">—</span> <span id="hero-label">merged pull requests</span></p>
 
-      <h2 id="pkgs-h">R, Python &amp; TypeScript packages I've contributed to</h2>
+      <h2 id="pkgs-h">R, Python &amp; TypeScript</h2>
       <div class="controls" id="lang-filter" role="group" aria-label="Language">
         <button aria-pressed="true" value="">All</button>
         <button aria-pressed="false" value="R">R</button>
@@ -184,7 +184,7 @@
         Role comes from each package's author list.
         Each sparkline has its own scale, so read them for shape. Hover for monthly values.</p>
 
-      <h2 id="other-h">Other work</h2>
+      <h2 id="other-h">Other repos</h2>
       <table id="other" aria-labelledby="other-h">
         <thead><tr>
           <th>Repository</th>
