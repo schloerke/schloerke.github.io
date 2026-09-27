@@ -311,6 +311,20 @@ data = {
     "videos": videos,
     "posts": posts,
 }
+
+
+def sizes(d):
+    """Row counts per section (packages per language), to catch a source that came back empty."""
+    out = Counter(f"packages {p['lang']}" for p in d["packages"])
+    out.update({k: len(d[k]) for k in ("other", "talks", "videos", "posts")})
+    return out
+
+
+# fail before writing, so the workflow goes red and keeps the last good data.json
+old = sizes(json.load(open("data.json"))) if os.path.exists("data.json") else Counter()
+new = sizes(data)
+if shrunk := [f"{k}: {old[k]} -> {new[k]}" for k in old if new[k] < old[k] / 2]:
+    raise SystemExit("data.json shrank by more than half, a source is probably down:\n  " + "\n  ".join(shrunk))
 with open("data.json", "w") as f:
     json.dump(data, f, separators=(",", ":"))
 print(f"wrote data.json: {len(pkgs)} packages, {len(data['other'])} other, {len(data['talks'])} talks, "

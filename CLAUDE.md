@@ -55,6 +55,12 @@ or change an approach below, update this file in the same change.
   which is why credit comes from the source files. Links go to the opensource.posit.co page, not YouTube.
   Video titles have the speaker name and channel ("| RStudio", "| Posit") removed.
 
+Before writing, the script compares row counts (packages per language, `other`, `talks`, `videos`,
+`posts`) against the committed `data.json` and exits with an error if any drops by more than half.
+A source that is down (a 404 reads as "not published") then turns the nightly run red instead of
+committing a gap. The page's "Data updated" date shows how stale the data is. If a big drop is real
+(e.g. after adding to `HIDE`), delete `data.json` and rerun `make data`.
+
 cranlogs and pypistats don't send CORS headers, which is why the data is fetched at build time
 rather than in the browser. `.github/workflows/data.yml` runs `make data` nightly and commits
 `data.json`. Its `keepalive` job re-enables the workflow via the API each run, because GitHub
