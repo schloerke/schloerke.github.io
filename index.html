@@ -199,8 +199,8 @@
         <form method="dialog"><button aria-label="Close" class="close">✕</button></form>
         <h2 id="cal-dialog-h">GitHub activity by year</h2>
         <p class="hero-label"><span class="hero" id="hero">—</span> <span id="hero-label">merged pull requests</span></p>
-        <p class="note" style="margin:0 0 1rem">Shades share one scale across years.</p>
         <div id="cal-years"></div>
+        <p class="note" style="margin:1rem 0 0">Shades share one scale across years.</p>
       </dialog>
 
       <h2 id="pkgs-h">R, Python &amp; TypeScript</h2>
@@ -545,7 +545,7 @@
           cals.forEach((c, i) => {
             const cal = el("div", { class: "cal", role: "img", "aria-label": `${fmt.format(c.total)} contributions in ${years[i]}` });
             document.getElementById("cal-years").append(
-              el("h3", {}, `${years[i]} · ${fmt.format(c.total)}`), calGrid(cal, c.days, level));
+              el("h3", {}, `${years[i]} · ${fmt.format(c.total)} contributions`), calGrid(cal, c.days, level));
           });
         });
       });
@@ -608,7 +608,7 @@
     load("summary").then((s) => {
       document.getElementById("hero").textContent = fmt.format(s.merged_prs);
       document.getElementById("hero-label").textContent =
-        `merged pull requests across ${s.repos} GitHub repositories`;
+        `merged pull requests across ${s.repos} GitHub repositories since ${Math.min(...s.years)}`;
       document.getElementById("updated").textContent = `Data updated ${s.updated} ·`;
       load("contributions/last").then((c) => calendar(c, s.years));
     });
