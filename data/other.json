@@ -7,7 +7,7 @@
 {"repo":"posit-dev/shiny-issue-triage","prs":20,"description":"A place where we can auto-label issues in other shiny team managed repos"},
 {"repo":"posit-dev/shinylive","prs":19,"description":"Run Shiny on Python and R (compiled to wasm) in the browser"},
 {"repo":"rstudio/shiny-workflows","prs":18,"description":"GitHub Actions workflows for Shiny and related packages"},
-{"repo":"schloerke/schloerke.github.io","prs":15,"description":""},
+{"repo":"schloerke/schloerke.github.io","prs":17,"description":""},
 {"repo":"posit-dev/shiny-showcase-bioinformatics","prs":12,"description":"A Quarto gallery of Shiny apps and packages for computational biology"},
 {"repo":"rstudio/hex-stickers","prs":9,"description":"RStudio hex stickers"},
 {"repo":"rstudio/gradethis","prs":7,"description":"Tools for teachers to use with learnr"},
