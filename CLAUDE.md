@@ -77,6 +77,8 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   its opensource.posit.co recording, because the video's date and title rarely match the talk's. That video
   moves out of `videos.json` and into the talk's `video` field. The page shows it on the talk row as a film + arrow-up-right icon
   link (Lucide, ISC) that opens in a new tab, and the Videos summary count still includes it.
+  The talks and videos lists show 6 rows with a "Show all" / "Show fewer" button (`showAll()`, shared with Other repos).
+  A timeline dot links to its row (`#talk-<i>`), opens the list if that row is hidden, and highlights the row for 5s.
 - `videos.json` / `posts.json`: pages on opensource.posit.co that credit `FULL_NAME` in their front matter
   `people:` list (Shiny Team posts list their contributors there since posit-dev/open-source-website#417).
   The site repo is 2 GB, so the script does a shallow, blobless, sparse `git clone` that fetches only
