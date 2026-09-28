@@ -73,12 +73,6 @@ match = 'reactlog'
 until = "2020-12"
 
 [[R.shiny]]
-title = "TypeScript"
-about = "Ported shiny.js to TypeScript and moved the build to esbuild."
-match = 'typescript|\bTS\b|eslint|esbuild'
-until = "2021-12"
-
-[[R.shiny]]
 title = "OpenTelemetry"
 about = "Traces and logs for sessions, reactivity, and outputs through {otel}."
 match = 'otel'
@@ -87,6 +81,37 @@ match = 'otel'
 title = "MCP Apps"
 about = "Serve Shiny apps as MCP Apps, with author tools for LLM clients."
 match = '\bmcp'
+
+[[R.shiny]]
+title = "Plot brushing"
+about = "Plot click and brush events carry CSS and image coordinates, and brushing works in WebKit."
+match = 'brush|plot click'
+
+[[R.shiny]]
+title = "testServer()"
+about = "Test server functions and modules in memory against a mock session."
+match = 'testServer|mock|runTests'
+
+[[R.shiny]]
+title = "devmode()"
+about = "One switch that turns on the options you want while developing an app."
+match = 'devmode'
+
+[[R.shiny]]
+title = "Quosures"
+about = "exprToFunction() and installExprFunction() accept quosures, including inject()ed ones."
+match = 'quosure|inject|quoted'
+
+[[R.shiny]]
+title = "Session lifecycle"
+about = "session$destroy(), a soft teardown when a session closes, and clean state on reconnect."
+match = 'session\$destroy|teardown|reconnect|destroys'
+
+[[TypeScript."@posit/shiny"]]
+title = "TypeScript"
+about = "Ported shiny.js to TypeScript, moved the build to esbuild, and published the types."
+match = 'typescript|\bTS\b|eslint|esbuild|srcts'
+until = "2022-12"
 
 [[R.shinytest2]]
 title = "AppDriver"
