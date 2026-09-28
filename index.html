@@ -45,6 +45,7 @@
     .links svg { display: block; width: 1.1rem; height: 1.1rem; fill: currentColor; }
     .links .line svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .note { color: var(--muted); font-size: .85rem; margin: .25rem 0 0; }
+    .note ul { margin: .25rem 0 0; padding-left: 1.25rem; }
     ul.plain { padding-left: 1.1rem; }
     ul.plain li { margin: .35rem 0; }
 
@@ -223,11 +224,15 @@
         <tbody></tbody>
       </table>
       <button id="more" class="more"></button>
-      <p class="note">Merged PRs are mine; reviews are others' PRs I reviewed; downloads are everyone's (CRAN via cranlogs, PyPI via pypistats, npm).
-        Role comes from each package's author list.
-        ▸ lists a package's epics, each dated and counted by my merged PRs whose titles match it;
-        a package's epic bars share one time scale.
-        Each sparkline has its own scale, so read them for shape. Hover for monthly values.</p>
+      <details class="note"><summary>Details</summary>
+        <ul>
+          <li>My PRs are my merged PRs. Reviews are others' PRs I reviewed.</li>
+          <li>Epics are big pieces of work, dated and counted by my merged PRs whose titles match. A package's epic bars share one time scale.</li>
+          <li>Role comes from each package's author list.</li>
+          <li>Downloads are everyone's: CRAN via <a href="https://cranlogs.r-pkg.org">cranlogs</a>, PyPI via <a href="https://pypistats.org">pypistats</a>, and <a href="https://www.npmjs.com">npm</a>.</li>
+          <li>Each sparkline has its own scale, so read them for shape. Hover for monthly values.</li>
+        </ul>
+      </details>
 
       <h2 id="other-h">Other repos</h2>
       <table id="other" aria-labelledby="other-h">
