@@ -24,7 +24,7 @@ from collections import Counter
 
 USER = "schloerke"
 NAME = "Schloerke"  # matched against package author fields for `role`
-FULL_NAME = "Barret Schloerke"  # matched against opensource.posit.co `people` / `people-hidden`
+FULL_NAME = "Barret Schloerke"  # matched against opensource.posit.co `people`
 OSS_REPO = "https://github.com/posit-dev/open-source-website"
 ROLES = ["contributor", "author", "maintainer"]
 HIDE = {"securingsincity/react-ace"}  # repos to leave out of the package table
@@ -69,6 +69,14 @@ def read(name):
     """A committed data/<name>.json, or None."""
     path = DATA / f"{name}.json"
     return json.loads(path.read_text()) if path.exists() else None
+
+
+def dump(v):
+    """JSON with one list item or top-level key per line, so a changed row is a one-line diff."""
+    c = lambda x: json.dumps(x, separators=(",", ":"))
+    rows = [c(x) for x in v] if isinstance(v, list) else [f"{c(k)}:{c(x)}" for k, x in v.items()]
+    ends = "[]" if isinstance(v, list) else "{}"
+    return ends[0] + "\n" + ",\n".join(rows) + "\n" + ends[1] + "\n"
 
 
 def month_range():
@@ -295,11 +303,11 @@ def talks():
 
 
 def credited(path):
-    """True if a Hugo page's front matter lists me in `people` or `people-hidden`."""
+    """True if a Hugo page's front matter lists me in `people`."""
     fm = path.read_text(errors="replace").split("\n---", 1)[0] + "\n"
     if not fm.startswith("---"):
         return False
-    for inline, items in re.findall(r"^people(?:-hidden)?:[ \t]*(.*)\n((?:[ \t]*- .*\n)*)", fm, re.M):
+    for inline, items in re.findall(r"^people:[ \t]*(.*)\n((?:[ \t]*- .*\n)*)", fm, re.M):
         names = re.findall(r"[^\[\],'\"]+", inline) + re.findall(r"- (.*)", items)
         if FULL_NAME in (n.strip(" '\"") for n in names):
             return True
@@ -309,8 +317,7 @@ def credited(path):
 def opensource():
     """Blog posts and videos crediting me on opensource.posit.co.
 
-    Credit comes from the source front matter (the site's JSON has no `people-hidden`),
-    display fields from the site's item-index.json, joined by permalink.
+    Credit comes from the source front matter, display fields from the site's item-index.json, joined by permalink.
     """
     with tempfile.TemporaryDirectory() as tmp:
         git = lambda *a: subprocess.run(["git", "-C", tmp, *a], check=True, capture_output=True)
@@ -376,9 +383,10 @@ old, new = sizes(read), sizes(files.get)
 if shrunk := [f"{k}: {old[k]} -> {new[k]}" for k in old if new[k] < old[k] / 2]:
     raise SystemExit("data/ shrank by more than half, a source is probably down:\n  " + "\n  ".join(shrunk))
 (DATA / "contributions").mkdir(parents=True, exist_ok=True)
-changed = [name for name, v in files.items() if read(name) != v]
+path = lambda name: DATA / f"{name}.json"
+changed = [name for name, v in files.items() if not path(name).exists() or path(name).read_text() != dump(v)]
 for name in changed:
-    (DATA / f"{name}.json").write_text(json.dumps(files[name], separators=(",", ":")))
+    path(name).write_text(dump(files[name]))
 print(f"{len(pkgs)} packages, {len(files['other'])} other, {len(files['talks'])} talks, "
       f"{len(videos)} videos, {len(posts)} posts, {len(cals)} calendars")
 print("updated data/:", ", ".join(changed) or "nothing")
