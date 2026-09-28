@@ -21,7 +21,7 @@
 {"date":"2020-04-29","kind":"presentation","title":"reactlog","url":"http://schloerke.com/presentation-2020-04-29-reactlog/"},
 {"date":"2019-11-11","kind":"presentation","title":"Reproducible Shiny apps with shinymeta - ABACUS 2019","url":"http://schloerke.com/presentation-2019-11-11-shinymeta/"},
 {"date":"2019-05-02","kind":"presentation","title":"shiny reactlog sparklyr","url":"https://github.com/schloerke/presentation-2019-05-02-shiny-reactlog-sparklyr"},
-{"date":"2019-01-18","kind":"presentation","title":"reactlog","url":"https://resources.rstudio.com/rstudio-conf-2019/reactlog-2-0-debugging-the-state-of-shiny)","video":{"date":"2019-09-03","title":"Reactlog 2.0 Debugging the state of Shiny","url":"https://opensource.posit.co/resources/videos/2019-09-03_barret-schloerke-reactlog-20-debugging-the-state-of-shiny-rstudio-2019/","minutes":21,"views":1280}},
+{"date":"2019-01-18","kind":"presentation","title":"reactlog","url":"https://posit.co/resources/videos/reactlog-2-0-debugging-the-state-of-shiny/","video":{"date":"2019-09-03","title":"Reactlog 2.0 Debugging the state of Shiny","url":"https://opensource.posit.co/resources/videos/2019-09-03_barret-schloerke-reactlog-20-debugging-the-state-of-shiny-rstudio-2019/","minutes":21,"views":1280}},
 {"date":"2018-08-20","kind":"presentation","title":"nasa shiny lightning","url":"https://github.com/schloerke/presentation-2018-08-20-nasa-shiny-lightning"},
 {"date":"2017-04-14","kind":"presentation","title":"Cognostics: Metrics enabling detailed interactive visualization of big data","url":"https://github.com/schloerke/presentation-2017_04_14-cognostics"},
 {"date":"2017-03-29","kind":"presentation","title":"web scraping","url":"https://github.com/schloerke/presentation-2017_03_29-web_scraping"},

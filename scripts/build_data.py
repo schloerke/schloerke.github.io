@@ -271,6 +271,7 @@ def packages(pr_counts):
             continue  # not published
         out.append({"name": name, "lang": lang, "repo": repo, "prs": prs, "role": ROLES[role[repo]],
                     "reviews": reviews(repo), "monthly": series, "recent": recent,
+                    "homepage": (gh(f"repos/{repo}") or {}).get("homepage") or None,
                     "feedstock": feedstock(lang, name),
                     **({"epics": ep} if (ep := epics(lang, name, repo)) else {})})
     return sorted(out, key=lambda p: -p["prs"])
