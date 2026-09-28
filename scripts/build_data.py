@@ -30,6 +30,31 @@ ROLES = ["contributor", "author", "maintainer"]
 HIDE = {"securingsincity/react-ace"}  # repos to leave out of the package table
 HIDE_OTHER = {"rstudio/shinycoreci-apps"}  # repos to leave out of the other work table
 ROLE = {"posit-dev/py-shiny": "author"}  # role when the manifests don't list me
+TALKS = {  # talk repo -> hand-written entries, for repos with no date in the name or several talks in one
+    "presentation-2020-08-14-shinydevseries": [
+        {"date": "2020-09-09", "title": "Shiny Developer Series #12: reactlog",
+         "url": "https://shinydevseries.com/interview/ep012/"},
+        {"date": "2020-09-17", "title": "Shiny Developer Series #13: Inside Plumber 1.0",
+         "url": "https://shinydevseries.com/interview/ep013/"},
+        {"date": "2020-10-03", "title": "Shiny Developer Series #14: Shining a Light on learnr",
+         "url": "https://shinydevseries.com/interview/ep014/"},
+    ],
+    "workshop-rinpharma24-shinylive": [
+        {"date": "2024-10-25", "title": "{shinylive}: Serverless Shiny applications workshop (R/Pharma 2024)",
+         "url": "http://schloerke.com/workshop-rinpharma24-shinylive/"},
+    ],
+}
+TALK_VIDEO = {  # talk repo -> its opensource.posit.co recording; shown with the talk, not under Videos
+    "presentation-2025-09-17-posit-conf-otel": "2025-11-07_observability-at-scale-barret-schloerke-posit-positconf2025",
+    "presentation-2025-08-09-user-plumber2": "2025-10-29_plumber2-streamlining-web-api-development-in-r-barret-schloerke",
+    "presentation-2024-08-13-posit-shiny-data-frame": "2024-10-31_barret-schloerke-editable-data-frames-in-py-shiny-updating-original-data-in-real-time",
+    "presentation-2024-04-18-appsilon-shinylive": "2024-06-06_shinylive-serverless-shiny-apps-barret-schloerke-posit",
+    "presentation-2023-03-15-appsilon-nightly-testing": "2023-04-18_barret-schloerke-lessons-learned-testing-2500-shiny-apps-every-day",
+    "presentation-2022-07-28-rstudioconf22-shinytest2": "2022-10-24_barret-schloerke-shinytest2-unit-testing-for-shiny-applications-rstudio-2022",
+    "presentation-2021-01-rstudio-global-plumber-async": "2021-02-18_barret-schloerke-plumber-future-async-web-apis-rstudio",
+    "workshop-rinpharma24-shinylive": "2025-03-11_shinylive-serverless-shiny-applications-workshop",
+    "presentation-2019-01-18-reactlog": "2019-09-03_barret-schloerke-reactlog-20-debugging-the-state-of-shiny-rstudio-2019",
+}
 MIN_PRS = 3  # repos with fewer merged PRs are drive-by fixes
 MONTHS = 6  # pypistats only keeps 180 days
 SINCE = 2018  # first year of contribution calendars
@@ -282,23 +307,32 @@ def contributions():
     return out
 
 
-def talks():
+def talks(videos):
+    """Presentation / workshop repos (or TALKS entries). Moves each TALK_VIDEO recording out of `videos` onto its talk."""
     repos, page = [], 1
     while batch := gh(f"users/{USER}/repos?per_page=100&page={page}"):
         repos += batch
         page += 1
     out = []
     for r in repos:
-        m = re.match(r"(presentation|workshop)-(\d{4})[-_](\d{2})(?:[-_](\d{2}))?[-_]?(.*)", r["name"])
-        if not m:
+        if r["name"] in TALKS:
+            talks_ = [{"kind": r["name"].split("-")[0], **t} for t in TALKS[r["name"]]]
+        elif m := re.match(r"(presentation|workshop)-(\d{4})[-_](\d{2})(?:[-_](\d{2}))?[-_]?(.*)", r["name"]):
+            kind, y, mo, d, slug = m.groups()
+            readme = fetch(f"https://raw.githubusercontent.com/{r['full_name']}/HEAD/README.md", raw=True)
+            h1 = re.search(r"^# (.+)", readme or "", re.M)
+            title = r["description"] or (h1 and h1.group(1)) or slug.replace("-", " ").replace("_", " ")
+            title = re.sub(r"<.*|[`*]", "", title).strip()  # plain text: drop html + markdown
+            talks_ = [{"date": f"{y}-{mo}-{d or '01'}", "kind": kind, "title": title,
+                       "url": r["homepage"] or r["html_url"]}]
+        else:
             continue
-        kind, y, mo, d, slug = m.groups()
-        readme = fetch(f"https://raw.githubusercontent.com/{r['full_name']}/HEAD/README.md", raw=True)
-        h1 = re.search(r"^# (.+)", readme or "", re.M)
-        title = r["description"] or (h1 and h1.group(1)) or slug.replace("-", " ").replace("_", " ")
-        title = re.sub(r"<.*|[`*]", "", title).strip()  # plain text: drop html + markdown
-        out.append({"date": f"{y}-{mo}-{d or '01'}", "kind": kind, "title": title,
-                    "url": r["homepage"] or r["html_url"]})
+        if r["name"] in TALK_VIDEO:
+            url = f"https://opensource.posit.co/resources/videos/{TALK_VIDEO[r['name']]}/"
+            if video := next((v for v in videos if v["url"] == url), None):
+                videos.remove(video)
+                talks_[0]["video"] = video
+        out += talks_
     return sorted(out, key=lambda t: t["date"], reverse=True)
 
 
@@ -364,7 +398,7 @@ files = {
                 "repos": len(pr_counts), "years": [int(y) for y in cals if y != "last"]},
     "packages": pkgs,
     "other": other_work(pr_counts, pkgs),
-    "talks": talks(),
+    "talks": talks(videos),  # also removes the talk recordings from `videos`
     "videos": videos,
     "posts": posts,
     **{f"contributions/{k}": v for k, v in cals.items()},
