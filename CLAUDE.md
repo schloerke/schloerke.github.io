@@ -98,6 +98,7 @@ hard-coded date on purpose; bump it yearly.
 make data    # rebuild data/ (uses `gh auth token` if GITHUB_TOKEN is unset)
 make serve   # preview at http://localhost:8000 (override with PORT=...)
 make data ONLY="packages other"   # rebuild just some sections; the rest are read back from data/
+make data-packages                # one section, same as ONLY=packages
 ```
 
 **During development, don't run a full `make data`.** It is slow and its output is long. Rebuild only the
