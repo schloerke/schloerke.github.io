@@ -51,6 +51,21 @@ title = "Agent Skills"
 about = "Skills shipped in the package so coding agents know how to write Shiny apps."
 match = 'agent skill|shiny skills|docs\(skills\)'
 
+[[Python.shiny]]
+title = "API reference"
+about = "The quartodoc function reference and its runnable examples."
+match = 'quartodoc|docs renderer|function reference|api reference'
+
+[[Python.shiny]]
+title = "Release train skill"
+about = "An Agent Skill that walks a py-shiny release from prep through PyPI, conda-forge, and shinylive."
+match = 'release.?(skill|train)|release phases'
+
+[[Python.shiny]]
+title = "Session lifecycle"
+about = "session.destroy(), a soft teardown when a session closes, and session.allow_reconnect()."
+match = 'session\.destroy|allow_reconnect|teardown|dangling'
+
 [[R.shiny]]
 title = "reactlog integration"
 about = "Record every reactive event so reactlog can draw the reactive graph."
@@ -165,21 +180,57 @@ match = 'exercise'
 until = "2020-12"
 
 [[R.shinyreact]]
+title = "Initial development"
+about = "Ported the Python API to R, then CRAN checks, a pkgdown site, and webR builds for 0.1.0."
+match = '\(r\)|R/Python|R package|CRAN|win-builder|spell|NEWS|pkgdown|tidytemplate|webR|wasm'
+
+[[R.shinyreact]]
+title = "ui.tsx apps"
+about = "Write the whole page in React and serve it from R."
+match = 'ui\.tsx|page_react|#168'
+
+[[R.shinyreact]]
+title = "Agent Skills"
+about = "Skills for building and converting apps with coding agents, shipped in the package."
+match = '(?<!audit )(?<!release )skill'
+
+[[Python.shinyreact]]
+title = "Initial development"
+about = "Began as shinyjson, a JSON spec renderer, then turned React-first and dropped json-render."
+match = 'shinyjson|SPA|json-render'
+until = "2026-05"
+
+[[Python.shinyreact]]
+title = "ui.tsx apps"
+about = "Write the whole page in React and serve it from Python."
+match = 'ui\.tsx|page_react|#168'
+
+[[Python.shinyreact]]
+title = "Renderer dependencies"
+about = "Find and serve the HTML dependencies of Shiny outputs used inside React."
+match = 'dep(endency)? discovery|HTMLDependenc|dependency placeholder'
+
+[[Python.shinyreact]]
+title = "Testing"
+about = "Playwright e2e tests, WireTap for wire payloads, and in-memory test_server()."
+match = 'wire.?tap|test_server|testServer|local_server|e2e|playwright'
+
+[[Python.shinyreact]]
+title = "Agent Skills"
+about = "Skills for building and converting apps with coding agents, shipped in the package."
+match = '(?<!audit )(?<!release )skill'
+
+[[TypeScript."@posit-dev/shinyreact"]]
 title = "React hooks"
 about = "useShinyInput / useShinyOutput hooks, and ShinyOutput for classic Shiny outputs."
 match = 'hook|ShinyOutput|useShiny'
 
-[[R.shinyreact]]
-title = "ui.tsx apps"
-about = "Write the whole page in React and serve it from R or Python."
-match = 'ui\.tsx|page_react'
-
-[[R.shinyreact]]
+[[TypeScript."@posit-dev/shinyreact"]]
 title = "Wire protocol"
-about = "One protocol shared by the R, Python, and JavaScript packages."
-match = 'protocol|wire'
+about = "One versioned protocol, checked by a handshake, shared with the R and Python packages."
+match = 'handshake|protocol (bump|surface)|wire-protocol'
 
-[[R.shinyreact]]
-title = "Agent Skills"
-about = "Skills for building and converting apps with coding agents."
-match = 'skill'
+[[TypeScript."@posit-dev/shinyreact"]]
+title = "npm package"
+about = "A dual build published as @posit-dev/shinyreact, usable with no server-side JS."
+match = 'npm|publish|dual build'
