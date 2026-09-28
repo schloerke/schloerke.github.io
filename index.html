@@ -103,6 +103,9 @@
     th .sort { font-weight: 500; color: var(--muted); }
     th .sort[aria-pressed="true"] { color: var(--text); cursor: default; }
     th .sort[aria-pressed="true"]::after { content: " ↓"; }
+    ul.clip:not(.all) > li:nth-child(n+7) { display: none; }
+    .talks li { border-radius: 4px; transition: background .5s; scroll-margin-top: 3rem; }
+    .talks li.hl { background: var(--empty); }
     .more { color: var(--accent); font-size: .9rem; margin-top: .5rem; }
     td.spark svg { display: block; width: 100%; height: 24px; overflow: visible; }
     .spark path { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
@@ -249,17 +252,13 @@
     <section id="talks" aria-labelledby="talks-h">
       <h2 id="talks-h">Talks &amp; workshops</h2>
       <div class="timeline" id="timeline"><div class="axis"></div></div>
-      <ul class="plain talks" id="talks-recent" style="list-style:none;padding:0"></ul>
-      <details><summary>All talks</summary>
-        <ul class="plain talks" id="talks-all" style="list-style:none;padding:0"></ul>
-      </details>
+      <ul class="plain talks clip" id="talks-list" style="list-style:none;padding:0"></ul>
+      <button id="talks-more" class="more"></button>
 
       <h2 id="videos-h">Videos</h2>
       <p id="videos-summary" style="margin-top:-.5rem;color:var(--text-2)"></p>
-      <ul class="plain talks" id="videos-recent" style="list-style:none;padding:0"></ul>
-      <details><summary>All videos</summary>
-        <ul class="plain talks" id="videos-all" style="list-style:none;padding:0"></ul>
-      </details>
+      <ul class="plain talks clip" id="videos-list" style="list-style:none;padding:0"></ul>
+      <button id="videos-more" class="more"></button>
     </section>
 
     <section id="writing" aria-labelledby="writing-h">
@@ -500,10 +499,15 @@
         tr.append(name, prs, el("td", { class: "about" }, r.description));
         table.tBodies[0].append(tr);
       }
-      const label = () => (more.textContent = table.classList.contains("all") ? "Show fewer" : `Show all ${repos.length}`);
-      more.hidden = repos.length <= 12;
+      showAll(table, more, repos.length, 12);
+    }
+
+    // a "Show all n" / "Show fewer" button that toggles .all on a table or list clipped by CSS
+    function showAll(box, more, n, shown) {
+      const label = () => (more.textContent = box.classList.contains("all") ? "Show fewer" : `Show all ${n}`);
+      more.hidden = n <= shown;
       label();
-      more.addEventListener("click", () => { table.classList.toggle("all"); label(); });
+      more.addEventListener("click", () => { box.classList.toggle("all"); label(); });
     }
 
     // quartiles of non-zero days -> 4 sequential steps of one hue
@@ -583,8 +587,9 @@
       const views = all.reduce((s, v) => s + v.views, 0);
       document.getElementById("videos-summary").textContent =
         `${all.length} recordings (${all.length - list.length} with their talks above), ${fmt.format(views)} views on YouTube`;
-      list.forEach((v) => document.getElementById("videos-all").append(item(v, stats(v))));
-      list.slice(0, 6).forEach((v) => document.getElementById("videos-recent").append(item(v, stats(v))));
+      const ul = document.getElementById("videos-list");
+      list.forEach((v) => ul.append(item(v, stats(v))));
+      showAll(ul, document.getElementById("videos-more"), list.length, 6);
     }
 
     function talks(list) {
@@ -594,14 +599,25 @@
       for (let y = t0; y < t1; y += 2) {
         tl.append(el("span", { class: "yr", style: `left:${pos(`${y}-07-01`)}%` }, y));
       }
-      for (const t of list) {
-        tl.append(el("a", {
-          href: t.url, style: `left:${pos(t.date)}%`,
+      const ul = document.getElementById("talks-list"), more = document.getElementById("talks-more");
+      list.forEach((t, i) => {
+        // a dot jumps to its row, opening the list first if the row is hidden
+        const dot = el("a", {
+          href: `#talk-${i}`, style: `left:${pos(t.date)}%`,
           "data-tip": `${t.date.slice(0, 7)} · ${t.title}`, "aria-label": t.title,
-        }));
-        document.getElementById("talks-all").append(item(t));
-      }
-      list.slice(0, 6).forEach((t) => document.getElementById("talks-recent").append(item(t)));
+        });
+        const li = item(t);
+        li.id = `talk-${i}`;
+        dot.addEventListener("click", () => {
+          if (!li.checkVisibility()) more.click();
+          li.classList.add("hl");
+          clearTimeout(li.hl);
+          li.hl = setTimeout(() => li.classList.remove("hl"), 5000);
+        });
+        tl.append(dot);
+        ul.append(li);
+      });
+      showAll(ul, more, list.length, 6);
     }
 
     const load = (name) => fetch(`data/${name}.json`).then((r) => r.json());
