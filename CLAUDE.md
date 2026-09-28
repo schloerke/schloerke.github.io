@@ -41,7 +41,10 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   any downloads in that window, including the current month, so new releases show as "new".
   `reviews` per package: search count of `reviewed-by:schloerke -author:schloerke` in that repo.
   `feedstock` is the `conda-forge/<name>-feedstock` repo for Python packages, if one exists
-  (`py-<name>`, then `<name>`). R packages are skipped on purpose. The table shows it as an anvil icon (Simple Icons, CC0).
+  (`py-<name>`, then `<name>`). R packages are skipped on purpose.
+  `homepage` is the GitHub repo's website field (pkgdown / docs site), or null.
+  In the table the package name is plain `<code>`. The language icon links to CRAN / PyPI / npm, and a
+  links column holds conda-forge feedstock (anvil, Simple Icons, CC0; an empty slot when missing so the rest align), GitHub (octocat), and homepage (Lucide globe) icons.
 - `other.json`: every other public repo with ≥ `MIN_PRS` merged PRs (not a listed package's repo,
   not a talk), with its GitHub description. Private repos are skipped so their names stay off the site,
   and forks (e.g. `schloerke/leaflet`) are skipped. `HIDE_OTHER` hand-lists repos to leave out.
