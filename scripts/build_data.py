@@ -30,6 +30,7 @@ ROLES = ["contributor", "author", "maintainer"]
 HIDE = {"securingsincity/react-ace"}  # repos to leave out of the package table
 HIDE_OTHER = {"rstudio/shinycoreci-apps"}  # repos to leave out of the other work table
 ROLE = {"posit-dev/py-shiny": "author"}  # role when the manifests don't list me
+EPICS = tomllib.loads(pathlib.Path(__file__).with_name("epics.toml").read_text())  # {lang: {package: [epic]}}
 MIN_PRS = 3  # repos with fewer merged PRs are drive-by fixes
 MONTHS = 6  # pypistats only keeps 180 days
 SINCE = 2018  # first year of contribution calendars
@@ -102,6 +103,18 @@ def monthly(days):
     return [{"month": m, "downloads": n} for m, n in months.items()], recent
 
 
+def search(q):
+    """Every issue / PR matching a search query (the API stops at 1000)."""
+    page = 1
+    while True:
+        res = gh(f"search/issues?q={q}&per_page=100&page={page}")
+        time.sleep(2)  # search API: 30 req/min
+        yield from res["items"]
+        if len(res["items"]) < 100:
+            break
+        page += 1
+
+
 def merged_pr_counts():
     """{year: {repo: merged PRs}}. Years before last year come from the committed file."""
     # ponytail: old years are never refetched; delete data/merged_prs.json if a repo moves or goes private
@@ -111,18 +124,27 @@ def merged_pr_counts():
         if year < this - 1 and str(year) in by_year:
             continue
         # search caps at 1000 results, so query one year at a time
-        counts, page = Counter(), 1
-        while True:
-            q = f"author:{USER}+type:pr+is:merged+merged:{year}-01-01..{year}-12-31"
-            res = gh(f"search/issues?q={q}&per_page=100&page={page}")
-            time.sleep(2)  # search API: 30 req/min
-            for item in res["items"]:
-                counts[item["repository_url"].split("/repos/")[1]] += 1
-            if len(res["items"]) < 100:
-                break
-            page += 1
-        by_year[str(year)] = dict(counts)
+        q = f"author:{USER}+type:pr+is:merged+merged:{year}-01-01..{year}-12-31"
+        by_year[str(year)] = dict(Counter(i["repository_url"].split("/repos/")[1] for i in search(q)))
     return by_year
+
+
+def epics(lang, name, repo):
+    """The package's epics from epics.toml, dated and counted by my merged PR titles they match."""
+    listed = EPICS.get(lang, {}).get(name)
+    if not listed:
+        return None
+    # ponytail: one query, so a repo past 1000 merged PRs of mine loses the oldest; split by year then
+    prs = [(i["closed_at"][:7], i["title"]) for i in search(f"author:{USER}+type:pr+is:merged+repo:{repo}")]
+    out = []
+    for e in listed:
+        months = sorted(m for m, title in prs if re.search(e["match"], title, re.I)
+                        and e.get("since", "") <= m <= e.get("until", "9999"))
+        if not months:
+            print(f"epic {lang} {name} {e['title']!r} matches no PRs; skipped")
+            continue
+        out.append({"title": e["title"], "about": e["about"], "prs": len(months), "start": months[0], "end": months[-1]})
+    return out
 
 
 def r_role(txt):
@@ -224,7 +246,8 @@ def packages(pr_counts):
             continue  # not published
         out.append({"name": name, "lang": lang, "repo": repo, "prs": prs, "role": ROLES[role[repo]],
                     "reviews": reviews(repo), "monthly": series, "recent": recent,
-                    "feedstock": feedstock(lang, name)})
+                    "feedstock": feedstock(lang, name),
+                    **({"epics": ep} if (ep := epics(lang, name, repo)) else {})})
     return sorted(out, key=lambda p: -p["prs"])
 
 

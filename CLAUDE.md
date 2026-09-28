@@ -42,6 +42,14 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   `reviews` per package: search count of `reviewed-by:schloerke -author:schloerke` in that repo.
   `feedstock` is the `conda-forge/<name>-feedstock` repo for Python packages, if one exists
   (`py-<name>`, then `<name>`). R packages are skipped on purpose. The table shows it as an anvil icon (Simple Icons, CC0).
+  `epics` (only on packages listed in `scripts/epics.toml`): big pieces of work, hand-written there
+  (first drafted from LinkedIn projects). Each has a `match` regex that is run against the titles of
+  my merged PRs in the repo (one search per repo that has epics), plus optional `since` / `until` months
+  to drop stray matches. The shown `start` / `end` months and `prs` count come from the PRs that match.
+  GitHub search can't do this itself: it allows only 5 `OR`s and matches words loosely. An epic with no
+  matches gets skipped and a warning is printed. In the table, a ▸ after the package name opens a row
+  listing its epics. Each epic has a bar on a small timeline, styled like the talks timeline. A package's
+  epics share one scale (whole years, at most ~4 year labels), and the dates appear in the tooltip and in visually hidden text. The "Show all" CSS counts rows with `:nth-child(n+13 of :not(.epics))`.
 - `other.json`: every other public repo with ≥ `MIN_PRS` merged PRs (not a listed package's repo,
   not a talk), with its GitHub description. Private repos are skipped so their names stay off the site,
   and forks (e.g. `schloerke/leaflet`) are skipped. `HIDE_OTHER` hand-lists repos to leave out.
