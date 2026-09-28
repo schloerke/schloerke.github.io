@@ -90,7 +90,7 @@
     .epics .track::before { content: ""; position: absolute; left: 0; right: 0; top: .8em; border-top: 1px solid var(--rule); }
     .epics .bar { position: absolute; top: calc(.8em - 2px); height: 5px; min-width: 5px; border-radius: 3px;
       background: var(--accent); box-shadow: 0 0 0 2px var(--bg); }
-    .epics .years { height: 1.2em; margin-top: -.2rem; }
+    .epics .years { height: 1.2em; margin-bottom: -.2rem; }
     .epics .years::before { display: none; }
     .epics .yr { position: absolute; transform: translateX(-50%); color: var(--muted); font-size: .75rem; }
     .epics .about { color: var(--text-2); }
@@ -398,9 +398,12 @@
         const y1 = Math.max(...p.epics.map((e) => +e.end.slice(0, 4))) + 1;
         const pos = (m) => ((m - y0 * 12) / ((y1 - y0) * 12)) * 100;
         const ul = el("ul");
-        for (const e of p.epics) {
+        // newest first
+        const newest = [...p.epics].sort((a, b) => b.start.localeCompare(a.start) || b.end.localeCompare(a.end));
+        for (const e of newest) {
           const li = el("li");
-          const when = e.start === e.end ? e.start : `${e.start} – ${e.end}`;
+          const ym = (s) => s.replace("-", "/");
+          const when = e.start === e.end ? ym(e.start) : `${ym(e.start)} – ${ym(e.end)}`;
           const track = el("span", { class: "track" });
           track.append(
             el("span", { class: "bar", style: `left:${pos(mo(e.start))}%;width:${pos(mo(e.end) + 1) - pos(mo(e.start))}%`,
@@ -413,13 +416,13 @@
           li.append(text);
           ul.append(li);
         }
-        // year labels under the bars, at most ~4 so they fit the track
+        // year labels above the bars, at most ~4 so they fit the track
         const years = el("span", { class: "track years", "aria-hidden": "true" });
         const step = Math.ceil((y1 - y0) / 4);
         for (let y = y0; y < y1; y += step) years.append(el("span", { class: "yr", style: `left:${pos(y * 12 + 6)}%` }, y));
         const axis = el("li");
         axis.append(years);
-        ul.append(axis);
+        ul.prepend(axis);
         const td = el("td", { colspan: 6 });
         td.append(ul);
         row.append(el("td", { colspan: 2 }), td);
