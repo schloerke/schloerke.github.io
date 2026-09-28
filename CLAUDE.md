@@ -43,8 +43,9 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   `feedstock` is the `conda-forge/<name>-feedstock` repo for Python packages, if one exists
   (`py-<name>`, then `<name>`). R packages are skipped on purpose.
   `homepage` is the GitHub repo's website field (pkgdown / docs site), or null.
-  In the table the package name is plain `<code>`. The language icon links to CRAN / PyPI / npm, and a
-  links column holds conda-forge feedstock (anvil, Simple Icons, CC0; an empty slot when missing so the rest align), GitHub (octocat), and homepage (Lucide globe, stroke 1.5, scaled to the octocat's height) icons.
+  The table's first columns are icons: the language icon (links to CRAN / PyPI / npm), then GitHub (octocat)
+  and homepage (Lucide globe, stroke 1.5, scaled to the octocat's height). The package name after them is plain `<code>`.
+  `feedstock` is fetched but not shown for now (the conda-forge anvil icon was removed; it's in git history).
   `epics` (only on packages listed in `scripts/epics.toml`): big pieces of work, hand-written there
   (first drafted from LinkedIn projects). Each has a `match` regex that is run against the titles of
   my merged PRs in the repo (one search per repo that has epics), plus optional `since` / `until` months
