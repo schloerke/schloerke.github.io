@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.11"
 # ///
-"""Fetch stats for the homepage and write data.json.
+"""Fetch stats for the homepage and write data/*.json.
 
 cranlogs / pypistats have no CORS headers, so the browser can't fetch them
 directly; this runs nightly in GitHub Actions instead. Needs GITHUB_TOKEN.
@@ -32,6 +32,11 @@ HIDE_OTHER = {"rstudio/shinycoreci-apps"}  # repos to leave out of the other wor
 ROLE = {"posit-dev/py-shiny": "author"}  # role when the manifests don't list me
 MIN_PRS = 3  # repos with fewer merged PRs are drive-by fixes
 MONTHS = 6  # pypistats only keeps 180 days
+SINCE = 2018  # first year of contribution calendars
+# its nightly workflow commits results to gh-pages as whoever last touched the cron (me);
+# ponytail: drops all my commit contributions there, hand-made ones too; PRs and reviews still count
+BOT_COMMITS = "rstudio/shinycoreci"
+DATA = pathlib.Path("data")
 TOKEN = os.environ["GITHUB_TOKEN"]
 
 
@@ -60,6 +65,12 @@ def gh(path):
         return fetch(f"https://api.github.com/{path}", auth=True)
 
 
+def read(name):
+    """A committed data/<name>.json, or None."""
+    path = DATA / f"{name}.json"
+    return json.loads(path.read_text()) if path.exists() else None
+
+
 def month_range():
     end = dt.date.today().replace(day=1) - dt.timedelta(days=1)  # last full month
     y, m = divmod(end.year * 12 + end.month - 1 - (MONTHS - 1), 12)
@@ -84,10 +95,15 @@ def monthly(days):
 
 
 def merged_pr_counts():
-    # search caps at 1000 results, so query one year at a time
-    counts = Counter()
-    for year in range(2010, dt.date.today().year + 1):
-        page = 1
+    """{year: {repo: merged PRs}}. Years before last year come from the committed file."""
+    # ponytail: old years are never refetched; delete data/merged_prs.json if a repo moves or goes private
+    by_year = read("merged_prs") or {}
+    this = dt.date.today().year
+    for year in range(2010, this + 1):
+        if year < this - 1 and str(year) in by_year:
+            continue
+        # search caps at 1000 results, so query one year at a time
+        counts, page = Counter(), 1
         while True:
             q = f"author:{USER}+type:pr+is:merged+merged:{year}-01-01..{year}-12-31"
             res = gh(f"search/issues?q={q}&per_page=100&page={page}")
@@ -97,7 +113,8 @@ def merged_pr_counts():
             if len(res["items"]) < 100:
                 break
             page += 1
-    return counts
+        by_year[str(year)] = dict(counts)
+    return by_year
 
 
 def r_role(txt):
@@ -218,12 +235,43 @@ def other_work(pr_counts, pkgs):
 
 
 def contributions():
-    q = """query($u:String!){user(login:$u){contributionsCollection{
-      contributionCalendar{totalContributions weeks{contributionDays{date contributionCount}}}}}}"""
-    cal = fetch("https://api.github.com/graphql", {"query": q, "variables": {"u": USER}}, auth=True)
-    cal = cal["data"]["user"]["contributionsCollection"]["contributionCalendar"]
-    days = [[d["date"], d["contributionCount"]] for w in cal["weeks"] for d in w["contributionDays"]]
-    return {"total": cal["totalContributions"], "days": days}
+    """Contribution calendars: {"last": the last year, "<year>": each year since SINCE}.
+
+    Years before last year keep their committed file, so each run fetches only the rolling
+    year, this year, and last year (refetched so a run on Dec 31 can't freeze a partial day).
+    """
+    q = """query($u:String!,$from:DateTime,$to:DateTime,$after:String){user(login:$u){contributionsCollection(from:$from,to:$to){
+      contributionCalendar{totalContributions weeks{contributionDays{date contributionCount}}}
+      commitContributionsByRepository(maxRepositories:100){repository{nameWithOwner}
+        contributions(first:100,after:$after){pageInfo{hasNextPage endCursor} nodes{occurredAt commitCount}}}}}}"""
+
+    def get(**span):
+        bot, after = Counter(), None
+        while True:  # page through BOT_COMMITS' days, 100 at a time
+            res = fetch("https://api.github.com/graphql",
+                        {"query": q, "variables": {"u": USER, "after": after, **span}}, auth=True)
+            col = res["data"]["user"]["contributionsCollection"]
+            repo = next((r["contributions"] for r in col["commitContributionsByRepository"]
+                         if r["repository"]["nameWithOwner"] == BOT_COMMITS), None)
+            for n in repo["nodes"] if repo else []:
+                bot[n["occurredAt"][:10]] += n["commitCount"]  # local midnight, so the date matches
+            if not repo or not repo["pageInfo"]["hasNextPage"]:
+                break
+            after = repo["pageInfo"]["endCursor"]
+        cal = col["contributionCalendar"]
+        days = [[d["date"], d["contributionCount"] - bot[d["date"]]] for w in cal["weeks"] for d in w["contributionDays"]]
+        return {"total": cal["totalContributions"] - sum(bot.values()), "days": days}
+
+    now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    out = {"last": get()}
+    this = dt.date.today().year
+    for y in range(this, SINCE - 1, -1):
+        # ponytail: old years are never refetched; delete a file if GitHub backfills that year
+        if y < this - 1 and (old := read(f"contributions/{y}")):
+            out[str(y)] = old
+        else:
+            out[str(y)] = get(**{"from": f"{y}-01-01T00:00:00Z", "to": min(f"{y}-12-31T23:59:59Z", now)})
+    return out
 
 
 def talks():
@@ -297,35 +345,40 @@ def opensource():
     return posts, videos
 
 
-pr_counts = merged_pr_counts()
+prs_by_year = merged_pr_counts()
+pr_counts = sum((Counter(c) for c in prs_by_year.values()), Counter())
 pkgs = packages(pr_counts)
 posts, videos = opensource()
-data = {
-    "updated": dt.date.today().isoformat(),
-    "merged_prs": sum(pr_counts.values()),
-    "repos": len(pr_counts),
+cals = contributions()
+# one file per section under data/, path -> contents
+files = {
+    "merged_prs": prs_by_year,  # cache for merged_pr_counts(); the page doesn't read it
+    "summary": {"updated": dt.date.today().isoformat(), "merged_prs": sum(pr_counts.values()),
+                "repos": len(pr_counts), "years": [int(y) for y in cals if y != "last"]},
     "packages": pkgs,
     "other": other_work(pr_counts, pkgs),
-    "contributions": contributions(),
     "talks": talks(),
     "videos": videos,
     "posts": posts,
+    **{f"contributions/{k}": v for k, v in cals.items()},
 }
 
 
-def sizes(d):
+def sizes(get):
     """Row counts per section (packages per language), to catch a source that came back empty."""
-    out = Counter(f"packages {p['lang']}" for p in d["packages"])
-    out.update({k: len(d[k]) for k in ("other", "talks", "videos", "posts")})
+    out = Counter(f"packages {p['lang']}" for p in get("packages") or [])
+    out.update({k: len(get(k) or []) for k in ("other", "talks", "videos", "posts")})
     return out
 
 
-# fail before writing, so the workflow goes red and keeps the last good data.json
-old = sizes(json.load(open("data.json"))) if os.path.exists("data.json") else Counter()
-new = sizes(data)
+# fail before writing, so the workflow goes red and keeps the last good data/
+old, new = sizes(read), sizes(files.get)
 if shrunk := [f"{k}: {old[k]} -> {new[k]}" for k in old if new[k] < old[k] / 2]:
-    raise SystemExit("data.json shrank by more than half, a source is probably down:\n  " + "\n  ".join(shrunk))
-with open("data.json", "w") as f:
-    json.dump(data, f, separators=(",", ":"))
-print(f"wrote data.json: {len(pkgs)} packages, {len(data['other'])} other, {len(data['talks'])} talks, "
-      f"{len(videos)} videos, {len(posts)} posts")
+    raise SystemExit("data/ shrank by more than half, a source is probably down:\n  " + "\n  ".join(shrunk))
+(DATA / "contributions").mkdir(parents=True, exist_ok=True)
+changed = [name for name, v in files.items() if read(name) != v]
+for name in changed:
+    (DATA / f"{name}.json").write_text(json.dumps(files[name], separators=(",", ":")))
+print(f"{len(pkgs)} packages, {len(files['other'])} other, {len(files['talks'])} talks, "
+      f"{len(videos)} videos, {len(posts)} posts, {len(cals)} calendars")
+print("updated data/:", ", ".join(changed) or "nothing")

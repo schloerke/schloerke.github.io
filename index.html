@@ -93,6 +93,13 @@
     .cal span[data-l="2"] { background: color-mix(in oklab, var(--accent) 55%, var(--empty)); }
     .cal span[data-l="3"] { background: color-mix(in oklab, var(--accent) 78%, var(--empty)); }
     .cal span[data-l="4"] { background: var(--accent); }
+    #cal-open { font-size: inherit; margin: 0; }
+    dialog { background: var(--bg); color: var(--text); border: 1px solid var(--rule); border-radius: 8px;
+      width: calc(100% - 2rem); max-width: 42rem; padding: 1.25rem 1.25rem 1.5rem; }
+    dialog::backdrop { background: rgb(0 0 0 / .45); }
+    dialog h2 { margin-top: 0; }
+    dialog .close { float: right; color: var(--text-2); }
+    dialog h3 { font-size: .85rem; font-weight: 500; color: var(--text-2); margin: 1rem 0 .25rem; font-variant-numeric: tabular-nums; }
     .cal-months { display: flex; justify-content: space-between; color: var(--muted); font-size: .75rem; margin-top: .25rem; }
 
     /* talks timeline */
@@ -204,9 +211,16 @@
       <button id="other-more" class="more"></button>
 
       <h2 id="cal-h">GitHub activity</h2>
-      <p id="cal-summary" style="margin-top:-.5rem;color:var(--text-2)"></p>
+      <p id="cal-summary" style="margin-top:-.5rem;color:var(--text-2)"><span id="cal-total"></span> contributions in the last year
+        <button id="cal-open" class="more" aria-haspopup="dialog"></button></p>
       <div class="cal" id="cal" role="img" aria-labelledby="cal-summary"></div>
       <div class="cal-months" id="cal-months"></div>
+      <dialog id="cal-dialog" closedby="any" aria-labelledby="cal-dialog-h">
+        <form method="dialog"><button aria-label="Close" class="close">✕</button></form>
+        <h2 id="cal-dialog-h">GitHub activity by year</h2>
+        <p class="note" style="margin:-.5rem 0 1rem">Shades share one scale across years.</p>
+        <div id="cal-years"></div>
+      </dialog>
     </section>
 
     <section id="talks" aria-labelledby="talks-h">
@@ -410,25 +424,50 @@
       more.addEventListener("click", () => { table.classList.toggle("all"); label(); });
     }
 
-    function calendar({ total, days }) {
-      document.getElementById("cal-summary").textContent =
-        `${fmt.format(total)} contributions in the last year`;
-      // quartiles of non-zero days -> 4 sequential steps of one hue
+    // quartiles of non-zero days -> 4 sequential steps of one hue
+    function levels(days) {
       const nz = days.map((d) => d[1]).filter(Boolean).sort((a, b) => a - b);
       const q = [0.25, 0.5, 0.75].map((p) => nz[Math.floor(p * (nz.length - 1))] ?? 0);
-      const level = (c) => (c === 0 ? 0 : c <= q[0] ? 1 : c <= q[1] ? 2 : c <= q[2] ? 3 : 4);
-      const cal = document.getElementById("cal");
-      cal.style.gridTemplateColumns = `repeat(${Math.ceil(days.length / 7)}, 1fr)`;
+      return (c) => (c === 0 ? 0 : c <= q[0] ? 1 : c <= q[1] ? 2 : c <= q[2] ? 3 : 4);
+    }
+
+    function calGrid(cal, days, level) {
       // pad so the first column starts on Sunday
       const pad = new Date(days[0][0] + "T00:00").getDay();
+      // at least 53 weeks, so a partial year keeps the same cell size
+      cal.style.gridTemplateColumns = `repeat(${Math.max(53, Math.ceil((pad + days.length) / 7))}, 1fr)`;
       for (let i = 0; i < pad; i++) cal.append(el("span", { style: "visibility:hidden" }));
       for (const [date, c] of days) {
         const nice = new Date(date + "T00:00").toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
         cal.append(el("span", { "data-l": level(c), "data-tip": `${c || "No"} contribution${c === 1 ? "" : "s"} on ${nice}` }));
       }
-      const months = document.getElementById("cal-months");
+      return cal;
+    }
+
+    function calendar({ total, days }, years) {
+      document.getElementById("cal-total").textContent = fmt.format(total);
+      calGrid(document.getElementById("cal"), days, levels(days));
       const first = days[0][0].slice(0, 7), last = days.at(-1)[0].slice(0, 7);
-      months.append(el("span", {}, monthName(first)), el("span", {}, monthName(last)));
+      document.getElementById("cal-months").append(el("span", {}, monthName(first)), el("span", {}, monthName(last)));
+
+      // every year, stacked in a dialog; fetched on first open
+      const dialog = document.getElementById("cal-dialog");
+      const open = document.getElementById("cal-open");
+      open.textContent = `(since ${Math.min(...years)})`;
+      let loaded;
+      open.addEventListener("click", () => {
+        dialog.append(tip); // the dialog is in the top layer, above any z-index
+        dialog.showModal();
+        loaded ??= Promise.all(years.map((y) => load(`contributions/${y}`))).then((cals) => {
+          const level = levels(cals.flatMap((c) => c.days));
+          cals.forEach((c, i) => {
+            const cal = el("div", { class: "cal", role: "img", "aria-label": `${fmt.format(c.total)} contributions in ${years[i]}` });
+            document.getElementById("cal-years").append(
+              el("h3", {}, `${years[i]} · ${fmt.format(c.total)}`), calGrid(cal, c.days, level));
+          });
+        });
+      });
+      dialog.addEventListener("close", () => { document.body.append(tip); tip.style.display = "none"; });
     }
 
     // dated link row shared by talks, videos, and posts
@@ -468,20 +507,19 @@
       list.slice(0, 6).forEach((t) => document.getElementById("talks-recent").append(item(t)));
     }
 
-    fetch("data.json")
-      .then((r) => r.json())
-      .then((d) => {
-        document.getElementById("hero").textContent = fmt.format(d.merged_prs);
-        document.getElementById("hero-label").textContent =
-          `merged pull requests across ${d.repos} GitHub repositories`;
-        packages(d.packages);
-        other(d.other);
-        calendar(d.contributions);
-        talks(d.talks);
-        videos(d.videos);
-        d.posts.forEach((p) => document.getElementById("posts").append(item(p)));
-        document.getElementById("updated").textContent = `Data updated ${d.updated} ·`;
-      });
+    const load = (name) => fetch(`data/${name}.json`).then((r) => r.json());
+    load("summary").then((s) => {
+      document.getElementById("hero").textContent = fmt.format(s.merged_prs);
+      document.getElementById("hero-label").textContent =
+        `merged pull requests across ${s.repos} GitHub repositories`;
+      document.getElementById("updated").textContent = `Data updated ${s.updated} ·`;
+      load("contributions/last").then((c) => calendar(c, s.years));
+    });
+    load("packages").then(packages);
+    load("other").then(other);
+    load("talks").then(talks);
+    load("videos").then(videos);
+    load("posts").then((ps) => ps.forEach((p) => document.getElementById("posts").append(item(p))));
   </script>
 </body>
 </html>
