@@ -97,7 +97,13 @@ hard-coded date on purpose; bump it yearly.
 ```sh
 make data    # rebuild data/ (uses `gh auth token` if GITHUB_TOKEN is unset)
 make serve   # preview at http://localhost:8000 (override with PORT=...)
+make data ONLY="packages other"   # rebuild just some sections; the rest are read back from data/
 ```
+
+**During development, don't run a full `make data`.** It is slow and its output is long. Rebuild only the
+section you changed with `ONLY=` (any of `prs`, `packages`, `other`, `talks`, `contributions`; `talks` also covers
+`videos` and `posts`). The sections you skip are read from the committed `data/`. `prs` falls back to the
+`merged_prs.json` cache. A partial run keeps the old `summary.updated` date. Leave full runs to the nightly workflow.
 
 In Conductor, `.conductor/settings.toml` defines a `site` run script (`make serve` on
 `$CONDUCTOR_PORT`) that starts automatically when a new workspace finishes setup.
