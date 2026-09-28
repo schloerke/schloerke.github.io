@@ -129,10 +129,10 @@
     .cal-months { display: flex; justify-content: space-between; color: var(--muted); font-size: .75rem; margin-top: .25rem; }
 
     /* talks timeline */
-    .timeline { position: relative; height: 56px; margin: .5rem 0 0; }
-    .timeline .axis { position: absolute; left: 0; right: 0; top: 24px; border-top: 1px solid var(--rule); }
+    .timeline { position: relative; height: 78px; margin: .5rem 0 0; }
+    .timeline .axis { position: absolute; left: 0; right: 0; top: 46px; border-top: 1px solid var(--rule); }
     .timeline a {
-      position: absolute; top: 16px; width: 16px; height: 16px; margin-left: -8px;
+      position: absolute; top: 38px; width: 16px; height: 16px; margin-left: -8px;
       display: grid; place-items: center;
     }
     .timeline a::after {
@@ -140,7 +140,7 @@
       background: var(--accent); box-shadow: 0 0 0 2px var(--bg);
     }
     .timeline a:hover::after, .timeline a:focus-visible::after { transform: scale(1.5); }
-    .timeline .yr { position: absolute; top: 34px; transform: translateX(-50%); color: var(--muted); font-size: .75rem; }
+    .timeline .yr { position: absolute; top: 56px; transform: translateX(-50%); color: var(--muted); font-size: .75rem; }
     .talks li { display: flex; gap: .75rem; }
     .talks time { color: var(--muted); flex: none; width: 5.5rem; font-variant-numeric: tabular-nums; }
     .talks .note-inline { color: var(--muted); font-size: .85rem; white-space: nowrap; }
@@ -600,10 +600,14 @@
         tl.append(el("span", { class: "yr", style: `left:${pos(`${y}-07-01`)}%` }, y));
       }
       const ul = document.getElementById("talks-list"), more = document.getElementById("talks-more");
+      const rows = []; // x (%) of the last dot in each row; a dot too close to the one before stacks up a row
       list.forEach((t, i) => {
+        const x = pos(t.date);
+        let r = rows.findIndex((last) => last - x > 2); // list is newest first; 2% ≈ 13px at full width
+        if (r < 0) r = rows.push(x) - 1; else rows[r] = x;
         // a dot jumps to its row, opening the list first if the row is hidden
         const dot = el("a", {
-          href: `#talk-${i}`, style: `left:${pos(t.date)}%`,
+          href: `#talk-${i}`, style: `left:${x}%; top:${38 - r * 11}px`,
           "data-tip": `${t.date.slice(0, 7)} · ${t.title}`, "aria-label": t.title,
         });
         const li = item(t);
