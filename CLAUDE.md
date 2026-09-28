@@ -44,7 +44,7 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   (`py-<name>`, then `<name>`). R packages are skipped on purpose.
   `homepage` is the GitHub repo's website field (pkgdown / docs site), or null.
   In the table the package name is plain `<code>`. The language icon links to CRAN / PyPI / npm, and a
-  links column holds conda-forge feedstock (anvil, Simple Icons, CC0; an empty slot when missing so the rest align), GitHub (octocat), and homepage (Lucide globe) icons.
+  links column holds conda-forge feedstock (anvil, Simple Icons, CC0; an empty slot when missing so the rest align), GitHub (octocat), and homepage (Lucide globe, stroke 1.5, scaled to the octocat's height) icons.
 - `other.json`: every other public repo with ≥ `MIN_PRS` merged PRs (not a listed package's repo,
   not a talk), with its GitHub description. Private repos are skipped so their names stay off the site,
   and forks (e.g. `schloerke/leaflet`) are skipped. `HIDE_OTHER` hand-lists repos to leave out.
