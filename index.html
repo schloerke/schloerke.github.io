@@ -406,8 +406,7 @@
         const newest = [...p.epics].sort((a, b) => b.start.localeCompare(a.start) || b.end.localeCompare(a.end));
         for (const e of newest) {
           const li = el("li");
-          const ym = (s) => s.replace("-", "/");
-          const when = e.start === e.end ? ym(e.start) : `${ym(e.start)} – ${ym(e.end)}`;
+          const when = e.start === e.end ? e.start : `${e.start} – ${e.end}`;
           const track = el("span", { class: "track" });
           track.append(
             el("span", { class: "bar", style: `left:${pos(mo(e.start))}%;width:${pos(mo(e.end) + 1) - pos(mo(e.start))}%`,

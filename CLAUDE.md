@@ -55,7 +55,7 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   GitHub search can't do this itself: it allows only 5 `OR`s and matches words loosely. An epic with no
   matches gets skipped and a warning is printed. In the table, a ▸ after the package name opens a row
   listing its epics, newest first. Each epic has a bar on a small timeline, styled like the talks timeline. A package's
-  epics share one scale (whole years, at most ~4 year labels), and the dates (`YYYY/MM`) appear in the tooltip and in visually hidden text. The "Show all" CSS counts rows with `:nth-child(n+13 of :not(.epics))`.
+  epics share one scale (whole years, at most ~4 year labels), and the dates (ISO `YYYY-MM`) appear in the tooltip and in visually hidden text. The "Show all" CSS counts rows with `:nth-child(n+13 of :not(.epics))`.
 - `other.json`: every other public repo with ≥ `MIN_PRS` merged PRs (not a listed package's repo,
   not a talk), with its GitHub description. Private repos are skipped so their names stay off the site,
   and forks (e.g. `schloerke/leaflet`) are skipped. `HIDE_OTHER` hand-lists repos to leave out.
