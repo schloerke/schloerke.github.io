@@ -24,7 +24,9 @@ or change an approach below, update this file in the same change.
 only rewrites files whose contents changed. The page fetches each file on its own.
 Each file puts one list item or top-level key per line (`dump()`), so a changed row is a one-line diff.
 
-- `summary.json`: `updated`, `merged_prs` / `repos` totals, and `years` (the contribution calendars).
+- `summary.json`: `updated`, `merged_prs` / `repos` totals since `SINCE` (shown at the top of the
+  "since 2018" dialog, so they cover the same years), and `years` (the contribution calendars).
+  The package / other tables still count merged PRs from every year.
 - `merged_prs.json`: `{year: {repo: merged PRs}}` from GitHub search, one query per year
   (search caps results at 1000). The page doesn't read it; it is a cache so each run only
   searches this year and last year. Delete it to refetch every year (e.g. a repo went private).
@@ -102,7 +104,7 @@ hard-coded date on purpose; bump it yearly.
 make data                         # rebuild all of data/ (uses `gh auth token` if GITHUB_TOKEN is unset)
 make data-packages                # rebuild one section; also data-prs, data-other, data-talks, data-contributions
 make data ONLY="packages other"   # rebuild several sections in one run
-make serve                        # preview at http://localhost:8000 (override with PORT=...)
+make serve                        # preview at http://localhost:8000 (override with PORT=...); scripts/serve.py sends Cache-Control: no-store
 ```
 
 **During development, don't run a full `make data`.** It is slow and its output is long. Rebuild only the

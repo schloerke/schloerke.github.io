@@ -23,4 +23,4 @@ data-contributions: ## Rebuild contribution calendars
 	@$(MAKE) data ONLY=contributions
 
 serve: ## Preview the site at http://localhost:$PORT (default 8000)
-	uv run python -m http.server $(PORT)
+	uv run scripts/serve.py $(PORT)
