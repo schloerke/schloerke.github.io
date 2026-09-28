@@ -70,6 +70,9 @@
     td.lang svg { display: block; width: 14px; height: 14px; fill: var(--muted); }
     .cf { color: var(--muted); margin-left: .35rem; }
     .cf:hover { color: var(--accent); }
+    .vid { text-decoration: none; white-space: nowrap; }
+    .vid svg { width: 1.3em; height: 1.3em; vertical-align: -.3em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .vid svg + svg { width: .8em; height: .8em; vertical-align: .2em; }
     .cf svg { width: .95em; height: .95em; vertical-align: -.1em; fill: currentColor; }
     table:not(.all) tbody tr:nth-child(n+13) { display: none; }
     td.about { color: var(--text-2); padding-left: 1rem; }
@@ -464,24 +467,39 @@
       dialog.addEventListener("close", () => { document.body.append(tip); tip.style.display = "none"; });
     }
 
-    // dated link row shared by talks, videos, and posts
+    // Lucide (ISC) film + arrow-up-right: a video that opens in a new tab
+    const VIDEO_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>'
+      + '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>';
+
+    // dated link row shared by talks, videos, and posts; a talk with a recording links it too
     const item = (t, note) => {
       const li = el("li");
       li.append(el("time", { datetime: t.date }, t.date.slice(0, 7)));
       const a = el("span");
       a.append(el("a", { href: t.url }, t.title));
       if (note) a.append(el("span", { class: "note-inline" }, ` · ${note}`));
+      if (t.video) {
+        const v = el("span", { class: "note-inline" }, " · ");
+        const link = el("a", { href: t.video.url, target: "_blank", rel: "noopener", class: "vid",
+          "aria-label": "Video (opens in new tab)", title: "Video" });
+        link.innerHTML = VIDEO_ICON;
+        v.append(link, ` · ${stats(t.video)}`);
+        a.append(v);
+      }
       li.append(a);
       return li;
     };
 
-    function videos(list) {
-      const views = list.reduce((s, v) => s + v.views, 0);
+    const stats = (v) => `${v.minutes} min · ${fmt.format(v.views)} views`;
+
+    // talk recordings live on their talk (see TALK_VIDEO) but count toward the total
+    function videos(list, talks) {
+      const all = [...list, ...talks.filter((t) => t.video).map((t) => t.video)];
+      const views = all.reduce((s, v) => s + v.views, 0);
       document.getElementById("videos-summary").textContent =
-        `${list.length} recordings, ${fmt.format(views)} views on YouTube`;
-      const note = (v) => `${v.minutes} min · ${fmt.format(v.views)} views`;
-      list.forEach((v) => document.getElementById("videos-all").append(item(v, note(v))));
-      list.slice(0, 6).forEach((v) => document.getElementById("videos-recent").append(item(v, note(v))));
+        `${all.length} recordings (${all.length - list.length} with their talks above), ${fmt.format(views)} views on YouTube`;
+      list.forEach((v) => document.getElementById("videos-all").append(item(v, stats(v))));
+      list.slice(0, 6).forEach((v) => document.getElementById("videos-recent").append(item(v, stats(v))));
     }
 
     function talks(list) {
@@ -511,8 +529,7 @@
     });
     load("packages").then(packages);
     load("other").then(other);
-    load("talks").then(talks);
-    load("videos").then(videos);
+    Promise.all([load("videos"), load("talks")]).then(([v, t]) => { talks(t); videos(v, t); });
     load("posts").then((ps) => ps.forEach((p) => document.getElementById("posts").append(item(p))));
   </script>
 </body>
