@@ -65,7 +65,12 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   into the dialog while it's open, since a modal dialog sits in the top layer above any z-index.
 - `talks.json`: `schloerke/presentation-*` and `workshop-*` repos. The date comes from the repo
   name. The title is the repo description, then the README's first `# ` heading, then the name
-  slug. Markdown and HTML are stripped out.
+  slug. Markdown and HTML are stripped out. `TALKS` (top of the script) hand-writes the entries for a repo
+  whose name has no date (e.g. `workshop-rinpharma24-shinylive`) or that holds several talks (shinydevseries
+  → 3 episodes). `TALK_VIDEO` (top of the script) hand-maps a talk repo to
+  its opensource.posit.co recording, because the video's date and title rarely match the talk's. That video
+  moves out of `videos.json` and into the talk's `video` field. The page shows it on the talk row as a film + arrow-up-right icon
+  link (Lucide, ISC) that opens in a new tab, and the Videos summary count still includes it.
 - `videos.json` / `posts.json`: pages on opensource.posit.co that credit `FULL_NAME` in their front matter
   `people:` list (Shiny Team posts list their contributors there since posit-dev/open-source-website#417).
   The site repo is 2 GB, so the script does a shallow, blobless, sparse `git clone` that fetches only
