@@ -7,6 +7,7 @@ cranlogs / pypistats have no CORS headers, so the browser can't fetch them
 directly; this runs nightly in GitHub Actions instead. Needs GITHUB_TOKEN.
 
     make data
+    make data ONLY="packages other"   # just those sections, the rest stay as committed
 """
 
 import base64
@@ -16,6 +17,7 @@ import os
 import pathlib
 import re
 import subprocess
+import sys
 import tempfile
 import time
 import tomllib
@@ -412,19 +414,35 @@ def opensource():
     return posts, videos
 
 
-prs_by_year = merged_pr_counts()
+# `build_data.py packages talks` rebuilds only those sections; the rest are read back from data/
+SECTIONS = {"prs", "packages", "other", "talks", "contributions"}  # talks also covers videos + posts
+only = set(sys.argv[1:])
+if only - SECTIONS:
+    raise SystemExit(f"unknown sections: {' '.join(only - SECTIONS)} (choose from {' '.join(sorted(SECTIONS))})")
+want = lambda s: not only or s in only
+
+prs_by_year = merged_pr_counts() if want("prs") else read("merged_prs")
 pr_counts = sum((Counter(c) for c in prs_by_year.values()), Counter())
-pkgs = packages(pr_counts)
-posts, videos = opensource()
-cals = contributions()
+pkgs = packages(pr_counts) if want("packages") else read("packages")
+if want("talks"):
+    posts, videos = opensource()
+    talk_rows = talks(videos)  # also removes the talk recordings from `videos`
+else:
+    posts, videos, talk_rows = read("posts"), read("videos"), read("talks")
+if want("contributions"):
+    cals = contributions()
+else:
+    cals = {p.stem: read(f"contributions/{p.stem}") for p in (DATA / "contributions").glob("*.json")}
 # one file per section under data/, path -> contents
 files = {
     "merged_prs": prs_by_year,  # cache for merged_pr_counts(); the page doesn't read it
-    "summary": {"updated": dt.date.today().isoformat(), "merged_prs": sum(pr_counts.values()),
-                "repos": len(pr_counts), "years": [int(y) for y in cals if y != "last"]},
+    # a partial run keeps the old date, since the sections it skipped weren't refreshed
+    "summary": {"updated": read("summary")["updated"] if only else dt.date.today().isoformat(),
+                "merged_prs": sum(pr_counts.values()), "repos": len(pr_counts),
+                "years": sorted((int(y) for y in cals if y != "last"), reverse=True)},
     "packages": pkgs,
-    "other": other_work(pr_counts, pkgs),
-    "talks": talks(videos),  # also removes the talk recordings from `videos`
+    "other": other_work(pr_counts, pkgs) if want("other") else read("other"),
+    "talks": talk_rows,
     "videos": videos,
     "posts": posts,
     **{f"contributions/{k}": v for k, v in cals.items()},
