@@ -22,6 +22,7 @@ or change an approach below, update this file in the same change.
 
 `scripts/build_data.py` (stdlib only, run with `uv`) writes one file per section to `data/`, and
 only rewrites files whose contents changed. The page fetches each file on its own.
+Each file puts one list item or top-level key per line (`dump()`), so a changed row is a one-line diff.
 
 - `summary.json`: `updated`, `merged_prs` / `repos` totals, and `years` (the contribution calendars).
 - `merged_prs.json`: `{year: {repo: merged PRs}}` from GitHub search, one query per year
@@ -58,13 +59,12 @@ only rewrites files whose contents changed. The page fetches each file on its ow
   name. The title is the repo description, then the README's first `# ` heading, then the name
   slug. Markdown and HTML are stripped out.
 - `videos.json` / `posts.json`: pages on opensource.posit.co that credit `FULL_NAME` in their front matter
-  `people:` or `people-hidden:` list (the second is added in posit-dev/open-source-website#415).
+  `people:` list (Shiny Team posts list their contributors there since posit-dev/open-source-website#417).
   The site repo is 2 GB, so the script does a shallow, blobless, sparse `git clone` that fetches only
   `content/blog/**/index.{md,markdown,html}` and `content/resources/videos/*/_index.md` (a few seconds).
   Titles, dates, durations, and YouTube view counts come from the site's `blog/item-index.json` and
   `resources/videos/item-index.json`, joined by permalink. Blog permalinks are rebuilt with the site's
-  `hugo.toml` rule `/blog/<date>_<slug or dir>/`, lowercased. The site's JSON has no `people-hidden`,
-  which is why credit comes from the source files. Links go to the opensource.posit.co page, not YouTube.
+  `hugo.toml` rule `/blog/<date>_<slug or dir>/`, lowercased. Credit comes from the source files, not the site's JSON. Links go to the opensource.posit.co page, not YouTube.
   Video titles have the speaker name and channel ("| RStudio", "| Posit") removed.
 
 Before writing, the script compares row counts (packages per language, `other`, `talks`, `videos`,
