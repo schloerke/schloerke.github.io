@@ -84,7 +84,7 @@ Before writing, the script compares row counts (packages per language, `other`, 
 `posts`) against the committed `data/` and exits with an error if any drops by more than half.
 A source that is down (a 404 reads as "not published") then turns the nightly run red instead of
 committing a gap. The page's "Data updated" date shows how stale the data is. If a big drop is real
-(e.g. after adding to `HIDE`), delete that file in `data/` and rerun `make data`.
+(e.g. after adding to `HIDE`), delete that file in `data/` and rerun its section (e.g. `make data-packages`).
 
 cranlogs and pypistats don't send CORS headers, which is why the data is fetched at build time
 rather than in the browser. `.github/workflows/data.yml` runs `make data` nightly and commits
@@ -95,16 +95,17 @@ hard-coded date on purpose; bump it yearly.
 ## Commands
 
 ```sh
-make data    # rebuild data/ (uses `gh auth token` if GITHUB_TOKEN is unset)
-make serve   # preview at http://localhost:8000 (override with PORT=...)
-make data ONLY="packages other"   # rebuild just some sections; the rest are read back from data/
-make data-packages                # one section, same as ONLY=packages
+make data                         # rebuild all of data/ (uses `gh auth token` if GITHUB_TOKEN is unset)
+make data-packages                # rebuild one section; also data-prs, data-other, data-talks, data-contributions
+make data ONLY="packages other"   # rebuild several sections in one run
+make serve                        # preview at http://localhost:8000 (override with PORT=...)
 ```
 
 **During development, don't run a full `make data`.** It is slow and its output is long. Rebuild only the
-section you changed with `ONLY=` (any of `prs`, `packages`, `other`, `talks`, `contributions`; `talks` also covers
-`videos` and `posts`). The sections you skip are read from the committed `data/`. `prs` falls back to the
-`merged_prs.json` cache. A partial run keeps the old `summary.updated` date. Leave full runs to the nightly workflow.
+section you changed with its `make data-<section>` target (`talks` also covers `videos` and `posts`). The
+sections you skip are read from the committed `data/`. `prs` falls back to the `merged_prs.json` cache.
+A partial run keeps the old `summary.updated` date. Leave full runs to the nightly workflow. A new section
+needs both an entry in `SECTIONS` (`scripts/build_data.py`) and a `data-<section>` target in the `Makefile`.
 
 In Conductor, `.conductor/settings.toml` defines a `site` run script (`make serve` on
 `$CONDUCTOR_PORT`) that starts automatically when a new workspace finishes setup.
