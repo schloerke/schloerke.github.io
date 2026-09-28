@@ -50,8 +50,9 @@
 
     /* hero figure */
     h2.big { font-size: 1.5rem; }
+    h2.big + h2 { margin-top: 1rem; }
     .hero { font-size: 1.25rem; font-weight: 600; color: var(--text); }
-    .hero-label { color: var(--text-2); margin: 0 0 1.25rem; }
+    .hero-label { color: var(--text-2); margin: -.5rem 0 .25rem; }
 
     /* package table */
     table { width: 100%; border-collapse: collapse; font-size: .95rem; }
@@ -188,7 +189,18 @@
 
     <section id="numbers" aria-labelledby="numbers-h">
       <h2 id="numbers-h" class="big">Open source</h2>
-      <p class="hero-label"><span class="hero" id="hero">—</span> <span id="hero-label">merged pull requests</span></p>
+      <h2 id="cal-h">GitHub activity</h2>
+      <p id="cal-summary" style="margin-top:-.5rem;color:var(--text-2)"><span id="cal-total"></span> contributions in the last year
+        <button id="cal-open" class="more" aria-haspopup="dialog"></button></p>
+      <div class="cal" id="cal" role="img" aria-labelledby="cal-summary"></div>
+      <div class="cal-months" id="cal-months"></div>
+      <dialog id="cal-dialog" closedby="any" aria-labelledby="cal-dialog-h">
+        <form method="dialog"><button aria-label="Close" class="close">✕</button></form>
+        <h2 id="cal-dialog-h">GitHub activity by year</h2>
+        <p class="hero-label"><span class="hero" id="hero">—</span> <span id="hero-label">merged pull requests</span></p>
+        <p class="note" style="margin:0 0 1rem">Shades share one scale across years.</p>
+        <div id="cal-years"></div>
+      </dialog>
 
       <h2 id="pkgs-h">R, Python &amp; TypeScript</h2>
       <div class="controls" id="lang-filter" role="group" aria-label="Language">
@@ -227,18 +239,6 @@
         <tbody></tbody>
       </table>
       <button id="other-more" class="more"></button>
-
-      <h2 id="cal-h">GitHub activity</h2>
-      <p id="cal-summary" style="margin-top:-.5rem;color:var(--text-2)"><span id="cal-total"></span> contributions in the last year
-        <button id="cal-open" class="more" aria-haspopup="dialog"></button></p>
-      <div class="cal" id="cal" role="img" aria-labelledby="cal-summary"></div>
-      <div class="cal-months" id="cal-months"></div>
-      <dialog id="cal-dialog" closedby="any" aria-labelledby="cal-dialog-h">
-        <form method="dialog"><button aria-label="Close" class="close">✕</button></form>
-        <h2 id="cal-dialog-h">GitHub activity by year</h2>
-        <p class="note" style="margin:-.5rem 0 1rem">Shades share one scale across years.</p>
-        <div id="cal-years"></div>
-      </dialog>
     </section>
 
     <section id="talks" aria-labelledby="talks-h">

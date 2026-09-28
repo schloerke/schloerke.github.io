@@ -423,6 +423,8 @@ want = lambda s: not only or s in only
 
 prs_by_year = merged_pr_counts() if want("prs") else read("merged_prs")
 pr_counts = sum((Counter(c) for c in prs_by_year.values()), Counter())
+# the summary's totals match the calendars' years, since they're shown in the "since SINCE" dialog
+recent_prs = sum((Counter(c) for y, c in prs_by_year.items() if int(y) >= SINCE), Counter())
 pkgs = packages(pr_counts) if want("packages") else read("packages")
 if want("talks"):
     posts, videos = opensource()
@@ -438,7 +440,7 @@ files = {
     "merged_prs": prs_by_year,  # cache for merged_pr_counts(); the page doesn't read it
     # a partial run keeps the old date, since the sections it skipped weren't refreshed
     "summary": {"updated": read("summary")["updated"] if only else dt.date.today().isoformat(),
-                "merged_prs": sum(pr_counts.values()), "repos": len(pr_counts),
+                "merged_prs": sum(recent_prs.values()), "repos": len(recent_prs),
                 "years": sorted((int(y) for y in cals if y != "last"), reverse=True)},
     "packages": pkgs,
     "other": other_work(pr_counts, pkgs) if want("other") else read("other"),
