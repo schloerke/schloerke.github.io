@@ -9,6 +9,7 @@ directly; this runs nightly in GitHub Actions instead. Needs GITHUB_TOKEN.
     make data
 """
 
+import base64
 import datetime as dt
 import json
 import os
@@ -42,7 +43,7 @@ TALKS = {  # talk repo -> hand-written entries, for repos with no date in the na
     ],
     "workshop-rinpharma24-shinylive": [
         {"date": "2024-10-25", "title": "{shinylive}: Serverless Shiny applications workshop (R/Pharma 2024)",
-         "url": "http://schloerke.com/workshop-rinpharma24-shinylive/"},
+         "url": "https://schloerke.com/workshop-rinpharma24-shinylive/"},
     ],
 }
 TALK_VIDEO = {  # talk repo -> its opensource.posit.co recording; shown with the talk, not under Videos
@@ -342,12 +343,13 @@ def talks(videos):
             talks_ = [{"kind": r["name"].split("-")[0], **t} for t in TALKS[r["name"]]]
         elif m := re.match(r"(presentation|workshop)-(\d{4})[-_](\d{2})(?:[-_](\d{2}))?[-_]?(.*)", r["name"]):
             kind, y, mo, d, slug = m.groups()
-            readme = fetch(f"https://raw.githubusercontent.com/{r['full_name']}/HEAD/README.md", raw=True)
+            readme = gh(f"repos/{r['full_name']}/readme")  # any case: README.md, Readme.md, ...
+            readme = readme and base64.b64decode(readme["content"]).decode(errors="replace")
             h1 = re.search(r"^# (.+)", readme or "", re.M)
             title = r["description"] or (h1 and h1.group(1)) or slug.replace("-", " ").replace("_", " ")
             title = re.sub(r"<.*|[`*]", "", title).strip()  # plain text: drop html + markdown
             talks_ = [{"date": f"{y}-{mo}-{d or '01'}", "kind": kind, "title": title,
-                       "url": r["homepage"] or r["html_url"]}]
+                       "url": re.sub(r"^http://", "https://", r["homepage"] or r["html_url"])}]
         else:
             continue
         if r["name"] in TALK_VIDEO:

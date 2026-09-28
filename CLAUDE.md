@@ -64,8 +64,8 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   loads every year and stacks them, sharing one color scale so years compare. The shared `#tip` moves
   into the dialog while it's open, since a modal dialog sits in the top layer above any z-index.
 - `talks.json`: `schloerke/presentation-*` and `workshop-*` repos. The date comes from the repo
-  name. The title is the repo description, then the README's first `# ` heading, then the name
-  slug. Markdown and HTML are stripped out. `TALKS` (top of the script) hand-writes the entries for a repo
+  name. The title is the repo description, then the README's first `# ` heading (via the `/readme` API, so
+  `Readme.md` counts too), then the name slug. The link is the repo homepage (`http://` upgraded to `https://`), else the repo. Markdown and HTML are stripped out. `TALKS` (top of the script) hand-writes the entries for a repo
   whose name has no date (e.g. `workshop-rinpharma24-shinylive`) or that holds several talks (shinydevseries
   → 3 episodes). `TALK_VIDEO` (top of the script) hand-maps a talk repo to
   its opensource.posit.co recording, because the video's date and title rarely match the talk's. That video
