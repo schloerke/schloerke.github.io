@@ -9,7 +9,7 @@ or change an approach below, update this file in the same change.
 ## Design
 
 - Simple like hadley.nz: one column, plain prose, system fonts, no framework.
-- Data-rich like samuelbharti.com: stats and small charts, all driven by `data.json`.
+- Data-rich like samuelbharti.com: stats and small charts, all driven by the JSON files in `data/`.
 - No build step for the page. `index.html` holds all markup, CSS, and JS.
 - Colors are CSS custom properties in `:root` using `light-dark()`. They follow the system
   by default; the button in the page's top-right corner cycles system (◐) → light (☀) → dark (☾), setting `data-theme` on `<html>` and saves it in `localStorage.theme`.
@@ -20,11 +20,14 @@ or change an approach below, update this file in the same change.
 
 ## Data pipeline
 
-`scripts/build_data.py` (stdlib only, run with `uv`) writes `data.json`:
+`scripts/build_data.py` (stdlib only, run with `uv`) writes one file per section to `data/`, and
+only rewrites files whose contents changed. The page fetches each file on its own.
 
-- `merged_prs` / `repos`: GitHub search for merged PRs by schloerke, one query per year
-  (search caps results at 1000).
-- `packages`: repos with ≥ `MIN_PRS` merged PRs that contain an R package (`DESCRIPTION`,
+- `summary.json`: `updated`, `merged_prs` / `repos` totals, and `years` (the contribution calendars).
+- `merged_prs.json`: `{year: {repo: merged PRs}}` from GitHub search, one query per year
+  (search caps results at 1000). The page doesn't read it; it is a cache so each run only
+  searches this year and last year. Delete it to refetch every year (e.g. a repo went private).
+- `packages.json`: repos with ≥ `MIN_PRS` merged PRs that contain an R package (`DESCRIPTION`,
   `pkg-r/DESCRIPTION`), a Python package (`pyproject.toml`, `pkg-py/pyproject.toml`, `setup.cfg`),
   or a TypeScript package (non-private `package.json` / `pkg-js/package.json` that mentions `typescript`).
   Monthly downloads for the last 6 full months come from cranlogs (R), pypistats (Python), or npm.
@@ -38,14 +41,23 @@ or change an approach below, update this file in the same change.
   `reviews` per package: search count of `reviewed-by:schloerke -author:schloerke` in that repo.
   `feedstock` is the `conda-forge/<name>-feedstock` repo for Python packages, if one exists
   (`py-<name>`, then `<name>`). R packages are skipped on purpose. The table shows it as an anvil icon (Simple Icons, CC0).
-- `other`: every other public repo with ≥ `MIN_PRS` merged PRs (not a listed package's repo,
+- `other.json`: every other public repo with ≥ `MIN_PRS` merged PRs (not a listed package's repo,
   not a talk), with its GitHub description. Private repos are skipped so their names stay off the site,
   and forks (e.g. `schloerke/leaflet`) are skipped. `HIDE_OTHER` hand-lists repos to leave out.
-- `contributions`: GitHub GraphQL contribution calendar (needs a token).
-- `talks`: `schloerke/presentation-*` and `workshop-*` repos. The date comes from the repo
+- `contributions/last.json` and `contributions/<year>.json`: GitHub GraphQL contribution calendars
+  (needs a token), the rolling last year plus each year since `SINCE` (one `from`/`to` query each).
+  Years before last year keep their committed file and aren't refetched; delete a file to refetch it.
+  Commit contributions to `BOT_COMMITS` (rstudio/shinycoreci) are subtracted per day: its nightly
+  `build-results.yml` commits to `gh-pages` as `GITHUB_ACTOR` (the last person to edit the cron, i.e. me),
+  which added 1 to every weekday. `commitContributionsByRepository` gives per-day counts; the calendar can't
+  filter by repo. `gh-pages` history there is trimmed, so matching commit messages doesn't work for old years.
+  The page shows the last year, scaled to itself. Its "(since 2018)" link opens a `<dialog>` that
+  loads every year and stacks them, sharing one color scale so years compare. The shared `#tip` moves
+  into the dialog while it's open, since a modal dialog sits in the top layer above any z-index.
+- `talks.json`: `schloerke/presentation-*` and `workshop-*` repos. The date comes from the repo
   name. The title is the repo description, then the README's first `# ` heading, then the name
   slug. Markdown and HTML are stripped out.
-- `videos` / `posts`: pages on opensource.posit.co that credit `FULL_NAME` in their front matter
+- `videos.json` / `posts.json`: pages on opensource.posit.co that credit `FULL_NAME` in their front matter
   `people:` or `people-hidden:` list (the second is added in posit-dev/open-source-website#415).
   The site repo is 2 GB, so the script does a shallow, blobless, sparse `git clone` that fetches only
   `content/blog/**/index.{md,markdown,html}` and `content/resources/videos/*/_index.md` (a few seconds).
@@ -56,21 +68,21 @@ or change an approach below, update this file in the same change.
   Video titles have the speaker name and channel ("| RStudio", "| Posit") removed.
 
 Before writing, the script compares row counts (packages per language, `other`, `talks`, `videos`,
-`posts`) against the committed `data.json` and exits with an error if any drops by more than half.
+`posts`) against the committed `data/` and exits with an error if any drops by more than half.
 A source that is down (a 404 reads as "not published") then turns the nightly run red instead of
 committing a gap. The page's "Data updated" date shows how stale the data is. If a big drop is real
-(e.g. after adding to `HIDE`), delete `data.json` and rerun `make data`.
+(e.g. after adding to `HIDE`), delete that file in `data/` and rerun `make data`.
 
 cranlogs and pypistats don't send CORS headers, which is why the data is fetched at build time
 rather than in the browser. `.github/workflows/data.yml` runs `make data` nightly and commits
-`data.json`. Its `keepalive` job re-enables the workflow via the API each run, because GitHub
+`data/`. Its `keepalive` job re-enables the workflow via the API each run, because GitHub
 disables scheduled workflows after 60 days without non-bot activity. The job fails after a
 hard-coded date on purpose; bump it yearly.
 
 ## Commands
 
 ```sh
-make data    # rebuild data.json (uses `gh auth token` if GITHUB_TOKEN is unset)
+make data    # rebuild data/ (uses `gh auth token` if GITHUB_TOKEN is unset)
 make serve   # preview at http://localhost:8000 (override with PORT=...)
 ```
 

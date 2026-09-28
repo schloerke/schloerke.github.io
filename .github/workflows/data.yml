@@ -22,8 +22,8 @@ jobs:
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898319+github-actions[bot]@users.noreply.github.com"
-          git add data.json
-          git diff --cached --quiet || (git commit -m "Refresh data.json" && git push)
+          git add data
+          git diff --cached --quiet || (git commit -m "Refresh data" && git push)
 
   # GitHub disables scheduled workflows after 60 days without repo activity,
   # and bot commits don't count. Re-enabling resets the timer. (Same call
