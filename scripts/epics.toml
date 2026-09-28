@@ -1,0 +1,185 @@
+# Epics: big pieces of work inside a package, listed under its row in the package table.
+# Keyed by [[<lang>.<package name>]], the same lang and name as data/packages.json.
+#   match: regex (case-insensitive) against the titles of my merged PRs in the package's repo
+#   since / until (optional, "YYYY-MM"): ignore matching PRs outside these months
+# The dates and PR count shown come from the matching PRs.
+
+[[Python.shiny]]
+title = "UI components from bslib"
+about = "Ported sidebars, cards, accordions, value boxes, tooltips, and popovers from R's bslib."
+match = 'sidebar|accordion|\bcards?\b|value.?box|tooltip|popover|experimental|navset|bslib|bs5|bootstrap'
+until = "2024-01"
+
+[[Python.shiny]]
+title = "Playwright testing"
+about = "shiny.playwright controllers for every UI component, and the shiny.pytest plugin."
+match = 'playwright|e2e|pytest'
+until = "2024-07"
+
+[[Python.shiny]]
+title = "Output renderers"
+about = "shiny.render.renderer, a base class for writing your own output renderers."
+match = 'renderer'
+until = "2024-02"
+since = "2023-12"
+
+[[Python.shiny]]
+title = "Data frames"
+about = "render.data_frame with editing, selection, sorting, filtering, and styles."
+match = 'data.?frame|\bdf\b|data.?grid'
+since = "2023-12"
+until = "2024-10"
+
+[[Python.shiny]]
+title = "Bookmarking"
+about = "Save and restore an app's state in the URL or on the server."
+match = 'bookmark'
+until = "2025-04"
+
+[[Python.shiny]]
+title = "OpenTelemetry"
+about = "Traces and logs for sessions, reactivity, and outputs."
+match = 'otel|opentelemetry'
+
+[[Python.shiny]]
+title = "Test mode"
+about = "test_server() and exported test values for fast tests without a browser."
+match = 'test.?mode|testserver|test_server|AppTestValues|local_server'
+
+[[Python.shiny]]
+title = "Agent Skills"
+about = "Skills shipped in the package so coding agents know how to write Shiny apps."
+match = 'agent skill|shiny skills|docs\(skills\)'
+
+[[R.shiny]]
+title = "reactlog integration"
+about = "Record every reactive event so reactlog can draw the reactive graph."
+match = 'reactlog'
+until = "2020-12"
+
+[[R.shiny]]
+title = "TypeScript"
+about = "Ported shiny.js to TypeScript and moved the build to esbuild."
+match = 'typescript|\bTS\b|eslint|esbuild'
+until = "2021-12"
+
+[[R.shiny]]
+title = "OpenTelemetry"
+about = "Traces and logs for sessions, reactivity, and outputs through {otel}."
+match = 'otel'
+
+[[R.shiny]]
+title = "MCP Apps"
+about = "Serve Shiny apps as MCP Apps, with author tools for LLM clients."
+match = '\bmcp'
+
+[[R.shinytest2]]
+title = "AppDriver"
+about = "Drive a Shiny app in headless Chrome: set inputs, click, and snapshot values."
+match = 'AppDriver|ShinyDriver|\$\w+\(|chromote'
+until = "2022-12"
+
+[[R.shinytest2]]
+title = "Test recorder"
+about = "record_test() writes a test while you click around the app."
+match = 'record_test|recorder'
+until = "2022-12"
+
+[[R.shinytest2]]
+title = "Screenshots"
+about = "Consistent screenshots, compared with a kernel density smoother to ignore stray pixels."
+match = 'screenshot'
+until = "2023-12"
+
+[[R.shinytest2]]
+title = "Migration from shinytest"
+about = "migrate_from_shinytest() converts existing shinytest tests."
+match = 'migrat'
+until = "2022-12"
+
+[[R.GGally]]
+title = "ggpairs and ggmatrix"
+about = "The generalized pairs plot and the plot matrix behind it."
+match = 'ggpairs|ggmatrix'
+until = "2017-12"
+
+[[R.GGally]]
+title = "ggduo, ggnostic, and friends"
+about = "Plot matrices for two groups of variables, model diagnostics, and time series."
+match = 'ggduo|ggnostic|ggfacet|ggts'
+until = "2017-12"
+
+[[R.GGally]]
+title = "Discrete stats"
+about = "Count, cross, table, and statistic plots for GGally 2.0."
+match = 'ggally_(count|cross|table|colbar|rowbar|statistic|cor|autopoint)|stat_|\bstat\b'
+since = "2020-01"
+until = "2020-12"
+
+[[R.GGally]]
+title = "S7"
+about = "Moved ggmatrix to S7 for ggplot2 4.0."
+match = 'S7|"gg"|ggplot_build|class objects|is_ggmatrix'
+since = "2025-01"
+
+[[R.plumber]]
+title = "OpenAPI docs"
+about = "OpenAPI v3 specs and pluggable docs pages (Swagger, RapiDoc, Redoc)."
+match = 'swagger|openapi|\bOAS\b|api spec|__docs__|ui to docs'
+until = "2020-12"
+
+[[R.plumber]]
+title = "Serializers and parsers"
+about = "Body parsers chosen by content type, and serializers for many output formats."
+match = 'serializ|parser'
+until = "2020-12"
+
+[[R.plumber]]
+title = "pr_*() API"
+about = "The pipe-friendly router API and consistent R6 methods of plumber 1.0."
+match = '\bpr_|R6|Plumber\$|plumb_api|available_apis'
+until = "2020-12"
+
+[[R.plumber]]
+title = "Async"
+about = "Promise and future support for long-running endpoints."
+match = 'promise|future|coro\b'
+until = "2020-12"
+
+[[R.plumber]]
+title = "Docker"
+about = "Docker images for running plumber APIs."
+match = 'docker'
+until = "2021-12"
+
+[[R.learnr]]
+title = "Quiz questions"
+about = "Questions rebuilt as Shiny modules, with a custom question API."
+match = 'question|quiz'
+until = "2020-12"
+
+[[R.learnr]]
+title = "Exercises"
+about = "Safer exercise evaluation, checker functions, and clearer errors."
+match = 'exercise'
+until = "2020-12"
+
+[[R.shinyreact]]
+title = "React hooks"
+about = "useShinyInput / useShinyOutput hooks, and ShinyOutput for classic Shiny outputs."
+match = 'hook|ShinyOutput|useShiny'
+
+[[R.shinyreact]]
+title = "ui.tsx apps"
+about = "Write the whole page in React and serve it from R or Python."
+match = 'ui\.tsx|page_react'
+
+[[R.shinyreact]]
+title = "Wire protocol"
+about = "One protocol shared by the R, Python, and JavaScript packages."
+match = 'protocol|wire'
+
+[[R.shinyreact]]
+title = "Agent Skills"
+about = "Skills for building and converting apps with coding agents."
+match = 'skill'

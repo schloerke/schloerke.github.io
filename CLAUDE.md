@@ -45,6 +45,14 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   `homepage` is the GitHub repo's website field (pkgdown / docs site), or null.
   In the table the package name is plain `<code>`. The language icon links to CRAN / PyPI / npm, and a
   links column holds conda-forge feedstock (anvil, Simple Icons, CC0; an empty slot when missing so the rest align), GitHub (octocat), and homepage (Lucide globe, stroke 1.5, scaled to the octocat's height) icons.
+  `epics` (only on packages listed in `scripts/epics.toml`): big pieces of work, hand-written there
+  (first drafted from LinkedIn projects). Each has a `match` regex that is run against the titles of
+  my merged PRs in the repo (one search per repo that has epics), plus optional `since` / `until` months
+  to drop stray matches. The shown `start` / `end` months and `prs` count come from the PRs that match.
+  GitHub search can't do this itself: it allows only 5 `OR`s and matches words loosely. An epic with no
+  matches gets skipped and a warning is printed. In the table, a ▸ after the package name opens a row
+  listing its epics. Each epic has a bar on a small timeline, styled like the talks timeline. A package's
+  epics share one scale (whole years, at most ~4 year labels), and the dates appear in the tooltip and in visually hidden text. The "Show all" CSS counts rows with `:nth-child(n+13 of :not(.epics))`.
 - `other.json`: every other public repo with ≥ `MIN_PRS` merged PRs (not a listed package's repo,
   not a talk), with its GitHub description. Private repos are skipped so their names stay off the site,
   and forks (e.g. `schloerke/leaflet`) are skipped. `HIDE_OTHER` hand-lists repos to leave out.
@@ -60,7 +68,12 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   into the dialog while it's open, since a modal dialog sits in the top layer above any z-index.
 - `talks.json`: `schloerke/presentation-*` and `workshop-*` repos. The date comes from the repo
   name. The title is the repo description, then the README's first `# ` heading, then the name
-  slug. Markdown and HTML are stripped out.
+  slug. Markdown and HTML are stripped out. `TALKS` (top of the script) hand-writes the entries for a repo
+  whose name has no date (e.g. `workshop-rinpharma24-shinylive`) or that holds several talks (shinydevseries
+  → 3 episodes). `TALK_VIDEO` (top of the script) hand-maps a talk repo to
+  its opensource.posit.co recording, because the video's date and title rarely match the talk's. That video
+  moves out of `videos.json` and into the talk's `video` field. The page shows it on the talk row as a film + arrow-up-right icon
+  link (Lucide, ISC) that opens in a new tab, and the Videos summary count still includes it.
 - `videos.json` / `posts.json`: pages on opensource.posit.co that credit `FULL_NAME` in their front matter
   `people:` list (Shiny Team posts list their contributors there since posit-dev/open-source-website#417).
   The site repo is 2 GB, so the script does a shallow, blobless, sparse `git clone` that fetches only
