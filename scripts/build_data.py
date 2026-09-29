@@ -31,7 +31,18 @@ FULL_NAME = "Barret Schloerke"  # matched against opensource.posit.co `people`
 OSS_REPO = "https://github.com/posit-dev/open-source-website"
 ROLES = ["contributor", "author", "maintainer"]
 HIDE = {"securingsincity/react-ace"}  # repos to leave out of the package table
-HIDE_OTHER = {"rstudio/shinycoreci-apps"}  # repos to leave out of the other work table
+HIDE_OTHER = {"rstudio/shinycoreci-apps", "schloerke/schloerke.github.io"}  # repos to leave out of the other work table
+OTHER_GROUP = {  # other work table filter; unlisted repos go in "Community"
+    "Shiny": {
+        "posit-dev/shinylive", "quarto-ext/shinylive", "posit-dev/py-shiny-site", "posit-dev/py-shiny-templates",
+        "rstudio/shiny-examples", "posit-dev/shiny-showcase-bioinformatics", "DivadNojnarg/outstanding-shiny-ui",
+        "DivadNojnarg/OSUICode", "rstudio/gradethis", "rstudio/shinycannon",
+    },
+    "Testing & CI": {
+        "rstudio/shinycoreci", "schloerke/shinyjster", "rstudio/shiny-workflows", "posit-dev/shiny-issue-triage",
+        "rstudio/shiny-testing-gha-example", "r-lib/actions", "r-wasm/actions",
+    },
+}
 ROLE = {"posit-dev/py-shiny": "author"}  # role when the manifests don't list me
 LOGO = {  # repo -> logo, for repos with no pkgdown hex
     "posit-dev/chatlas": "https://posit-dev.github.io/chatlas/logos/hex/logo.png",
@@ -336,7 +347,8 @@ def other_work(pr_counts, pkgs):
         info = gh(f"repos/{repo}")
         if not info or info["private"] or info["fork"]:
             continue  # private: keep names off the site; fork: my copy of someone else's repo
-        out.append({"repo": info["full_name"], "prs": prs, "description": info["description"] or ""})
+        group = next((g for g, repos in OTHER_GROUP.items() if info["full_name"] in repos), "Community")
+        out.append({"repo": info["full_name"], "prs": prs, "description": info["description"] or "", "group": group})
     return sorted(out, key=lambda r: -r["prs"])
 
 

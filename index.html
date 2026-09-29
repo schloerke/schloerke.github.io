@@ -96,7 +96,6 @@
     .epics .years::before { display: none; }
     .epics .yr { position: absolute; transform: translateX(-50%); color: var(--muted); font-size: .75rem; }
     .epics .about { color: var(--text-2); }
-    td.about { color: var(--text-2); padding-left: 1rem; }
     button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
     .controls { display: flex; gap: .25rem; margin: 0 0 .75rem; }
     .controls button { font-size: .85rem; padding: .15rem .6rem; border-radius: 999px; border: 1px solid var(--rule); color: var(--text-2); }
@@ -259,11 +258,17 @@
       </details>
 
       <h2 id="other-h">Other repos</h2>
+      <div class="controls" id="other-filter" role="group" aria-label="Group">
+        <button aria-pressed="true" value="">All</button>
+        <button aria-pressed="false" value="Shiny">Shiny</button>
+        <button aria-pressed="false" value="Testing &amp; CI">Testing &amp; CI</button>
+        <button aria-pressed="false" value="Community">Community</button>
+      </div>
       <table id="other" aria-labelledby="other-h">
         <thead><tr>
+          <th><span class="visually-hidden">Links</span></th>
           <th>Repository</th>
           <th class="num">My PRs</th>
-          <th class="spark-h">About</th>
         </tr></thead>
         <tbody></tbody>
       </table>
@@ -531,16 +536,33 @@
     function other(repos) {
       const table = document.getElementById("other");
       const more = document.getElementById("other-more");
-      for (const r of repos) {
-        const name = el("td");
-        name.append(el("a", { href: `https://github.com/${r.repo}` }, r.repo));
+      let group = "";
+      function render() {
+        const rows = repos.filter((r) => !group || r.group === group);
+        table.tBodies[0].replaceChildren(...rows.map(row));
+        more.hidden = rows.length <= 12;
+        more.textContent = table.classList.contains("all") ? "Show fewer" : `Show all ${rows.length}`;
+      }
+      function row(r) {
+        const links = el("td", { class: "repo-links" });
+        links.append(iconLink(`https://github.com/${r.repo}`, `GitHub: ${r.repo}`, ICONS.github));
+        const name = el("td", { class: "name" });
+        name.append(el("code", {}, r.repo));
+        if (r.description) name.append(el("span", { class: "about" }, r.description));
         const prs = el("td", { class: "num" });
         prs.append(el("a", { href: `https://github.com/${r.repo}/pulls?q=is%3Apr+is%3Amerged+author%3Aschloerke` }, r.prs));
         const tr = el("tr");
-        tr.append(name, prs, el("td", { class: "about" }, r.description));
-        table.tBodies[0].append(tr);
+        tr.append(links, name, prs);
+        return tr;
       }
-      showAll(table, more, repos.length, 12);
+      const buttons = document.querySelectorAll("#other-filter button");
+      buttons.forEach((b) => b.addEventListener("click", () => {
+        group = b.value;
+        buttons.forEach((x) => x.setAttribute("aria-pressed", x === b));
+        render();
+      }));
+      more.addEventListener("click", () => { table.classList.toggle("all"); render(); });
+      render();
     }
 
     // a "Show all n" / "Show fewer" button that toggles .all on a table or list clipped by CSS

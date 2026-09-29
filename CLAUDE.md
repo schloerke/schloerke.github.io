@@ -69,7 +69,10 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   epics share one scale (whole years, at most ~4 year labels), and the dates (ISO `YYYY-MM`) appear in the tooltip and in visually hidden text. The "Show all" CSS counts rows with `:nth-child(n+13 of :not(.epics))`.
 - `other.json`: every other public repo with ≥ `MIN_PRS` merged PRs (not a listed package's repo,
   not a talk), with its GitHub description. Private repos are skipped so their names stay off the site,
-  and forks (e.g. `schloerke/leaflet`) are skipped. `HIDE_OTHER` hand-lists repos to leave out.
+  and forks (e.g. `schloerke/leaflet`) are skipped. `HIDE_OTHER` hand-lists repos to leave out (e.g. this site's repo).
+  The table is laid out like the packages table: GitHub icon, then the repo name as `<code>` with its description
+  in small text after it, then the My PRs count. `group` comes from `OTHER_GROUP` (top of the script; unlisted
+  repos are "Community"), and buttons above the table filter by it, like the packages language filter.
 - `contributions/last.json` and `contributions/<year>.json`: GitHub GraphQL contribution calendars
   (needs a token), the rolling last year plus each year since `SINCE` (one `from`/`to` query each).
   Years before last year keep their committed file and aren't refetched; delete a file to refetch it.
@@ -97,7 +100,7 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   recording not on opensource.posit.co (e.g. Harvard R User Group). Its date, title, length, and views are scraped from the
   watch page's embedded JSON (no API key). The page shows it as the talk row's film icon (Lucide, ISC),
   and the Videos summary count still includes it.
-  The talks table and videos list show 6 rows with a "Show all" / "Show fewer" button (`showAll()`, shared with Other repos).
+  The talks table and videos list show 6 rows with a "Show all" / "Show fewer" button (`showAll()`).
   Timeline dots within 2% of the axis width of the previous one stack up a row (greedy, at most ~3 rows) so none overlap.
   A timeline dot links to its row (`#talk-<i>`), opens the list if that row is hidden, and highlights the row for 5s.
 - `videos.json` / `posts.json`: pages on opensource.posit.co that credit `FULL_NAME` in their front matter
