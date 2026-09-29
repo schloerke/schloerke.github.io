@@ -61,14 +61,18 @@
     td { padding: .3rem 0; border-top: 1px solid var(--rule); vertical-align: middle; }
     .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
     th.num, td.num { padding-left: 1rem; }
-    td.spark { width: 40%; padding: .3rem 1rem; }
+    td.spark { width: 25%; padding: .3rem .3rem .3rem 1rem; color: var(--muted); font-size: .85rem; }
     th.spark-h { padding-left: 1rem; }
     .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
     td.lang { width: 1.5rem; }
-    td.role { color: var(--muted); font-size: .85rem; padding-right: 1rem; }
+    td.name .about { margin-left: .4rem; color: var(--text-2); font-size: .8rem; }
+    tr.has-epics { cursor: pointer; }
+    tr.has-epics:hover td { background: var(--empty); }
+    td.toggle { width: 1rem; padding-right: .2rem; }
     #pkgs td a { white-space: nowrap; }
     td.lang { padding-right: .6rem; }
-    td.name { padding-right: .6rem; white-space: nowrap; }
+    td.name { padding-right: .6rem; line-height: 1.35; }
+    td.name code { white-space: nowrap; }
     td.lang a, td.repo-links a { color: var(--muted); }
     td.lang a:hover, td.repo-links a:hover { color: var(--accent); }
     td.lang svg, td.repo-links svg { display: block; width: 14px; height: 14px; fill: currentColor; }
@@ -80,7 +84,7 @@
     .vid svg + svg { width: .8em; height: .8em; vertical-align: .2em; }
     table:not(.all) tbody tr:nth-child(n+13 of :not(.epics)),
     table:not(.all) tbody tr:nth-child(n+13 of :not(.epics)) + .epics { display: none; }
-    .epic-toggle { color: var(--muted); margin-left: .15rem; padding: 0 .3rem; transition: transform .15s; }
+    .epic-toggle { display: block; color: var(--muted); padding: 0 .2rem; transition: transform .15s; }
     .epic-toggle:hover { color: var(--accent); }
     .epic-toggle[aria-expanded="true"] { transform: rotate(90deg); }
     tr.epics td { border-top: 0; padding: 0 0 .5rem; }
@@ -151,7 +155,7 @@
     #tip {
       position: fixed; pointer-events: none; z-index: 10; display: none;
       background: var(--text); color: var(--bg); font-size: .8rem; line-height: 1.35;
-      padding: .35rem .5rem; border-radius: 4px; max-width: 18rem;
+      padding: .35rem .5rem; border-radius: 4px; max-width: 18rem; white-space: pre-line;
     }
     footer { margin-top: 4rem; color: var(--muted); font-size: .85rem; }
     footer a { color: inherit; }
@@ -215,21 +219,19 @@
       </div>
       <table id="pkgs" aria-labelledby="pkgs-h">
         <thead><tr>
+          <th><span class="visually-hidden">Epics</span></th>
           <th><span class="visually-hidden">Language</span></th>
           <th><span class="visually-hidden">Links</span></th>
           <th>Package</th>
-          <th>Role</th>
           <th class="num"><button class="sort" value="prs" aria-pressed="true">My PRs</button></th>
-          <th class="num"><button class="sort" value="reviews" aria-pressed="false">Reviews</button></th>
-          <th class="spark-h">Downloads, last 6 months</th>
-          <th class="num"><button class="sort" value="downloads" aria-pressed="false">Last month</button></th>
+          <th class="spark-h"><button class="sort" value="downloads" aria-pressed="false" title="Monthly downloads over the last 6 months, sorted by the last month">Downloads (6m)</button></th>
         </tr></thead>
         <tbody></tbody>
       </table>
       <button id="more" class="more"></button>
       <details class="note"><summary>Details</summary>
         <ul>
-          <li>My PRs are my merged PRs. Reviews are others' PRs I reviewed.</li>
+          <li>My PRs are my merged PRs. Hover a count for Reviews: others' PRs I reviewed.</li>
           <li>Epics are big pieces of work, dated and counted by my merged PRs whose titles match. A package's epic bars share one time scale.</li>
           <li>Role comes from each package's author list.</li>
           <li>Downloads are everyone's: CRAN via <a href="https://cranlogs.r-pkg.org">cranlogs</a>, PyPI via <a href="https://pypistats.org">pypistats</a>, and <a href="https://www.npmjs.com">npm</a>.</li>
@@ -382,7 +384,7 @@
         group.forEach((b) => b.setAttribute("aria-pressed", b.value === value));
 
       // a toggle after the package name opens a row listing its epics
-      function epicRow(p, name) {
+      function epicRow(p, cell) {
         const key = `${p.lang} ${p.name}`, id = `epics-${key.replace(/\W+/g, "-")}`;
         const row = el("tr", { class: "epics", id });
         row.hidden = !state.open.has(key);
@@ -395,7 +397,7 @@
           toggle.setAttribute("aria-expanded", !row.hidden);
           row.hidden ? state.open.delete(key) : state.open.add(key);
         });
-        name.append(toggle);
+        cell.append(toggle);
         // months since year 0, so bars can be placed on the package's own scale
         const mo = (ym) => ym.slice(0, 4) * 12 + (ym.slice(5, 7) - 1);
         const y0 = Math.min(...p.epics.map((e) => +e.start.slice(0, 4)));
@@ -426,9 +428,9 @@
         const axis = el("li");
         axis.append(years);
         ul.prepend(axis);
-        const td = el("td", { colspan: 6 });
+        const td = el("td", { colspan: 3 });
         td.append(ul);
-        row.append(el("td", { colspan: 2 }), td);
+        row.append(el("td", { colspan: 3 }), td);
         return row;
       }
 
@@ -448,26 +450,36 @@
           lang.append(iconLink(href, `${p.lang} package on ${registry}`, ICONS[p.lang]));
           const name = el("td", { class: "name" });
           name.append(el("code", {}, p.name));
+          if (p.description) name.append(el("span", { class: "about" }, p.description));
+          const toggle = el("td", { class: "toggle" });
           const links = el("td", { class: "repo-links" });
           const span = el("span");
           span.append(iconLink(`https://github.com/${p.repo}`, `GitHub: ${p.repo}`, ICONS.github));
           if (p.homepage) span.append(iconLink(p.homepage, "Website", ICONS.globe, "line"));
           links.append(span);
           const prs = el("td", { class: "num" });
-          prs.append(el("a", { href: `https://github.com/${p.repo}/pulls?q=is%3Apr+is%3Amerged+author%3Aschloerke` }, p.prs));
-          const reviews = el("td", { class: "num" });
-          reviews.append(el("a", { href: `https://github.com/${p.repo}/pulls?q=is%3Apr+reviewed-by%3Aschloerke+-author%3Aschloerke` }, fmt.format(p.reviews)));
-          const spark = el("td", { class: "spark" });
+          const tipText = `PRs: ${fmt.format(p.prs)}\nReviews: ${fmt.format(p.reviews)}`;
+          prs.append(el("a", {
+            href: `https://github.com/${p.repo}/pulls?q=is%3Apr+is%3Amerged+author%3Aschloerke`,
+            "data-tip": tipText, "aria-label": tipText.replace("\n", ", "),
+          }, p.prs));
           // released after the last full month: no history to plot yet
           const isNew = p.monthly.every((m) => m.downloads === 0);
-          const count = isNew
-            ? el("td", { class: "num", "data-tip": `${fmt.format(p.recent)} downloads since release`, tabindex: 0 }, "new")
-            : el("td", { class: "num" }, fmt.format(last(p)));
-          if (!isNew) spark.append(sparkline(p.monthly));
+          const spark = isNew
+            ? el("td", { class: "spark", "data-tip": `${fmt.format(p.recent)} downloads since release`, tabindex: 0 }, "new")
+            : el("td", { class: "spark" });
+          if (!isNew) spark.append(sparkline(p.monthly), el("span", { class: "visually-hidden" }, `${fmt.format(last(p))} downloads last month`));
           const tr = el("tr");
-          tr.append(lang, links, name, el("td", { class: "role" }, p.role), prs, reviews, spark, count);
+          tr.append(toggle, lang, links, name, prs, spark);
           tbody.append(tr);
-          if (p.epics) tbody.append(epicRow(p, name));
+          if (p.epics) {
+            tbody.append(epicRow(p, toggle));
+            // the whole row opens the epics, except its links, buttons, and text selection
+            tr.classList.add("has-epics");
+            tr.addEventListener("click", (e) => {
+              if (!e.target.closest("a, button") && !getSelection().toString()) toggle.firstChild.click();
+            });
+          }
         }
         more.hidden = rows.length <= 12;
         more.textContent = table.classList.contains("all") ? "Show fewer" : `Show all ${rows.length}`;
