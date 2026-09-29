@@ -56,6 +56,7 @@ TALKS = {  # talk repo -> hand-written entries, for repos with no date in the na
 TALK_VIDEO = {  # talk repo -> its opensource.posit.co recording (or a YouTube URL); shown with the talk, not under Videos
     "presentation-2021-08-12-harvard-plumber-async": "https://www.youtube.com/watch?v=eHrzsIGY0so",
     "presentation-2021-08-05-harvard-plumber-beginner": "https://www.youtube.com/watch?v=GPNFP7qIxHc",
+    "presentation-2025-11-12-ggplot2-extenders-GGally": "https://www.youtube.com/watch?v=Q4Cf_pIr4gs",
     "presentation-2025-09-17-posit-conf-otel": "2025-11-07_observability-at-scale-barret-schloerke-posit-positconf2025",
     "presentation-2025-08-09-user-plumber2": "2025-10-29_plumber2-streamlining-web-api-development-in-r-barret-schloerke",
     "presentation-2024-08-13-posit-shiny-data-frame": "2024-10-31_barret-schloerke-editable-data-frames-in-py-shiny-updating-original-data-in-real-time",
@@ -82,6 +83,9 @@ VENUES = {  # regex on a talk repo name (or video title) -> venue; {y} is the ta
     r"harvard": "Harvard R User Group",
     r"integrating-plumber": "RStudio Webinar",
     r"Data Science Lab": "Data Science Lab",
+}
+VENUE_URL = {  # venue -> its home page; the page links the venue name
+    "ggplot2 extenders": "https://exts.ggplot2.tidyverse.org/",
 }
 MIN_PRS = 3  # repos with fewer merged PRs are drive-by fixes
 MONTHS = 6  # pypistats only keeps 180 days
@@ -491,6 +495,9 @@ pkgs = packages(pr_counts) if want("packages") else read("packages")
 if want("talks"):
     posts, videos = opensource()
     talk_rows = talks(videos)  # also removes the talk recordings from `videos`
+    for t in talk_rows + videos:
+        if url := VENUE_URL.get(t.get("venue")):
+            t["venue_url"] = url
 else:
     posts, videos, talk_rows = read("posts"), read("videos"), read("talks")
 if want("contributions"):
