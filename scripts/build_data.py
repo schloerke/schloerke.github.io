@@ -400,7 +400,8 @@ def opensource():
                 if date:  # permalink rule from the site's hugo.toml
                     mine.add(f"/blog/{date[1]}_{slug[1].strip() if slug else f.parent.name}/".lower())
     site = "https://opensource.posit.co"
-    posts = [{"date": p["date"], "title": p["title"], "url": site + p["permalink"]}
+    posts = [{"date": p["date"], "title": p["title"], "url": site + p["permalink"],
+              "image": site + p["image"]["src"] if p.get("image") else None}
              for p in fetch(f"{site}/blog/item-index.json") if p["permalink"].lower() in mine]
     videos = []
     for v in fetch(f"{site}/resources/videos/item-index.json"):
