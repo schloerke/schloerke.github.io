@@ -161,6 +161,13 @@
       /* :focus-visible, not :focus-within: a right-click focuses the link and would pin the image */
       #posts li:is(:hover, :has(:focus-visible)) img { display: block; }
     }
+    /* package hex logo, the same way; held in the first cell so it centers on the package row, and its epics row shows it too */
+    #pkgs td.toggle { position: relative; }
+    #pkgs td.toggle img { display: none; position: absolute; right: calc(100% + 1.5rem); top: 50%; translate: 0 -50%;
+      width: 6rem; pointer-events: none; }
+    @media (hover: hover) and (min-width: 72rem) {
+      #pkgs tr:is(:hover, :has(:focus-visible), :has(+ .epics:is(:hover, :has(:focus-visible)))) td.toggle img { display: block; }
+    }
 
     #tip {
       position: fixed; pointer-events: none; z-index: 10; display: none;
@@ -462,6 +469,7 @@
           name.append(el("code", {}, p.name));
           if (p.description) name.append(el("span", { class: "about" }, p.description));
           const toggle = el("td", { class: "toggle" });
+          if (p.logo) toggle.append(el("img", { src: p.logo, alt: "", loading: "lazy" }));
           const links = el("td", { class: "repo-links" });
           const span = el("span");
           span.append(iconLink(`https://github.com/${p.repo}`, `GitHub: ${p.repo}`, ICONS.github));
