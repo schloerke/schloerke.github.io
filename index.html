@@ -79,9 +79,6 @@
     td.repo-links { padding-right: .6rem; }
     td.repo-links > span { display: grid; grid-template-columns: repeat(2, 14px); gap: .5rem; }
     td.repo-links .line { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-    .vid { text-decoration: none; white-space: nowrap; }
-    .vid svg { width: 1.3em; height: 1.3em; vertical-align: -.3em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .vid svg + svg { width: .8em; height: .8em; vertical-align: .2em; }
     table:not(.all) tbody tr:nth-child(n+13 of :not(.epics)),
     table:not(.all) tbody tr:nth-child(n+13 of :not(.epics)) + .epics { display: none; }
     .epic-toggle { display: block; color: var(--muted); padding: 0 .2rem; transition: transform .15s; }
@@ -108,8 +105,13 @@
     th .sort[aria-pressed="true"] { color: var(--text); cursor: default; }
     th .sort[aria-pressed="true"]::after { content: " ↓"; }
     ul.clip:not(.all) > li:nth-child(n+7) { display: none; }
-    .talks li { border-radius: 4px; transition: background .5s; scroll-margin-top: 3rem; }
-    .talks li.hl { background: var(--empty); }
+    #talks-list:not(.all) tbody tr:nth-child(n+7) { display: none; }
+    #talks-list tr { scroll-margin-top: 3rem; }
+    #talks-list td { transition: background .5s; }
+    #talks-list tr.hl td { background: var(--empty); }
+    #talks-list .date { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; padding-left: 1rem; }
+    #talks-list .venue { color: var(--text-2); padding-left: 1rem; }
+    #talks-list td.repo-links > span { grid-template-columns: repeat(3, 14px); }
     .more { color: var(--accent); font-size: .9rem; margin-top: .5rem; }
     td.spark svg { display: block; width: 100%; height: 24px; overflow: visible; }
     .spark path { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
@@ -271,7 +273,15 @@
     <section id="talks" aria-labelledby="talks-h">
       <h2 id="talks-h">Talks &amp; workshops</h2>
       <div class="timeline" id="timeline"><div class="axis"></div></div>
-      <ul class="plain talks clip" id="talks-list" style="list-style:none;padding:0"></ul>
+      <table id="talks-list" aria-labelledby="talks-h">
+        <thead><tr>
+          <th><span class="visually-hidden">Links</span></th>
+          <th>Title</th>
+          <th class="venue">Venue</th>
+          <th class="date">Date</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
       <button id="talks-more" class="more"></button>
 
       <h2 id="videos-h">Videos</h2>
@@ -383,6 +393,8 @@
       github: document.querySelector('nav a[aria-label="GitHub"] path').getAttribute("d"),
       // Lucide globe (ISC), scaled up so with a 1.5 stroke it is as tall as the octocat (23.4)
       globe: "M1.05 12a10.95 10.95 0 1 0 21.9 0 10.95 10.95 0 1 0-21.9 0M12 1.05a15.88 15.88 0 0 0 0 21.9 15.88 15.88 0 0 0 0-21.9M1.05 12h21.9",
+      // Lucide film (ISC), scaled the same way
+      film: "M3.48 1.05h17.04a2.43 2.43 0 0 1 2.43 2.43v17.04a2.43 2.43 0 0 1-2.43 2.43H3.48a2.43 2.43 0 0 1-2.43-2.43V3.48a2.43 2.43 0 0 1 2.43-2.43zM5.92 1.05v21.9M1.05 6.53h4.87M1.05 12h21.9M1.05 17.48h4.87M18.08 1.05v21.9M18.08 6.53h4.87M18.08 17.48h4.87",
     };
     const iconLink = (href, label, d, cls = "") => {
       const a = el("a", { href, "data-tip": label, "aria-label": label });
@@ -585,11 +597,7 @@
       dialog.addEventListener("close", () => { document.body.append(tip); tip.style.display = "none"; });
     }
 
-    // Lucide (ISC) film + arrow-up-right: a video that opens in a new tab
-    const VIDEO_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>'
-      + '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>';
-
-    // dated link row shared by talks, videos, and posts; a talk with a recording links it too
+    // dated link row shared by videos and posts
     const item = (t, note) => {
       const li = el("li");
       li.append(el("time", { datetime: t.date }, t.date.slice(0, 7)));
@@ -601,14 +609,6 @@
       }
       a.append(el("a", { href: t.url }, t.title));
       if (note) a.append(el("span", { class: "note-inline" }, ` · ${note}`));
-      if (t.video) {
-        const v = el("span", { class: "note-inline" }, " · ");
-        const link = el("a", { href: t.video.url, target: "_blank", rel: "noopener", class: "vid",
-          "aria-label": "Video (opens in new tab)", title: "Video" });
-        link.innerHTML = VIDEO_ICON;
-        v.append(link, ` · ${stats(t.video)}`);
-        a.append(v);
-      }
       li.append(a);
       // loading=lazy + display:none: fetched only once shown on hover
       if (t.image) li.append(el("img", { src: t.image, alt: "", loading: "lazy" }));
@@ -635,7 +635,7 @@
       for (let y = t0; y < t1; y += 2) {
         tl.append(el("span", { class: "yr", style: `left:${pos(`${y}-07-01`)}%` }, y));
       }
-      const ul = document.getElementById("talks-list"), more = document.getElementById("talks-more");
+      const table = document.getElementById("talks-list"), more = document.getElementById("talks-more");
       const rows = []; // x (%) of the last dot in each row; a dot too close to the one before stacks up a row
       list.forEach((t, i) => {
         const x = pos(t.date);
@@ -646,8 +646,18 @@
           href: `#talk-${i}`, style: `left:${x}%; top:${38 - r * 11}px`,
           "data-tip": `${t.date.slice(0, 7)} · ${t.venue ? `${t.venue} · ` : ""}${t.title}`, "aria-label": t.title,
         });
-        const li = item(t);
-        li.id = `talk-${i}`;
+        const li = el("tr", { id: `talk-${i}` });
+        const date = el("td", { class: "date" });
+        date.append(el("time", { datetime: t.date }, t.date.slice(0, 7)));
+        // fixed icon slots (repo, slides, video) so the columns line up
+        const links = el("td", { class: "repo-links" }), span = el("span");
+        span.append(iconLink(`https://github.com/${t.repo}`, `GitHub: ${t.repo}`, ICONS.github),
+          t.url ? iconLink(t.url, t.url.includes("schloerke.com") ? "Slides" : "Website", ICONS.globe, "line") : el("span"));
+        if (t.video) span.append(iconLink(t.video.url, `Video: ${stats(t.video)}`, ICONS.film, "line"));
+        links.append(span);
+        const venue = el("td", { class: "venue" });
+        if (t.venue) venue.append(t.venue_url ? el("a", { href: t.venue_url }, t.venue) : t.venue);
+        li.append(links, el("td", {}, t.title), venue, date);
         dot.addEventListener("click", () => {
           if (!li.checkVisibility()) more.click();
           li.classList.add("hl");
@@ -655,9 +665,9 @@
           li.hl = setTimeout(() => li.classList.remove("hl"), 5000);
         });
         tl.append(dot);
-        ul.append(li);
+        table.tBodies[0].append(li);
       });
-      showAll(ul, more, list.length, 6);
+      showAll(table, more, list.length, 6);
     }
 
     const load = (name) => fetch(`data/${name}.json`).then((r) => r.json());

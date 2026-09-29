@@ -82,19 +82,22 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   into the dialog while it's open, since a modal dialog sits in the top layer above any z-index.
 - `talks.json`: `schloerke/presentation-*` and `workshop-*` repos. The date comes from the repo
   name. The title is the repo description, then the README's first `# ` heading (via the `/readme` API, so
-  `Readme.md` counts too), then the name slug. The link is the repo homepage (`http://` upgraded to `https://`), else the repo. Markdown and HTML are stripped out. `TALKS` (top of the script) hand-writes the entries for a repo
+  `Readme.md` counts too), then the name slug. `repo` is the repo's full name; `url` is the repo homepage (`http://` upgraded
+  to `https://`), or null if it is unset or on github.com. The talks section is a table: icons, title, venue, date.
+  The title is plain text; the icons are GitHub (octocat, the repo), a globe for `url` ("Slides" on schloerke.com,
+  else "Website"), and a film icon for `video` (its length and views in the tooltip), in fixed slots so they line up. Markdown and HTML are stripped out. `TALKS` (top of the script) hand-writes the entries for a repo
   whose name has no date (e.g. `workshop-rinpharma24-shinylive`) or that holds several talks (shinydevseries
   → 3 episodes). `venue` comes from `VENUES` (top of the script): regexes run against the talk repo name or
   the raw video title, with `{y}` filled in from the year (e.g. `posit-conf` → `posit::conf(2026)`). A `TALKS` entry
   can set `venue` itself. A venue at the start or end of a title (`rstudio::conf(2022) - ...`) is removed from the title.
-  The page shows it before the title as `venue · title`, in the row and in the timeline tooltip.
+  The page shows it in the talks table's Venue column, and before the title as `venue · title` in video rows and the timeline tooltip.
   `VENUE_URL` (top of the script) hand-maps a venue to its home page; that row gets a `venue_url` and the venue name becomes a link. `TALK_VIDEO` (top of the script) hand-maps a talk repo to
   its opensource.posit.co recording, because the video's date and title rarely match the talk's. That video
   moves out of `videos.json` and into the talk's `video` field. A `TALK_VIDEO` value can instead be a YouTube URL, for a
   recording not on opensource.posit.co (e.g. Harvard R User Group). Its date, title, length, and views are scraped from the
-  watch page's embedded JSON (no API key). The page shows it on the talk row as a film + arrow-up-right icon
-  link (Lucide, ISC) that opens in a new tab, and the Videos summary count still includes it.
-  The talks and videos lists show 6 rows with a "Show all" / "Show fewer" button (`showAll()`, shared with Other repos).
+  watch page's embedded JSON (no API key). The page shows it as the talk row's film icon (Lucide, ISC),
+  and the Videos summary count still includes it.
+  The talks table and videos list show 6 rows with a "Show all" / "Show fewer" button (`showAll()`, shared with Other repos).
   Timeline dots within 2% of the axis width of the previous one stack up a row (greedy, at most ~3 rows) so none overlap.
   A timeline dot links to its row (`#talk-<i>`), opens the list if that row is hidden, and highlights the row for 5s.
 - `videos.json` / `posts.json`: pages on opensource.posit.co that credit `FULL_NAME` in their front matter

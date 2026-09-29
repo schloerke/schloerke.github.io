@@ -403,7 +403,7 @@ def talks(videos):
     out = []
     for r in repos:
         if r["name"] in TALKS:
-            talks_ = [{"kind": r["name"].split("-")[0], **t} for t in TALKS[r["name"]]]
+            talks_ = [{"kind": r["name"].split("-")[0], "repo": r["full_name"], **t} for t in TALKS[r["name"]]]
         elif m := re.match(r"(presentation|workshop)-(\d{4})[-_](\d{2})(?:[-_](\d{2}))?[-_]?(.*)", r["name"]):
             kind, y, mo, d, slug = m.groups()
             readme = gh(f"repos/{r['full_name']}/readme")  # any case: README.md, Readme.md, ...
@@ -413,8 +413,9 @@ def talks(videos):
             title = re.sub(r"<.*|[`*]", "", title).strip()  # plain text: drop html + markdown
             if v := venue(r["name"], y):  # the venue gets its own field: "rstudio::conf(2022) - {shinytest2}"
                 title = title.removeprefix(f"{v} - ").removesuffix(f" - {v}")
-            talks_ = [{"date": f"{y}-{mo}-{d or '01'}", "kind": kind, "title": title, "venue": v,
-                       "url": re.sub(r"^http://", "https://", r["homepage"] or r["html_url"])}]
+            home = re.sub(r"^http://", "https://", r["homepage"] or "")
+            talks_ = [{"date": f"{y}-{mo}-{d or '01'}", "kind": kind, "title": title, "venue": v, "repo": r["full_name"],
+                       "url": home if home and "github.com/" not in home else None}]  # the repo has its own link
         else:
             continue
         if (slug := TALK_VIDEO.get(r["name"], "")).startswith("https://www.youtube.com/"):
