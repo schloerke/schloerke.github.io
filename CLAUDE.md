@@ -88,6 +88,9 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   `resources/videos/item-index.json`, joined by permalink. Blog permalinks are rebuilt with the site's
   `hugo.toml` rule `/blog/<date>_<slug or dir>/`, lowercased. Credit comes from the source files, not the site's JSON. Links go to the opensource.posit.co page, not YouTube.
   Video titles have the speaker name and channel ("| RStudio", "| Posit") removed.
+  A post's `image` is its feature image from `item-index.json` (or null). Hovering (or focusing) a post row shows it in
+  the left margin beside the date, CSS only, when the viewport is wide enough (≥ 72rem) and has hover.
+  The `<img>` is `loading="lazy"` and `display: none` until then, so it downloads only on first hover.
 
 Before writing, the script compares row counts (packages per language, `other`, `talks`, `videos`,
 `posts`) against the committed `data/` and exits with an error if any drops by more than half.

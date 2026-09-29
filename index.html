@@ -148,6 +148,15 @@
     summary.h2-summary { color: inherit; margin: 3rem 0 .75rem; }
     summary.h2-summary h2 { display: inline; }
 
+    /* post feature image, in the left margin while its row is hovered; only when the margin fits it */
+    #posts li { position: relative; }
+    #posts img { display: none; position: absolute; right: calc(100% + 1.5rem); top: 50%; translate: 0 -50%;
+      width: 12rem; border-radius: 4px; pointer-events: none; }
+    @media (hover: hover) and (min-width: 72rem) {
+      /* :focus-visible, not :focus-within: a right-click focuses the link and would pin the image */
+      #posts li:is(:hover, :has(:focus-visible)) img { display: block; }
+    }
+
     #tip {
       position: fixed; pointer-events: none; z-index: 10; display: none;
       background: var(--text); color: var(--bg); font-size: .8rem; line-height: 1.35;
@@ -173,7 +182,7 @@
         <!-- Lucide (ISC) -->
         <a href="https://vita.schloerke.com/" aria-label="CV" title="CV"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg></a>
         <a href="#talks" aria-label="Talks" title="Talks"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg></a>
-        <a href="#writing" aria-label="Blog posts" title="Blog posts"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 21h8"/><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></svg></a>
+        <a href="#blog-posts" aria-label="Blog posts" title="Blog posts"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 21h8"/><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></svg></a>
       </span>
     </nav>
   </header>
@@ -261,8 +270,8 @@
       <button id="videos-more" class="more"></button>
     </section>
 
-    <section id="writing" aria-labelledby="writing-h">
-      <h2 id="writing-h">Blog posts</h2>
+    <section id="blog-posts" aria-labelledby="blog-posts-h">
+      <h2 id="blog-posts-h">Blog posts</h2>
       <ul class="plain talks" id="posts" style="list-style:none;padding:0"></ul>
     </section>
 
@@ -575,6 +584,8 @@
         a.append(v);
       }
       li.append(a);
+      // loading=lazy + display:none: fetched only once shown on hover
+      if (t.image) li.append(el("img", { src: t.image, alt: "", loading: "lazy" }));
       return li;
     };
 
