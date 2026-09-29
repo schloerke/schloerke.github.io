@@ -94,9 +94,11 @@ VENUES = {  # regex on a talk repo name (or video title) -> venue; {y} is the ta
     r"harvard": "Harvard R User Group",
     r"integrating-plumber": "RStudio Webinar",
     r"Data Science Lab": "Data Science Lab",
+    r"2016_02_18-graphql": "WOMBAT",
 }
 VENUE_URL = {  # venue -> its home page; the page links the venue name
     "ggplot2 extenders": "https://exts.ggplot2.tidyverse.org/",
+    "WOMBAT": "https://wombat.numbat.space/",
 }
 MIN_PRS = 3  # repos with fewer merged PRs are drive-by fixes
 MONTHS = 6  # pypistats only keeps 180 days
