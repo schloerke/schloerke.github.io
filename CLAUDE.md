@@ -43,7 +43,7 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   `ROLE` (a minimum role when the manifests don't list you, e.g. py-shiny → author).
   6 months because pypistats keeps only 180 days. A package counts as published if it has
   any downloads in that window, including the current month, so new releases show as "new".
-  `reviews` per package: search count of `reviewed-by:schloerke -author:schloerke` in that repo, shown in the tooltip on the My PRs count.
+  `reviews` per package: search count of `reviewed-by:schloerke -author:schloerke` in that repo, shown in the tooltip on the PRs count.
   `feedstock` is the `conda-forge/<name>-feedstock` repo for Python packages, if one exists
   (`py-<name>`, then `<name>`). R packages are skipped on purpose.
   `homepage` is the GitHub repo's website field (pkgdown / docs site), or null.
@@ -71,7 +71,7 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   not a talk), with its GitHub description. Private repos are skipped so their names stay off the site,
   and forks (e.g. `schloerke/leaflet`) are skipped. `HIDE_OTHER` hand-lists repos to leave out (e.g. this site's repo).
   The table is laid out like the packages table: GitHub icon, then the repo name as `<code>` with its description
-  in small text after it, then the My PRs count. `group` comes from `OTHER_GROUP` (top of the script; unlisted
+  in small text after it, then the PRs count. `group` comes from `OTHER_GROUP` (top of the script; unlisted
   repos are "Community"), and buttons above the table filter by it, like the packages language filter.
 - `contributions/last.json` and `contributions/<year>.json`: GitHub GraphQL contribution calendars
   (needs a token), the rolling last year plus each year since `SINCE` (one `from`/`to` query each).
