@@ -63,7 +63,7 @@ TALK_VIDEO = {  # talk repo -> its opensource.posit.co recording (or a YouTube U
     "presentation-2023-03-15-appsilon-nightly-testing": "2023-04-18_barret-schloerke-lessons-learned-testing-2500-shiny-apps-every-day",
     "presentation-2022-07-28-rstudioconf22-shinytest2": "2022-10-24_barret-schloerke-shinytest2-unit-testing-for-shiny-applications-rstudio-2022",
     "presentation-2021-01-rstudio-global-plumber-async": "2021-02-18_barret-schloerke-plumber-future-async-web-apis-rstudio",
-    "presentation-2020-10-30-integrating-plumber": "2021-03-01_james-blair-barret-schloerke-integrating-r-with-plumber-apis-rstudio-2020",
+    "presentation-2020-10-28-integrating-plumber": "2021-03-01_james-blair-barret-schloerke-integrating-r-with-plumber-apis-rstudio-2020",
     "workshop-rinpharma24-shinylive": "2025-03-11_shinylive-serverless-shiny-applications-workshop",
     "presentation-2019-01-18-reactlog": "2019-09-03_barret-schloerke-reactlog-20-debugging-the-state-of-shiny-rstudio-2019",
 }
