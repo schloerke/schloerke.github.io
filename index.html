@@ -147,7 +147,8 @@
     .timeline .yr { position: absolute; top: 56px; transform: translateX(-50%); color: var(--muted); font-size: .75rem; }
     .talks li { display: flex; gap: .75rem; }
     .talks time { color: var(--muted); flex: none; width: 5.5rem; font-variant-numeric: tabular-nums; }
-    .talks .note-inline { color: var(--muted); font-size: .85rem; white-space: nowrap; }
+    .talks .venue { color: var(--text-2); }
+.talks .note-inline { color: var(--muted); font-size: .85rem; white-space: nowrap; }
     details summary { cursor: pointer; color: var(--text-2); margin-top: .5rem; }
     summary.h2-summary { color: inherit; margin: 3rem 0 .75rem; }
     summary.h2-summary h2 { display: inline; }
@@ -585,6 +586,7 @@
       const li = el("li");
       li.append(el("time", { datetime: t.date }, t.date.slice(0, 7)));
       const a = el("span");
+      if (t.venue) a.append(el("span", { class: "venue" }, `${t.venue} · `));
       a.append(el("a", { href: t.url }, t.title));
       if (note) a.append(el("span", { class: "note-inline" }, ` · ${note}`));
       if (t.video) {
@@ -630,7 +632,7 @@
         // a dot jumps to its row, opening the list first if the row is hidden
         const dot = el("a", {
           href: `#talk-${i}`, style: `left:${x}%; top:${38 - r * 11}px`,
-          "data-tip": `${t.date.slice(0, 7)} · ${t.title}`, "aria-label": t.title,
+          "data-tip": `${t.date.slice(0, 7)} · ${t.venue ? `${t.venue} · ` : ""}${t.title}`, "aria-label": t.title,
         });
         const li = item(t);
         li.id = `talk-${i}`;

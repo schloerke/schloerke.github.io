@@ -78,7 +78,10 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   name. The title is the repo description, then the README's first `# ` heading (via the `/readme` API, so
   `Readme.md` counts too), then the name slug. The link is the repo homepage (`http://` upgraded to `https://`), else the repo. Markdown and HTML are stripped out. `TALKS` (top of the script) hand-writes the entries for a repo
   whose name has no date (e.g. `workshop-rinpharma24-shinylive`) or that holds several talks (shinydevseries
-  → 3 episodes). `TALK_VIDEO` (top of the script) hand-maps a talk repo to
+  → 3 episodes). `venue` comes from `VENUES` (top of the script): regexes run against the talk repo name or
+  the raw video title, with `{y}` filled in from the year (e.g. `posit-conf` → `posit::conf(2026)`). A `TALKS` entry
+  can set `venue` itself. A venue at the start or end of a title (`rstudio::conf(2022) - ...`) is removed from the title.
+  The page shows it before the title as `venue · title`, in the row and in the timeline tooltip. `TALK_VIDEO` (top of the script) hand-maps a talk repo to
   its opensource.posit.co recording, because the video's date and title rarely match the talk's. That video
   moves out of `videos.json` and into the talk's `video` field. The page shows it on the talk row as a film + arrow-up-right icon
   link (Lucide, ISC) that opens in a new tab, and the Videos summary count still includes it.
