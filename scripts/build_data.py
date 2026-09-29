@@ -77,6 +77,8 @@ VENUES = {  # regex on a talk repo name (or video title) -> venue; {y} is the ta
     r"shinymeta": "ABACUS {y}",
     r"ggplot2-extenders": "ggplot2 extenders",
     r"open-source-pharma": "Open Source in Pharma",
+    r"harvard": "Harvard R User Group",
+    r"integrating-plumber": "RStudio Webinar",
     r"Data Science Lab": "Data Science Lab",
 }
 MIN_PRS = 3  # repos with fewer merged PRs are drive-by fixes
