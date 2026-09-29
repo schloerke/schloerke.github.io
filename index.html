@@ -495,7 +495,7 @@
             // the whole row opens the epics, except its links, buttons, and text selection
             tr.classList.add("has-epics");
             tr.addEventListener("click", (e) => {
-              if (!e.target.closest("a, button") && !getSelection().toString()) toggle.firstChild.click();
+              if (!e.target.closest("a, button") && !getSelection().toString()) toggle.querySelector(".epic-toggle").click();
             });
           }
         }
