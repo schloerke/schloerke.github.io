@@ -33,6 +33,11 @@ ROLES = ["contributor", "author", "maintainer"]
 HIDE = {"securingsincity/react-ace"}  # repos to leave out of the package table
 HIDE_OTHER = {"rstudio/shinycoreci-apps"}  # repos to leave out of the other work table
 ROLE = {"posit-dev/py-shiny": "author"}  # role when the manifests don't list me
+LOGO = {  # repo -> logo, for repos with no pkgdown hex
+    "posit-dev/chatlas": "https://posit-dev.github.io/chatlas/logos/hex/logo.png",
+    "narwhals-dev/narwhals": "https://narwhals-dev.github.io/narwhals/assets/image.png",
+    "posit-dev/brand-yml": "https://posit-dev.github.io/brand-yml/logos/tall/brand-yml-tall-color.svg",
+}
 EPICS = tomllib.loads(pathlib.Path(__file__).with_name("epics.toml").read_text())  # {lang: {package: [epic]}}
 TALKS = {  # talk repo -> hand-written entries, for repos with no date in the name or several talks in one
     "presentation-2020-08-14-shinydevseries": [
@@ -270,6 +275,15 @@ def feedstock(lang, name):
             return f"conda-forge/{cand}-feedstock"
 
 
+def logo(repo):
+    """The repo's pkgdown hex logo, if it has one."""
+    if repo in LOGO:
+        return LOGO[repo]
+    for path in ["man/figures/logo.svg", "man/figures/logo.png", "pkg-r/man/figures/logo.svg", "pkg-r/man/figures/logo.png"]:
+        if gh(f"repos/{repo}/contents/{path}"):
+            return f"https://raw.githubusercontent.com/{repo}/HEAD/{path}"
+
+
 def packages(pr_counts):
     # (lang, name) -> (prs, repo, description); forks of the same package keep the busiest repo
     found, role = {}, Counter()
@@ -293,8 +307,13 @@ def packages(pr_counts):
                     "reviews": reviews(repo), "monthly": series, "recent": recent,
                     "description": desc or info.get("description") or "",
                     "homepage": info.get("homepage") or None,
-                    "feedstock": feedstock(lang, name),
+                    "feedstock": feedstock(lang, name), "logo": logo(repo),
                     **({"epics": ep} if (ep := epics(lang, name, repo)) else {})})
+    # a Python package without a hex borrows its R namesake's (py-shiny -> shiny)
+    r_logos = {p["name"].lower(): p["logo"] for p in out if p["lang"] == "R"}
+    for p in out:
+        if p["lang"] == "Python" and not p["logo"]:
+            p["logo"] = r_logos.get(p["name"].lower().replace("_", "-"))
     return sorted(out, key=lambda p: -p["prs"])
 
 

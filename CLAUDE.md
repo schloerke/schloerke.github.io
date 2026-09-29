@@ -50,6 +50,12 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   `description` is the package's own one-liner: R `Title:`, Python `description`, npm `description`,
   falling back to the GitHub repo description. The page shows it in small text right after the package name,
   wrapping within the cell (a column of its own was too narrow). `role` is kept in the data but no longer shown.
+  `logo` is the repo's pkgdown hex (`man/figures/logo.{svg,png}`, then under `pkg-r/`) as a raw.githubusercontent URL, or null.
+  Every package in a repo shares its logo (e.g. `@posit/shiny` in rstudio/shiny), and a Python package with none
+  borrows the R package of the same name's (py-shiny → shiny). `LOGO` (top of the script) hand-maps a repo
+  to a logo URL when it has no hex at those paths (chatlas, narwhals, brand-yml).
+  It is shown in the left margin while the package row or its epics row is hovered, centered on the package row,
+  the same way as post images (the `<img>` sits in the first cell).
   The table's first columns are icons: the language icon (links to CRAN / PyPI / npm), then GitHub (octocat)
   and homepage (Lucide globe, stroke 1.5, scaled to the octocat's height). The package name after them is plain `<code>`.
   `feedstock` is fetched but not shown for now (the conda-forge anvil icon was removed; it's in git history).
