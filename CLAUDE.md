@@ -122,6 +122,6 @@ In Conductor, `.conductor/settings.toml` defines a `site` run script (`make serv
 ## Hand-edited content
 
 The bio, papers list, and nav links are hand-written in `index.html`. The nav is all icons in two groups:
-GitHub / Bluesky / ORCID (filled, Simple Icons, CC0), then CV / Talks / Writing (outline, Lucide, ISC,
+GitHub / Bluesky / ORCID (filled, Simple Icons, CC0), then CV / Talks / Blog posts (outline, Lucide, ISC,
 styled by `.links .line`). Each icon link has `aria-label` and `title`.
 Papers are low priority, so that section is a `<details>` that starts collapsed.
