@@ -53,7 +53,9 @@ TALKS = {  # talk repo -> hand-written entries, for repos with no date in the na
          "url": "https://schloerke.com/workshop-rinpharma24-shinylive/"},
     ],
 }
-TALK_VIDEO = {  # talk repo -> its opensource.posit.co recording; shown with the talk, not under Videos
+TALK_VIDEO = {  # talk repo -> its opensource.posit.co recording (or a YouTube URL); shown with the talk, not under Videos
+    "presentation-2021-08-12-harvard-plumber-async": "https://www.youtube.com/watch?v=eHrzsIGY0so",
+    "presentation-2021-08-05-harvard-plumber-beginner": "https://www.youtube.com/watch?v=GPNFP7qIxHc",
     "presentation-2025-09-17-posit-conf-otel": "2025-11-07_observability-at-scale-barret-schloerke-posit-positconf2025",
     "presentation-2025-08-09-user-plumber2": "2025-10-29_plumber2-streamlining-web-api-development-in-r-barret-schloerke",
     "presentation-2024-08-13-posit-shiny-data-frame": "2024-10-31_barret-schloerke-editable-data-frames-in-py-shiny-updating-original-data-in-real-time",
@@ -61,6 +63,7 @@ TALK_VIDEO = {  # talk repo -> its opensource.posit.co recording; shown with the
     "presentation-2023-03-15-appsilon-nightly-testing": "2023-04-18_barret-schloerke-lessons-learned-testing-2500-shiny-apps-every-day",
     "presentation-2022-07-28-rstudioconf22-shinytest2": "2022-10-24_barret-schloerke-shinytest2-unit-testing-for-shiny-applications-rstudio-2022",
     "presentation-2021-01-rstudio-global-plumber-async": "2021-02-18_barret-schloerke-plumber-future-async-web-apis-rstudio",
+    "presentation-2020-10-28-integrating-plumber": "2021-03-01_james-blair-barret-schloerke-integrating-r-with-plumber-apis-rstudio-2020",
     "workshop-rinpharma24-shinylive": "2025-03-11_shinylive-serverless-shiny-applications-workshop",
     "presentation-2019-01-18-reactlog": "2019-09-03_barret-schloerke-reactlog-20-debugging-the-state-of-shiny-rstudio-2019",
 }
@@ -76,6 +79,8 @@ VENUES = {  # regex on a talk repo name (or video title) -> venue; {y} is the ta
     r"shinymeta": "ABACUS {y}",
     r"ggplot2-extenders": "ggplot2 extenders",
     r"open-source-pharma": "Open Source in Pharma",
+    r"harvard": "Harvard R User Group",
+    r"integrating-plumber": "RStudio Webinar",
     r"Data Science Lab": "Data Science Lab",
 }
 MIN_PRS = 3  # repos with fewer merged PRs are drive-by fixes
@@ -376,6 +381,15 @@ def venue(text, year):
     return next((v.format(y=year) for k, v in VENUES.items() if re.search(k, text)), None)
 
 
+def youtube(url):
+    """A video not on opensource.posit.co: date, title, length, and views from its YouTube watch page."""
+    page = fetch(url, raw=True)
+    # ponytail: scrapes the page's embedded player JSON; use the YouTube Data API if this breaks
+    get = lambda k: json.loads(re.search(rf'"{k}":("[^"]*")', page).group(1))
+    return {"date": get("publishDate")[:10], "title": get("title"), "venue": None, "url": url,
+            "minutes": round(int(get("lengthSeconds")) / 60), "views": int(get("viewCount"))}
+
+
 def talks(videos):
     """Presentation / workshop repos (or TALKS entries). Moves each TALK_VIDEO recording out of `videos` onto its talk."""
     repos, page = [], 1
@@ -399,8 +413,10 @@ def talks(videos):
                        "url": re.sub(r"^http://", "https://", r["homepage"] or r["html_url"])}]
         else:
             continue
-        if r["name"] in TALK_VIDEO:
-            url = f"https://opensource.posit.co/resources/videos/{TALK_VIDEO[r['name']]}/"
+        if (slug := TALK_VIDEO.get(r["name"], "")).startswith("https://www.youtube.com/"):
+            talks_[0]["video"] = youtube(slug)
+        elif slug:
+            url = f"https://opensource.posit.co/resources/videos/{slug}/"
             if video := next((v for v in videos if v["url"] == url), None):
                 videos.remove(video)
                 talks_[0]["video"] = video
