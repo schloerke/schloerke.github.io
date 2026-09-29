@@ -84,6 +84,9 @@ VENUES = {  # regex on a talk repo name (or video title) -> venue; {y} is the ta
     r"integrating-plumber": "RStudio Webinar",
     r"Data Science Lab": "Data Science Lab",
 }
+VENUE_URL = {  # venue -> its home page; the page links the venue name
+    "ggplot2 extenders": "https://exts.ggplot2.tidyverse.org/",
+}
 MIN_PRS = 3  # repos with fewer merged PRs are drive-by fixes
 MONTHS = 6  # pypistats only keeps 180 days
 SINCE = 2018  # first year of contribution calendars
@@ -492,6 +495,9 @@ pkgs = packages(pr_counts) if want("packages") else read("packages")
 if want("talks"):
     posts, videos = opensource()
     talk_rows = talks(videos)  # also removes the talk recordings from `videos`
+    for t in talk_rows + videos:
+        if url := VENUE_URL.get(t.get("venue")):
+            t["venue_url"] = url
 else:
     posts, videos, talk_rows = read("posts"), read("videos"), read("talks")
 if want("contributions"):

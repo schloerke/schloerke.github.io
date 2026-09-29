@@ -87,7 +87,8 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   → 3 episodes). `venue` comes from `VENUES` (top of the script): regexes run against the talk repo name or
   the raw video title, with `{y}` filled in from the year (e.g. `posit-conf` → `posit::conf(2026)`). A `TALKS` entry
   can set `venue` itself. A venue at the start or end of a title (`rstudio::conf(2022) - ...`) is removed from the title.
-  The page shows it before the title as `venue · title`, in the row and in the timeline tooltip. `TALK_VIDEO` (top of the script) hand-maps a talk repo to
+  The page shows it before the title as `venue · title`, in the row and in the timeline tooltip.
+  `VENUE_URL` (top of the script) hand-maps a venue to its home page; that row gets a `venue_url` and the venue name becomes a link. `TALK_VIDEO` (top of the script) hand-maps a talk repo to
   its opensource.posit.co recording, because the video's date and title rarely match the talk's. That video
   moves out of `videos.json` and into the talk's `video` field. A `TALK_VIDEO` value can instead be a YouTube URL, for a
   recording not on opensource.posit.co (e.g. Harvard R User Group). Its date, title, length, and views are scraped from the

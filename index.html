@@ -594,7 +594,11 @@
       const li = el("li");
       li.append(el("time", { datetime: t.date }, t.date.slice(0, 7)));
       const a = el("span");
-      if (t.venue) a.append(el("span", { class: "venue" }, `${t.venue} · `));
+      if (t.venue) {
+        const v = el("span", { class: "venue" });
+        v.append(t.venue_url ? el("a", { href: t.venue_url }, t.venue) : t.venue, " · ");
+        a.append(v);
+      }
       a.append(el("a", { href: t.url }, t.title));
       if (note) a.append(el("span", { class: "note-inline" }, ` · ${note}`));
       if (t.video) {
