@@ -100,7 +100,9 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   recording not on opensource.posit.co (e.g. Harvard R User Group). Its date, title, length, and views are scraped from the
   watch page's embedded JSON (no API key). The page shows it as the talk row's film icon (Lucide, ISC),
   and the Videos summary count still includes it.
-  The talks table and videos list show 6 rows with a "Show all" / "Show fewer" button (`showAll()`).
+  Videos and blog posts are tables laid out like the talks table (class `dated`, shared `venueCell` / `dateCell`):
+  videos have a film icon (length and views in the tooltip), title, venue, and date; posts have a pen icon, title, and date.
+  The talks and videos tables show 6 rows, posts 12, with a "Show all" / "Show fewer" button (`showAll()`).
   Timeline dots within 2% of the axis width of the previous one stack up a row (greedy, at most ~3 rows) so none overlap.
   A timeline dot links to its row (`#talk-<i>`), opens the list if that row is hidden, and highlights the row for 5s.
 - `videos.json` / `posts.json`: pages on opensource.posit.co that credit `FULL_NAME` in their front matter
@@ -150,4 +152,5 @@ In Conductor, `.conductor/settings.toml` defines a `site` run script (`make serv
 The bio, papers list, and nav links are hand-written in `index.html`. The nav is all icons in two groups:
 GitHub / Bluesky / ORCID (filled, Simple Icons, CC0), then CV / Talks / Blog posts (outline, Lucide, ISC,
 styled by `.links .line`). Each icon link has `aria-label` and `title`.
-Papers are low priority, so that section is a `<details>` that starts collapsed.
+Papers are low priority, so that section is a `<details>` that starts collapsed. It is a hand-written
+`dated` table (icon, title, journal, year); a script fills each empty link with the nav's CV (file) icon.
