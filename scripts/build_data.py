@@ -44,7 +44,7 @@ TALKS = {  # talk repo -> hand-written entries, for repos with no date in the na
          "url": "https://shinydevseries.com/interview/ep014/"},
     ],
     "workshop-rinpharma24-shinylive": [
-        {"date": "2024-10-25", "title": "{shinylive}: Serverless Shiny applications workshop (R/Pharma 2024)",
+        {"date": "2024-10-25", "title": "{shinylive}: Serverless Shiny applications workshop", "venue": "R/Pharma 2024",
          "url": "https://schloerke.com/workshop-rinpharma24-shinylive/"},
     ],
 }
@@ -58,6 +58,20 @@ TALK_VIDEO = {  # talk repo -> its opensource.posit.co recording; shown with the
     "presentation-2021-01-rstudio-global-plumber-async": "2021-02-18_barret-schloerke-plumber-future-async-web-apis-rstudio",
     "workshop-rinpharma24-shinylive": "2025-03-11_shinylive-serverless-shiny-applications-workshop",
     "presentation-2019-01-18-reactlog": "2019-09-03_barret-schloerke-reactlog-20-debugging-the-state-of-shiny-rstudio-2019",
+}
+VENUES = {  # regex on a talk repo name (or video title) -> venue; {y} is the talk's year
+    r"posit-conf": "posit::conf({y})",
+    r"posit::conf\(\d{4}\)": "posit::conf({y})",
+    r"rstudioconf|2019-01-18-reactlog": "rstudio::conf({y})",
+    r"rstudio-global": "rstudio::global({y})",
+    r"-user-|ggduo": "useR! {y}",
+    r"shinyconf|appsilon-nightly|appsilon-shinylive": "ShinyConf {y}",
+    r"rinpharma": "R/Pharma {y}",
+    r"jsm": "JSM {y}",
+    r"shinymeta": "ABACUS {y}",
+    r"ggplot2-extenders": "ggplot2 extenders",
+    r"open-source-pharma": "Open Source in Pharma",
+    r"Data Science Lab": "Data Science Lab",
 }
 MIN_PRS = 3  # repos with fewer merged PRs are drive-by fixes
 MONTHS = 6  # pypistats only keeps 180 days
@@ -338,6 +352,11 @@ def contributions():
     return out
 
 
+def venue(text, year):
+    """Venue for a talk repo name or video title, from VENUES, or None."""
+    return next((v.format(y=year) for k, v in VENUES.items() if re.search(k, text)), None)
+
+
 def talks(videos):
     """Presentation / workshop repos (or TALKS entries). Moves each TALK_VIDEO recording out of `videos` onto its talk."""
     repos, page = [], 1
@@ -355,7 +374,9 @@ def talks(videos):
             h1 = re.search(r"^# (.+)", readme or "", re.M)
             title = r["description"] or (h1 and h1.group(1)) or slug.replace("-", " ").replace("_", " ")
             title = re.sub(r"<.*|[`*]", "", title).strip()  # plain text: drop html + markdown
-            talks_ = [{"date": f"{y}-{mo}-{d or '01'}", "kind": kind, "title": title,
+            if v := venue(r["name"], y):  # the venue gets its own field: "rstudio::conf(2022) - {shinytest2}"
+                title = title.removeprefix(f"{v} - ").removesuffix(f" - {v}")
+            talks_ = [{"date": f"{y}-{mo}-{d or '01'}", "kind": kind, "title": title, "venue": v,
                        "url": re.sub(r"^http://", "https://", r["homepage"] or r["html_url"])}]
         else:
             continue
@@ -414,7 +435,8 @@ def opensource():
             title = re.sub(rf"^{FULL_NAME}\s*[-:]\s*|\s*\({FULL_NAME}[^)]*\)", "", v["title"])
             parts = [p.strip() for p in re.split(rf"\s+\|\|?\s+|\s+-\s+(?={FULL_NAME})", title)]
             parts = [p for p in parts if FULL_NAME not in p and not re.match(r"RStudio|Posit\b|posit::conf|Data Science Lab", p)]
-            videos.append({"date": v["date"], "title": " · ".join(parts) or title, "url": site + v["permalink"],
+            videos.append({"date": v["date"], "title": " · ".join(parts) or title,
+                           "venue": venue(v["title"], v["date"][:4]), "url": site + v["permalink"],
                            "minutes": round(v["duration"] / 60), "views": v["views"]})
     return posts, videos
 
