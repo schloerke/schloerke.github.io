@@ -89,7 +89,9 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   can set `venue` itself. A venue at the start or end of a title (`rstudio::conf(2022) - ...`) is removed from the title.
   The page shows it before the title as `venue · title`, in the row and in the timeline tooltip. `TALK_VIDEO` (top of the script) hand-maps a talk repo to
   its opensource.posit.co recording, because the video's date and title rarely match the talk's. That video
-  moves out of `videos.json` and into the talk's `video` field. The page shows it on the talk row as a film + arrow-up-right icon
+  moves out of `videos.json` and into the talk's `video` field. A `TALK_VIDEO` value can instead be a YouTube URL, for a
+  recording not on opensource.posit.co (e.g. Harvard R User Group). Its date, title, length, and views are scraped from the
+  watch page's embedded JSON (no API key). The page shows it on the talk row as a film + arrow-up-right icon
   link (Lucide, ISC) that opens in a new tab, and the Videos summary count still includes it.
   The talks and videos lists show 6 rows with a "Show all" / "Show fewer" button (`showAll()`, shared with Other repos).
   Timeline dots within 2% of the axis width of the previous one stack up a row (greedy, at most ~3 rows) so none overlap.
