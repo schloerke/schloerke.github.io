@@ -196,26 +196,28 @@ def reviews(repo):
 
 
 def manifests(repo):
-    """Yield (lang, package name, role) for R / Python / TypeScript packages in a repo."""
+    """Yield (lang, package name, role, description) for R / Python / TypeScript packages in a repo."""
     raw = lambda p: fetch(f"https://raw.githubusercontent.com/{repo}/HEAD/{p}", raw=True)
     for path in ["DESCRIPTION", "pkg-r/DESCRIPTION"]:
         if (txt := raw(path)) and (m := re.search(r"^Package:\s*(\S+)", txt, re.M)):
-            yield "R", m.group(1), r_role(txt)
+            title = re.search(r"^Title:\s*(.+(?:\n[ \t]+.+)*)", txt, re.M)  # may wrap onto indented lines
+            yield "R", m.group(1), r_role(txt), title and " ".join(title.group(1).split())
             break
     for path in ["pyproject.toml", "pkg-py/pyproject.toml"]:
         if (txt := raw(path)) and (proj := tomllib.loads(txt).get("project", {})).get("name"):
-            yield "Python", proj["name"], listed_role(proj.get("maintainers"), proj.get("authors"))
+            yield "Python", proj["name"], listed_role(proj.get("maintainers"), proj.get("authors")), proj.get("description")
             break
     else:
         if (txt := raw("setup.cfg")) and (m := re.search(r"^name\s*=\s*([\w.-]+)", txt, re.M)):
             yield "Python", m.group(1), listed_role(re.findall(r"^maintainer\s*=.*", txt, re.M),
-                                                     re.findall(r"^author\s*=.*", txt, re.M))
+                                                     re.findall(r"^author\s*=.*", txt, re.M)), \
+                  (d := re.search(r"^description\s*=\s*(.+)", txt, re.M)) and d.group(1).strip()
     for path in ["package.json", "pkg-js/package.json"]:
         # ponytail: TypeScript only; plain JS packages are skipped until one needs an icon
         if (txt := raw(path)) and '"typescript"' in txt:
             pkg = json.loads(txt)
             if pkg.get("name") and not pkg.get("private"):
-                yield "TypeScript", pkg["name"], listed_role(pkg.get("maintainers"), pkg.get("author"))
+                yield "TypeScript", pkg["name"], listed_role(pkg.get("maintainers"), pkg.get("author")), pkg.get("description")
                 break
 
 
@@ -255,26 +257,28 @@ def feedstock(lang, name):
 
 
 def packages(pr_counts):
-    # (lang, name) -> (prs, repo); forks of the same package keep the busiest repo
+    # (lang, name) -> (prs, repo, description); forks of the same package keep the busiest repo
     found, role = {}, Counter()
     for repo, prs in pr_counts.items():
         if prs < MIN_PRS or repo in HIDE or re.match(rf"{USER}/(presentation|workshop)-", repo):
             continue
-        for lang, name, r in manifests(repo):
+        for lang, name, r, desc in manifests(repo):
             # a repo's packages share a role: the strongest one any manifest gives
             role[repo] = max(role[repo], ROLES.index(r), ROLES.index(ROLE.get(repo, "contributor")))
             if (lang, name) not in found or found[lang, name][0] < prs:
-                found[lang, name] = (prs, repo)
+                found[lang, name] = (prs, repo, desc)
     r_dl = cran(name for lang, name in found if lang == "R")
     downloads = {"R": lambda n: r_dl.get(n, ([], 0)), "Python": pypi, "TypeScript": npm}
     out = []
-    for (lang, name), (prs, repo) in found.items():
+    for (lang, name), (prs, repo, desc) in found.items():
         series, recent = downloads[lang](name)
         if recent == 0:
             continue  # not published
+        info = gh(f"repos/{repo}") or {}
         out.append({"name": name, "lang": lang, "repo": repo, "prs": prs, "role": ROLES[role[repo]],
                     "reviews": reviews(repo), "monthly": series, "recent": recent,
-                    "homepage": (gh(f"repos/{repo}") or {}).get("homepage") or None,
+                    "description": desc or info.get("description") or "",
+                    "homepage": info.get("homepage") or None,
                     "feedstock": feedstock(lang, name),
                     **({"epics": ep} if (ep := epics(lang, name, repo)) else {})})
     return sorted(out, key=lambda p: -p["prs"])

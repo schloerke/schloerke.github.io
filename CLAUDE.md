@@ -34,6 +34,8 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   `pkg-r/DESCRIPTION`), a Python package (`pyproject.toml`, `pkg-py/pyproject.toml`, `setup.cfg`),
   or a TypeScript package (non-private `package.json` / `pkg-js/package.json` that mentions `typescript`).
   Monthly downloads for the last 6 full months come from cranlogs (R), pypistats (Python), or npm.
+  The table shows them as a sparkline under a "Downloads (6m)" header that sorts by the last month
+  (there's no separate count column; the count is in visually hidden text and the hover tooltips).
   `role` is maintainer / author / contributor: R `cre` / `aut` in `Authors@R`, Python
   `maintainers` / `authors`, npm `maintainers` / `author`. Every package in a repo gets the
   strongest role found in any of its manifests (e.g. shinyreact's `cre` in R covers its npm package).
@@ -41,10 +43,13 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   `ROLE` (a minimum role when the manifests don't list you, e.g. py-shiny → author).
   6 months because pypistats keeps only 180 days. A package counts as published if it has
   any downloads in that window, including the current month, so new releases show as "new".
-  `reviews` per package: search count of `reviewed-by:schloerke -author:schloerke` in that repo.
+  `reviews` per package: search count of `reviewed-by:schloerke -author:schloerke` in that repo, shown in the tooltip on the My PRs count.
   `feedstock` is the `conda-forge/<name>-feedstock` repo for Python packages, if one exists
   (`py-<name>`, then `<name>`). R packages are skipped on purpose.
   `homepage` is the GitHub repo's website field (pkgdown / docs site), or null.
+  `description` is the package's own one-liner: R `Title:`, Python `description`, npm `description`,
+  falling back to the GitHub repo description. The page shows it in small text right after the package name,
+  wrapping within the cell (a column of its own was too narrow). `role` is kept in the data but no longer shown.
   The table's first columns are icons: the language icon (links to CRAN / PyPI / npm), then GitHub (octocat)
   and homepage (Lucide globe, stroke 1.5, scaled to the octocat's height). The package name after them is plain `<code>`.
   `feedstock` is fetched but not shown for now (the conda-forge anvil icon was removed; it's in git history).
@@ -53,8 +58,8 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   my merged PRs in the repo (one search per repo that has epics), plus optional `since` / `until` months
   to drop stray matches. The shown `start` / `end` months and `prs` count come from the PRs that match.
   GitHub search can't do this itself: it allows only 5 `OR`s and matches words loosely. An epic with no
-  matches gets skipped and a warning is printed. In the table, a ▸ after the package name opens a row
-  listing its epics, newest first. Each epic has a bar on a small timeline, styled like the talks timeline. A package's
+  matches gets skipped and a warning is printed. In the table, a ▸ in its own first column (or a click
+  anywhere on the row outside its links; such rows highlight on hover) opens a row listing its epics, newest first. Each epic has a bar on a small timeline, styled like the talks timeline. A package's
   epics share one scale (whole years, at most ~4 year labels), and the dates (ISO `YYYY-MM`) appear in the tooltip and in visually hidden text. The "Show all" CSS counts rows with `:nth-child(n+13 of :not(.epics))`.
 - `other.json`: every other public repo with ≥ `MIN_PRS` merged PRs (not a listed package's repo,
   not a talk), with its GitHub description. Private repos are skipped so their names stay off the site,
