@@ -1,0 +1,15 @@
+# Build the CV PDF on every PR, so a broken cv.typ or cv.json fails here instead of in the
+# weekly rebuild. Nothing is committed. `build` is a required check on main (repo ruleset),
+# so it has no `paths:` filter: a required check that never runs would block the merge.
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: typst-community/setup-typst@v5
+        with:
+          typst-version: 0.13.1  # keep in sync with data.yml
+      - run: make cv

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CV · Barret Schloerke</title>
+  <meta name="description" content="Curriculum vitae of Barret Schloerke, software engineer at Posit.">
+  <link rel="icon" href="../favicon.ico">
+  <script>
+    if (localStorage.theme) document.documentElement.dataset.theme = localStorage.theme;
+  </script>
+  <style>
+    /* same colors as ../index.html (and the light ones in cv.typ) */
+    :root {
+      color-scheme: light dark;
+      --bg: light-dark(#fafaf7, #1a1a19);
+      --text: light-dark(#0b0b0b, #ecebe6);
+      --text-2: light-dark(#52514e, #c3c2b7);
+      --muted: light-dark(#5f5e59, #a3a299);
+      --rule: light-dark(#dddcd6, #333331);
+      --accent: light-dark(#174e9c, #8ab8f2);
+    }
+    :root[data-theme="light"] { color-scheme: light; }
+    :root[data-theme="dark"] { color-scheme: dark; }
+    #theme { position: absolute; top: 1rem; right: 1.25rem; font-size: 1.1rem; color: var(--text-2); }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto; max-width: 42rem; padding: 4rem 1.25rem 3rem;
+      background: var(--bg); color: var(--text);
+      font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    a { color: var(--accent); text-underline-offset: 2px; }
+    button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+    h1 { font-size: 2rem; line-height: 1.2; margin: 0; }
+    h1 a { color: inherit; text-decoration: none; }
+    h1 a:hover { color: var(--accent); }
+    h2 { font-size: 1rem; margin: 2.5rem 0 .5rem; padding-bottom: .25rem; border-bottom: 1px solid var(--rule); }
+    code, .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .9em; }
+    .title { margin: .25rem 0 0; }
+    .tagline { color: var(--text-2); margin: 0 0 1rem; }
+    /* name on the left, contact list top right with its icons in a column on the right edge */
+    header { display: grid; grid-template-columns: 1fr auto; gap: 1rem 1.5rem; align-items: start; }
+    .contact { list-style: none; padding: 0; margin: .35rem 0 0; font-size: .85rem; line-height: 1.75; }
+    .contact li { display: flex; align-items: center; justify-content: flex-end; gap: .5rem; }
+    .contact a { color: var(--text-2); text-decoration: none; }
+    .contact a:hover { color: var(--accent); }
+    @media (max-width: 36rem) {
+      header { grid-template-columns: 1fr; }
+      .contact li { flex-direction: row-reverse; justify-content: flex-end; }
+    }
+    .i { display: block; flex: none; width: 14px; height: 14px; fill: currentColor; color: var(--muted); }
+    .i.line { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .actions { display: flex; gap: .5rem; flex-wrap: wrap; margin: 1.25rem 0 0; font-size: .85rem; }
+    .actions a { padding: .15rem .6rem; border-radius: 999px; border: 1px solid var(--rule); color: var(--text-2); text-decoration: none; }
+    .actions a:hover { border-color: var(--text); color: var(--text); }
+    .entry { margin: .9rem 0; }
+    .head { display: flex; justify-content: space-between; gap: 1rem; }
+    .when { color: var(--muted); font-size: .85rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .sub { color: var(--text-2); font-size: .9rem; margin: 0; }
+    .entry ul, ul.list { margin: .25rem 0 0; padding-left: 1.1rem; font-size: .95rem; }
+    /* an icon for a bullet, lined up with the first line of text */
+    ul.list { list-style: none; padding: 0; }
+    ul.list > li { display: grid; grid-template-columns: 14px 1fr; column-gap: .65rem; margin: .45rem 0; }
+    ul.list > li > .i { margin-top: .4em; }
+    ul.list > li:has(.epics) { margin: .9rem 0; }
+    .about { color: var(--text-2); font-size: .9rem; }
+    .entry .epics { color: var(--text-2); font-size: .85rem; }
+    .epics li { margin: .1rem 0; }
+    dl { display: grid; grid-template-columns: auto 1fr; gap: .25rem 1rem; margin: 0; }
+    dt { color: var(--muted); }
+    dd { margin: 0; }
+    footer { margin-top: 4rem; color: var(--muted); font-size: .85rem; }
+    footer a { color: inherit; }
+    @media print {
+      :root { color-scheme: light; }
+      body { padding: 0; max-width: none; font-size: 11pt; }
+      #theme, .actions { display: none; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <button id="theme" type="button" aria-label="Theme: system">◐</button>
+  <header>
+    <div>
+    <h1 id="name"><a href="../">Barret Schloerke</a></h1>
+    <p class="title" id="title"></p>
+    <p class="tagline mono" id="tagline"></p>
+    <nav class="actions">
+      <a href="cv_barret_schloerke.pdf" target="_blank" rel="noopener">CV (PDF) ↗</a>
+      <a href="https://vita.schloerke.com/resume_barret_schloerke.pdf" target="_blank" rel="noopener">Resume (PDF) ↗</a>
+    </nav>
+    </div>
+    <ul class="contact" id="contact"></ul>
+  </header>
+  <main id="cv"></main>
+  <footer><span id="updated"></span> <a href="https://github.com/schloerke/schloerke.github.io">Source</a></footer>
+
+  <script>
+    // Cycle system → light → dark → system, same as ../index.html
+    const themeBtn = document.getElementById("theme");
+    const themes = { "": ["◐", "system"], light: ["☀", "light"], dark: ["☾", "dark"] };
+    const showTheme = (t) => { themeBtn.textContent = themes[t][0]; themeBtn.setAttribute("aria-label", `Theme: ${themes[t][1]}`); };
+    showTheme(localStorage.theme || "");
+    themeBtn.addEventListener("click", () => {
+      const next = { "": "light", light: "dark", dark: "" }[localStorage.theme || ""];
+      if (next) localStorage.theme = document.documentElement.dataset.theme = next;
+      else { localStorage.removeItem("theme"); delete document.documentElement.dataset.theme; }
+      showTheme(next);
+    });
+
+    // Built as plain text in document order so a copy/paste reads like the PDF.
+    const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+    const link = (text, url) => (url ? `<a href="${esc(url)}">${esc(text)}</a>` : esc(text));
+    const month = (ym) => new Date(ym + "-15").toLocaleString("en-US", { month: "short", year: "numeric" });
+    const span = (a, b) => (a === b ? month(a) : `${month(a)} – ${b ? month(b) : "Present"}`);
+    const years = (a, b) => (b && a.slice(0, 4) === b.slice(0, 4) ? a.slice(0, 4) : `${a.slice(0, 4)} – ${b ? b.slice(0, 4) : "Present"}`);
+    const head = (left, when) => `<div class="head"><div>${left}</div> <span class="when">${when}</span></div>`;
+    const bullets = (xs) => (xs?.length ? `<ul>${xs.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : "");
+    const section = (title, body) => `<section><h2>${title}</h2>${body}</section>`;
+    let ICONS; // cv/icons.json, shared with cv.typ
+    const icon = (name) => `<svg class="i${ICONS[name].line ? " line" : ""}" viewBox="0 0 24 24" aria-hidden="true"><path d="${ICONS[name].d}"/></svg>`;
+    // ic: an icon name, or a function of the item that returns one
+    const list = (items, ic, body) =>
+      `<ul class="list">${items.map((x) => `<li>${icon(typeof ic === "function" ? ic(x) : ic)}<div>${body(x)}</div></li>`).join("")}</ul>`;
+    // a note with some of its words as links: links = {"words in the note": url}
+    // split around each phrase (first match) so a later phrase can't match inside an earlier link, same as cv.typ
+    const linkify = (note, links = {}) => {
+      const [[text, url] = [], ...rest] = Object.entries(links), more = Object.fromEntries(rest);
+      const i = text ? note.indexOf(text) : -1;
+      if (!text) return esc(note);
+      if (i < 0) return linkify(note, more);
+      return linkify(note.slice(0, i), more) + link(text, url) + linkify(note.slice(i + text.length), more);
+    };
+    const siteIcon = (url) => (url.includes("github.com") ? "github" : "globe");
+
+    // one row per repo: its packages' languages, strongest role, and every epic
+    function byRepo(pkgs) {
+      const rank = { maintainer: 0, author: 1, contributor: 2 };
+      const repos = new Map();
+      for (const p of pkgs) {
+        const r = repos.get(p.repo) ?? repos.set(p.repo, { ...p, langs: [], epics: [] }).get(p.repo);
+        if (!r.langs.includes(p.lang)) r.langs.push(p.lang);
+        if (rank[p.role] < rank[r.role]) r.role = p.role;
+        r.epics.push(...(p.epics ?? []).map((e) => ({ ...e, lang: p.lang })));
+      }
+      for (const r of repos.values()) r.epics.sort((a, b) => b.start.localeCompare(a.start));
+      return [...repos.values()].sort((a, b) => b.prs - a.prs);
+    }
+
+    function render(cv, icons, pkgs, talks, videos, posts, summary) {
+      ICONS = icons;
+      document.getElementById("title").textContent = cv.title;
+      document.getElementById("tagline").textContent = cv.tagline;
+      // the address is only ever in cv.json as its two halves, so it isn't in the HTML for scrapers to find
+      document.getElementById("contact").innerHTML = cv.contact.map((c) => {
+        const [text, url] = c.email ? [c.email.join("@"), `mailto:${c.email.join("@")}`] : [c.text, c.url];
+        return `<li><a href="${esc(url)}" title="${esc(c.label)}">${esc(text)}</a> ${icon(c.icon)}</li>`;
+      }).join("");
+      document.getElementById("updated").textContent = `Updated ${summary.updated} ·`;
+
+      const repos = byRepo(pkgs);
+      const lead = repos.filter((r) => r.role !== "contributor");
+      const contrib = repos.filter((r) => r.role === "contributor");
+      document.getElementById("cv").innerHTML = [
+        section("Summary", `<p>${esc(cv.summary)}</p>`),
+        section("Experience", cv.experience.map((e) => `<div class="entry">
+          ${head(`<strong>${esc(e.role)}</strong>, ${link(e.org, e.url)}`, span(e.start, e.end))}
+          <p class="sub">${esc(e.place)}</p>${bullets(e.bullets)}</div>`).join("")),
+        section("Education", cv.education.map((e) => `<div class="entry">
+          ${head(`<strong>${link(e.degree, e.url)}</strong>, ${esc(e.org)}`, years(e.start, e.end))}
+          <p class="sub">${esc(e.place)}</p>${bullets(e.notes)}</div>`).join("")),
+        section("Open source software", `<p class="sub">${summary.merged_prs.toLocaleString("en-US")} merged pull requests across ${summary.repos} GitHub repositories since ${Math.min(...summary.years)}. Packages I maintain or author, by merged PRs:</p>` +
+          list(lead, "github", (r) => `
+            <code>${link(r.name, `https://github.com/${r.repo}`)}</code> <span class="about">${esc(r.langs.join(", "))} · ${esc(r.role)} · ${r.prs} PRs</span>
+            <p class="sub">${esc(r.description)}</p>
+            ${r.epics.length ? `<ul class="epics">${r.epics.map((e) => `<li>${r.langs.length > 1 ? `${e.lang}: ` : ""}${esc(e.title)} (${years(e.start, e.end)}): ${esc(e.about)}</li>`).join("")}</ul>` : ""}`) +
+          `<p class="sub">Also contributed to: ${contrib.map((r) => link(r.name, `https://github.com/${r.repo}`)).join(", ")}.</p>`),
+        section("Earlier research software", list(cv.research, (r) => siteIcon(r.url), (r) => `${head(`<code>${link(r.name, r.url)}</code>, ${esc(r.org)}`, years(r.start, r.end))}
+          <span class="about">${esc(r.about)}</span>`)),
+        section("Publications", list(cv.publications, "file", (p) =>
+          `${esc(p.authors).replace("Schloerke, B.", "<strong>Schloerke, B.</strong>").replace("B. Schloerke", "<strong>B. Schloerke</strong>")} (${p.year}). ${link(p.title, p.url)}. <i>${esc(p.venue)}</i>.`)),
+        section("Talks &amp; workshops", list(talks, "talk", (t) => `${head(link(t.title, t.url ?? `https://github.com/${t.repo}`), month(t.date.slice(0, 7)))}
+          ${t.venue ? `<span class="about">${esc(t.venue)}${t.video ? ` · ${link("video", t.video.url)}` : ""}</span>` : t.video ? `<span class="about">${link("video", t.video.url)}</span>` : ""}`)),
+        section("Videos", list(videos, "film", (v) => head(link(v.title, v.url), month(v.date.slice(0, 7))))),
+        section("Blog posts", list(posts, "pen", (p) => head(link(p.title, p.url), month(p.date.slice(0, 7))))),
+        section("Honors &amp; awards", list(cv.awards, "award", (a) => `${head(link(a.title, a.url), years(a.start, a.end))}
+          ${a.note ? `<span class="about">${linkify(a.note, a.links)}</span>` : ""}`)),
+        section("Teaching &amp; mentoring", list(cv.teaching, "cap", (t) => `${head(`<strong>${esc(t.role)}</strong>, ${link(t.org, t.url)}`, years(t.start, t.end))}
+          ${t.note ? `<span class="about">${linkify(t.note, t.links)}</span>` : ""}`)),
+        section("Service", list(cv.service, "users", (s) => `${head(`<strong>${esc(s.role)}</strong>, ${esc(s.org)}`, years(s.start, s.end))}
+          ${s.note ? `<span class="about">${linkify(s.note, s.links)}</span>` : ""}`)),
+        section("Skills", `<dl>${cv.skills.map((s) => `<dt>${esc(s.group)}</dt> <dd>${esc(s.items)}</dd>`).join("")}</dl>`),
+      ].join("");
+    }
+
+    const load = (path) => fetch(path).then((r) => r.json());
+    Promise.all(["cv.json", "icons.json", "../data/packages.json", "../data/talks.json", "../data/videos.json", "../data/posts.json", "../data/summary.json"].map(load))
+      .then((d) => render(...d));
+  </script>
+</body>
+</html>

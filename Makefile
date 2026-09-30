@@ -1,7 +1,7 @@
-.PHONY: help data data-prs data-packages data-other data-talks data-contributions serve
+.PHONY: help cv data data-prs data-packages data-other data-talks data-contributions serve
 
 PORT ?= 8000
-GITHUB_TOKEN ?= $(shell gh auth token)
+GITHUB_TOKEN ?= $(shell gh auth token 2>/dev/null)
 export GITHUB_TOKEN
 
 help: ## Show targets
@@ -21,6 +21,9 @@ data-talks: ## Rebuild talks, videos, and posts
 	@$(MAKE) data ONLY=talks
 data-contributions: ## Rebuild contribution calendars
 	@$(MAKE) data ONLY=contributions
+
+cv: ## Build cv/cv_barret_schloerke.pdf from cv/cv.json and data/ (needs typst)
+	typst compile --root . --ignore-system-fonts --font-path cv/fonts cv/cv.typ cv/cv_barret_schloerke.pdf
 
 serve: ## Preview the site at http://localhost:$PORT (default 8000)
 	uv run scripts/serve.py $(PORT)
