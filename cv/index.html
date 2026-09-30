@@ -180,7 +180,7 @@
           <span class="about">${esc(r.about)}</span>`)),
         section("Publications", list(cv.publications, "file", (p) =>
           `${esc(p.authors).replace("Schloerke, B.", "<strong>Schloerke, B.</strong>").replace("B. Schloerke", "<strong>B. Schloerke</strong>")} (${p.year}). ${link(p.title, p.url)}. <i>${esc(p.venue)}</i>.`)),
-        section("Talks &amp; workshops", list(talks, "talk", (t) => `${head(link(t.title, t.url ?? `https://github.com/${t.repo}`), month(t.date.slice(0, 7)))}
+        section("Talks &amp; workshops", list(talks, "talk", (t) => `${head(link(t.title, t.url ?? (t.repo && `https://github.com/${t.repo}`)), month(t.date.slice(0, 7)))}
           ${t.venue ? `<span class="about">${esc(t.venue)}${t.video ? ` · ${link("video", t.video.url)}` : ""}</span>` : t.video ? `<span class="about">${link("video", t.video.url)}</span>` : ""}`)),
         section("Videos", list(videos, "film", (v) => head(link(v.title, v.url), month(v.date.slice(0, 7))))),
         section("Blog posts", list(posts, "pen", (p) => head(link(p.title, p.url), month(p.date.slice(0, 7))))),

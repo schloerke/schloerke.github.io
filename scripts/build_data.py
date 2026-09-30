@@ -105,6 +105,12 @@ TALKS = {  # talk repo -> hand-written entries, for repos with no date in the na
          "url": "https://schloerke.com/workshop-rinpharma24-shinylive/"},
     ],
 }
+TALKS_NO_REPO = [  # talks from the LaTeX CV with no talk repo
+    {"date": "2016-06-01", "title": "Analysis and Visualization of Large Complex Data with Tessera",
+     "venue": "Spring Research Conference, IIT", "url": "https://slides.com/schloerke/tessera-src-2016-5-25"},
+    {"date": "2010-09-01", "title": "helpr: Help for R", "venue": "Iowa State Working Group", "url": None},
+    {"date": "2010-08-01", "title": "GGally: A Plot Matrix for All Variable Types", "venue": "JSM 2010", "url": None},
+]
 TALK_VIDEO = {  # talk repo -> its opensource.posit.co recording (or a YouTube URL); shown with the talk, not under Videos
     "presentation-2021-08-12-harvard-plumber-async": "https://www.youtube.com/watch?v=eHrzsIGY0so",
     "presentation-2021-08-05-harvard-plumber-beginner": "https://www.youtube.com/watch?v=GPNFP7qIxHc",
@@ -460,7 +466,7 @@ def talks(videos):
     while batch := gh(f"users/{USER}/repos?per_page=100&page={page}"):
         repos += batch
         page += 1
-    out = []
+    out = [{"kind": "presentation", "repo": None, **t} for t in TALKS_NO_REPO]
     for r in repos:
         if r["name"] in TALKS:
             talks_ = [{"kind": r["name"].split("-")[0], "repo": r["full_name"], **t} for t in TALKS[r["name"]]]

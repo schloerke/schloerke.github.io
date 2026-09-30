@@ -713,8 +713,8 @@
         const li = el("tr", { id: `talk-${i}` });
         // fixed icon slots (repo, slides, video) so the columns line up
         const links = el("td", { class: "repo-links" }), span = el("span");
-        span.append(iconLink(`https://github.com/${t.repo}`, `GitHub: ${t.repo}`, ICONS.github),
-          t.url ? iconLink(t.url, t.url.includes("schloerke.com") ? "Slides" : "Website", ICONS.globe, "line") : el("span"));
+        span.append(t.repo ? iconLink(`https://github.com/${t.repo}`, `GitHub: ${t.repo}`, ICONS.github) : el("span"),
+          t.url ? iconLink(t.url, /schloerke\.com|slides\.com/.test(t.url) ? "Slides" : "Website", ICONS.globe, "line") : el("span"));
         if (t.video) span.append(iconLink(t.video.url, `Video: ${stats(t.video)}`, ICONS.film, "line"));
         links.append(span);
         li.append(links, el("td", {}, t.title), venueCell(t), dateCell(t.date));
