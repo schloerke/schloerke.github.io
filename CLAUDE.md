@@ -87,11 +87,12 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   name. The title is the repo description, then the README's first `# ` heading (via the `/readme` API, so
   `Readme.md` counts too), then the name slug. `repo` is the repo's full name; `url` is the repo homepage (`http://` upgraded
   to `https://`), or null if it is unset or on github.com. The talks section is a table: icons, title, venue, date.
-  The title is plain text; the icons are GitHub (octocat, the repo), a globe for `url` ("Slides" on schloerke.com,
+  The title is plain text; the icons are GitHub (octocat, the repo), a globe for `url` ("Slides" on schloerke.com or slides.com,
   else "Website"), and a film icon for `video` (its length and views in the tooltip), in fixed slots so they line up. Markdown and HTML are stripped out. `TALKS` (top of the script) hand-writes the entries for a repo
   whose name has no date (e.g. `workshop-rinpharma24-shinylive`), that holds several talks (shinydevseries
   → 3 episodes, 2016_03-trelliscope → 3 Tessera talks), or whose repo has no real title (the pre-2019 talks;
-  titles and venues come from the LaTeX CV in schloerke/curriculum_vitae). `venue` comes from `VENUES` (top of the script): regexes run against the talk repo name or
+  titles and venues come from the LaTeX CV in schloerke/curriculum_vitae). `TALKS_NO_REPO` (top of the script) hand-writes talks from the
+  LaTeX CV that have no repo; they get `repo: null` and an empty GitHub icon slot. The CV links a talk's `url`, else its repo, else shows plain text. `venue` comes from `VENUES` (top of the script): regexes run against the talk repo name or
   the raw video title, with `{y}` filled in from the year (e.g. `posit-conf` → `posit::conf(2026)`). A `TALKS` entry
   can set `venue` itself. A venue at the start or end of a title (`rstudio::conf(2022) - ...`) is removed from the title.
   The page shows it in the talks table's Venue column, and before the title as `venue · title` in video rows and the timeline tooltip.

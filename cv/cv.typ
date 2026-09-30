@@ -137,7 +137,9 @@
 == Talks & workshops
 #for t in talks {
   let extra = (t.at("venue", default: none), if t.at("video", default: none) != none { link(t.video.url)[video] }).filter(x => x != none)
-  row([#link(if t.at("url", default: none) != none { t.url } else { "https://github.com/" + t.repo }, t.title) #if extra.len() > 0 { dim[· #extra.join[ · ]] }],
+  let url = t.at("url", default: none)
+  if url == none and t.repo != none { url = "https://github.com/" + t.repo }
+  row([#maybe-link(url, t.title) #if extra.len() > 0 { dim[· #extra.join[ · ]] }],
     month(t.date.slice(0, 7)))
 }
 
