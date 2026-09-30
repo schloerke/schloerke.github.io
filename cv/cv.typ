@@ -20,7 +20,8 @@
 
 // No creation date, a month (not a day) in the footer, and rounded counts: the PDF's bytes only
 // change when something shown changes, so the nightly workflow commits it only then.
-#set document(title: cv.name + " CV", author: cv.name, date: none)
+// keywords: the build month, which the nightly workflow greps for to rebuild once a month
+#set document(title: cv.name + " CV", author: cv.name, date: none, keywords: ("built " + summary.updated.slice(0, 7),))
 #set page(paper: "us-letter", margin: (x: 0.75in, y: 0.7in), footer: context text(8pt, fill: muted)[
   #cv.name · CV #h(1fr) Updated #month(summary.updated.slice(0, 7)) · #counter(page).display() / #counter(page).final().first()
 ])
