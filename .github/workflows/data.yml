@@ -12,7 +12,11 @@ jobs:
   refresh:
     runs-on: ubuntu-latest
     steps:
+      # Push with a deploy key, not GITHUB_TOKEN: main's ruleset requires the `build` check,
+      # and this deploy key is the ruleset's only bypass (a personal repo can't list the Actions app).
       - uses: actions/checkout@v4
+        with:
+          ssh-key: ${{ secrets.DATA_DEPLOY_KEY }}
       - uses: astral-sh/setup-uv@v6
 
       - run: make data

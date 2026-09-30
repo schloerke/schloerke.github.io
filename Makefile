@@ -1,7 +1,7 @@
 .PHONY: help cv data data-prs data-packages data-other data-talks data-contributions serve
 
 PORT ?= 8000
-GITHUB_TOKEN ?= $(shell gh auth token)
+GITHUB_TOKEN ?= $(shell gh auth token 2>/dev/null)
 export GITHUB_TOKEN
 
 help: ## Show targets

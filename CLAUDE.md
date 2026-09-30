@@ -124,7 +124,10 @@ committing a gap. The page's "Data updated" date shows how stale the data is. If
 (e.g. after adding to `HIDE`), delete that file in `data/` and rerun its section (e.g. `make data-packages`).
 
 cranlogs and pypistats don't send CORS headers, which is why the data is fetched at build time
-rather than in the browser. `.github/workflows/data.yml` runs `make data` nightly and commits
+rather than in the browser. `main` has a repository ruleset ("main: CV builds") that requires `cv.yml`'s `build`
+check, and the repo allows auto-merge. Its one bypass is a deploy key: `data.yml` checks out with the
+`DATA_DEPLOY_KEY` secret (a write deploy key) so its direct pushes to `main` get through; a personal repo's ruleset
+can't list the GitHub Actions app as a bypass. `.github/workflows/data.yml` runs `make data` nightly and commits
 `data/` (and, on Mondays, `cv/cv_barret_schloerke.pdf`). Its `keepalive` job re-enables the workflow via the API each run, because GitHub
 disables scheduled workflows after 60 days without non-bot activity. The job fails after a
 hard-coded date on purpose; bump it yearly.
@@ -170,8 +173,8 @@ Colors are the site's light-mode values, copied into `cv/index.html` `:root` and
 The PDF is committed. `make cv` builds it with `--ignore-system-fonts --font-path cv/fonts` (Inter 4.1, OFL, plus
 Typst's bundled DejaVu Sans Mono). The nightly workflow rebuilds it weekly (Mondays, UTC) and on any manual run,
 with the same Typst version (0.13.1, pinned in `data.yml` and `cv.yml`; bump all three together).
-`.github/workflows/cv.yml` runs `make cv` on PRs that touch `cv/`, `data/`, or the `Makefile`, so a broken build
-fails there first; it commits nothing. The PDF's bytes only change when what it shows changes:
+`.github/workflows/cv.yml` runs `make cv` on every PR (no `paths:` filter, since its `build` job is a required check
+and a required check that never runs blocks the merge); it commits nothing. The PDF's bytes only change when what it shows changes:
 `document(date: none)`, a month rather than a day in the footer, and counts rounded down (`approx()`: PRs to 10s,
 totals to 100s, shown as `350+`), so the workflow's `git diff --cached --quiet` commits it only then. Emoji are
 stripped in the PDF since the vendored fonts have none. The page shows exact counts.
