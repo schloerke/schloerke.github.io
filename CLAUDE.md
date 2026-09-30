@@ -92,7 +92,8 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   whose name has no date (e.g. `workshop-rinpharma24-shinylive`), that holds several talks (shinydevseries
   → 3 episodes, 2016_03-trelliscope → 3 Tessera talks), or whose repo has no real title (the pre-2019 talks;
   titles and venues come from the LaTeX CV in schloerke/curriculum_vitae). `TALKS_NO_REPO` (top of the script) hand-writes talks from the
-  LaTeX CV that have no repo; they get `repo: null` and an empty GitHub icon slot. The CV links a talk's `url`, else its repo, else shows plain text. `venue` comes from `VENUES` (top of the script): regexes run against the talk repo name or
+  LaTeX CV that have no repo; they get `repo: null` and an empty GitHub icon slot. Their slides, if any, live in `talks/` (compressed with
+  Ghostscript `-dPDFSETTINGS=/ebook` first, to keep the repo small; helpr went from 12.4 MB to 0.9 MB). The CV links a talk's `url`, else its repo, else shows plain text. `venue` comes from `VENUES` (top of the script): regexes run against the talk repo name or
   the raw video title, with `{y}` filled in from the year (e.g. `posit-conf` → `posit::conf(2026)`). A `TALKS` entry
   can set `venue` itself. A venue at the start or end of a title (`rstudio::conf(2022) - ...`) is removed from the title.
   The page shows it in the talks table's Venue column, and before the title as `venue · title` in video rows and the timeline tooltip.

@@ -108,7 +108,8 @@ TALKS = {  # talk repo -> hand-written entries, for repos with no date in the na
 TALKS_NO_REPO = [  # talks from the LaTeX CV with no talk repo
     {"date": "2016-06-01", "title": "Analysis and Visualization of Large Complex Data with Tessera",
      "venue": "Spring Research Conference, IIT", "url": "https://slides.com/schloerke/tessera-src-2016-5-25"},
-    {"date": "2010-09-01", "title": "helpr: Help for R", "venue": "Iowa State Working Group", "url": None},
+    {"date": "2010-09-01", "title": "helpr: Help for R", "venue": "Iowa State Working Group",
+     "url": "https://schloerke.com/talks/2010-09-helpr.pdf"},
     {"date": "2010-08-01", "title": "GGally: A Plot Matrix for All Variable Types", "venue": "JSM 2010", "url": None},
 ]
 TALK_VIDEO = {  # talk repo -> its opensource.posit.co recording (or a YouTube URL); shown with the talk, not under Videos

@@ -41,6 +41,6 @@
 {"kind":"presentation","repo":"schloerke/presentation-2014_10_21-ggplot2_spatial_statistics","date":"2014-10-21","title":"ggplot2: displaying spatial and temporal data","venue":"Purdue Spatial Statistics Seminar"},
 {"kind":"presentation","repo":"schloerke/presentation-2014_06_27-Git","date":"2014-06-27","title":"git","venue":"Purdue Working Group"},
 {"kind":"presentation","repo":"schloerke/presentation-2014_02_14-minimize-work-inefficiencies","date":"2014-02-14","title":"Reducing Working Environment Inefficiencies","venue":"Purdue Graduate Statistics Seminar"},
-{"kind":"presentation","repo":null,"date":"2010-09-01","title":"helpr: Help for R","venue":"Iowa State Working Group","url":null},
+{"kind":"presentation","repo":null,"date":"2010-09-01","title":"helpr: Help for R","venue":"Iowa State Working Group","url":"https://schloerke.com/talks/2010-09-helpr.pdf"},
 {"kind":"presentation","repo":null,"date":"2010-08-01","title":"GGally: A Plot Matrix for All Variable Types","venue":"JSM 2010","url":null}
 ]
