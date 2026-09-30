@@ -50,14 +50,55 @@ LOGO = {  # repo -> logo, for repos with no pkgdown hex
     "posit-dev/brand-yml": "https://posit-dev.github.io/brand-yml/logos/tall/brand-yml-tall-color.svg",
 }
 EPICS = tomllib.loads(pathlib.Path(__file__).with_name("epics.toml").read_text())  # {lang: {package: [epic]}}
-TALKS = {  # talk repo -> hand-written entries, for repos with no date in the name or several talks in one
+TALKS = {  # talk repo -> hand-written entries, for repos with no date in the name, several talks in one,
+    # or no real title in the repo (older talks; titles and venues from the LaTeX CV, schloerke/curriculum_vitae)
     "presentation-2020-08-14-shinydevseries": [
-        {"date": "2020-09-09", "title": "Shiny Developer Series #12: reactlog",
+        {"date": "2020-09-09", "title": "Episode 12: reactlog", "venue": "Shiny Developer Series",
          "url": "https://shinydevseries.com/interview/ep012/"},
-        {"date": "2020-09-17", "title": "Shiny Developer Series #13: Inside Plumber 1.0",
+        {"date": "2020-09-17", "title": "Episode 13: Inside Plumber 1.0", "venue": "Shiny Developer Series",
          "url": "https://shinydevseries.com/interview/ep013/"},
-        {"date": "2020-10-03", "title": "Shiny Developer Series #14: Shining a Light on learnr",
+        {"date": "2020-10-03", "title": "Episode 14: Shining a Light on learnr", "venue": "Shiny Developer Series",
          "url": "https://shinydevseries.com/interview/ep014/"},
+    ],
+    "presentation-2018-08-20-nasa-shiny-lightning": [
+        {"date": "2018-08-20", "title": "Shiny", "venue": "NASA Datanauts"},
+    ],
+    "presentation-2017_03_29-web_scraping": [
+        {"date": "2017-03-29", "title": "Web Scraping with R"},  # not in the CV; title from the slides
+    ],
+    "presentation-2017_01_26-tidyverse": [
+        {"date": "2017-01-26", "title": 'tidyverse[c("magrittr", "dplyr", "tidyr")]',
+         "venue": "Purdue Graduate Statistics Seminar"},
+    ],
+    "presentation-2016_06_30-ggduo": [
+        {"date": "2016-06-30", "title": "ggduo: Pairs plot for two group data", "venue": "useR! 2016"},
+    ],
+    "presentation-2016_03-trelliscope": [  # the repo's slides.txt links all three
+        {"date": "2016-04-07", "title": "Analysis and Visualization of Large Complex Data with Tessera",
+         "venue": "Purdue Graduate Statistics Seminar", "url": "https://slides.com/schloerke/tessera-purdue-2016-4-7"},
+        {"date": "2016-03-24", "title": "Analysis and Visualization of Large Complex Data with Tessera",
+         "venue": "Iowa State Graphics Research Group", "url": "https://slides.com/schloerke/tessera-isu-2016-3"},
+        {"date": "2016-03-04", "title": "Analysis and Visualization of Large Complex Data with Tessera",
+         "venue": "NUMBAT Seminar, Monash University", "url": "https://slides.com/schloerke/tessera-monash-2016"},
+    ],
+    "presentation-2015_10_20-web_scraping": [
+        {"date": "2015-10-20", "title": "Web Scraping with R", "venue": "American Credit Acceptance"},
+    ],
+    "presentation-2015_02_24-trelliscope": [
+        {"date": "2015-02-24", "title": "Trelliscope: D&R visualization tool",
+         "venue": "Fields Institute Big Data Visualization",
+         "url": "https://www.fields.utoronto.ca/programs/scientific/14-15/bigdata/optimization/"},
+    ],
+    "presentation-2014_10_21-ggplot2_spatial_statistics": [
+        {"date": "2014-10-21", "title": "ggplot2: displaying spatial and temporal data",
+         "venue": "Purdue Spatial Statistics Seminar"},
+    ],
+    "presentation-2014_06_27-Git": [
+        {"date": "2014-06-27", "title": "git", "venue": "Purdue Working Group"},
+    ],
+    "presentation-2014_02_14-minimize-work-inefficiencies": [
+        {"date": "2014-02-14", "title": "Reducing Working Environment Inefficiencies",
+         "venue": "Purdue Graduate Statistics Seminar"},
     ],
     "workshop-rinpharma24-shinylive": [
         {"date": "2024-10-25", "title": "{shinylive}: Serverless Shiny applications workshop. An exercise in deploying your app to GitHub Pages", "venue": "R/Pharma 2024",
@@ -80,25 +121,30 @@ TALK_VIDEO = {  # talk repo -> its opensource.posit.co recording (or a YouTube U
     "presentation-2019-01-18-reactlog": "2019-09-03_barret-schloerke-reactlog-20-debugging-the-state-of-shiny-rstudio-2019",
 }
 VENUES = {  # regex on a talk repo name (or video title) -> venue; {y} is the talk's year
-    r"posit-conf": "posit::conf({y})",
+    r"posit-conf|posit-shiny-data-frame": "posit::conf({y})",
     r"posit::conf\(\d{4}\)": "posit::conf({y})",
     r"rstudioconf|2019-01-18-reactlog": "rstudio::conf({y})",
     r"rstudio-global": "rstudio::global({y})",
     r"-user-|ggduo": "useR! {y}",
-    r"shinyconf|appsilon-nightly|appsilon-shinylive": "ShinyConf {y}",
+    r"shinyconf|appsilon": "ShinyConf {y}",
     r"rinpharma": "R/Pharma {y}",
-    r"jsm": "JSM {y}",
+    r"jsm|2016_08_03_cognostics": "JSM {y}",
+    r"2017_04_14-cognostics": "CSESC {y}",
+    r"2019-05-02-shiny-reactlog-sparklyr": "Advanced R workshop, Northeastern University",
+    r"2020-04-29-reactlog": "Statistical Programming DC",
+    r"jnj22": "Johnson & Johnson Shiny Day",
     r"shinymeta": "ABACUS {y}",
     r"ggplot2-extenders": "ggplot2 extenders",
     r"open-source-pharma": "Open Source in Pharma",
     r"harvard": "Harvard R User Group",
     r"integrating-plumber": "RStudio Webinar",
     r"Data Science Lab": "Data Science Lab",
-    r"2016_02_18-graphql": "WOMBAT",
+    r"2016_02_18-graphql": "WOMBAT {y}",
 }
 VENUE_URL = {  # venue -> its home page; the page links the venue name
     "ggplot2 extenders": "https://exts.ggplot2.tidyverse.org/",
-    "WOMBAT": "https://wombat.numbat.space/",
+    "WOMBAT 2016": "https://wombat.numbat.space/",
+    "Shiny Developer Series": "https://shinydevseries.com/",
 }
 MIN_PRS = 3  # repos with fewer merged PRs are drive-by fixes
 MONTHS = 6  # pypistats only keeps 180 days
