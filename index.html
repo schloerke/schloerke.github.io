@@ -110,6 +110,7 @@
     /* talks, videos, posts, and papers tables */
     table.dated .date { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; padding-left: 1rem; }
     table.dated .venue { color: var(--text-2); padding-left: 1rem; white-space: nowrap; }
+    #papers .venue { white-space: normal; }
     #talks-list td.repo-links > span { grid-template-columns: repeat(3, 14px); }
     .more { color: var(--accent); font-size: .9rem; margin-top: .5rem; }
     td.spark svg { display: block; width: 100%; height: 24px; overflow: visible; }
@@ -269,6 +270,17 @@
         <tbody></tbody>
       </table>
       <button id="other-more" class="more"></button>
+
+      <h2 id="earlier-h">Earlier work</h2>
+      <table id="earlier" class="dated" aria-labelledby="earlier-h">
+        <thead><tr>
+          <th><span class="visually-hidden">Links</span></th>
+          <th>Project</th>
+          <th class="venue">Where</th>
+          <th class="date">Years</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
     </section>
 
     <section id="talks" aria-labelledby="talks-h">
@@ -321,18 +333,7 @@
           <th class="venue">Journal</th>
           <th class="date">Year</th>
         </tr></thead>
-        <tbody>
-          <tr><td class="repo-links"><a href="https://doi.org/10.1007/s00180-019-00950-7" aria-label="Paper" data-tip="Paper"></a></td>
-            <td>Parallel computing in linear mixed models</td><td class="venue"><i>Computational Statistics</i></td><td class="date">2020</td></tr>
-          <tr><td class="repo-links"><a href="https://journal.r-project.org/articles/RJ-2016-044/index.html" aria-label="Paper" data-tip="Paper"></a></td>
-            <td>Escape from Boxland: Generating a Library of High-Dimensional Geometric Shapes</td><td class="venue"><i>R Journal</i></td><td class="date">2016</td></tr>
-          <tr><td class="repo-links"><a href="https://vita.had.co.nz/papers/gpp.pdf" aria-label="Paper" data-tip="Paper"></a></td>
-            <td>The Generalized Pairs Plot</td><td class="venue"><i>JCGS</i></td><td class="date">2013</td></tr>
-          <tr><td class="repo-links"><a href="https://doi.org/10.1198/jcgs.2011.3de" aria-label="Paper" data-tip="Paper"></a></td>
-            <td>Delayed, Canceled, on Time, Boarding… Flying in the USA</td><td class="venue"><i>JCGS</i></td><td class="date">2011</td></tr>
-          <tr><td class="repo-links"><a href="https://doi.org/10.1080/09332480.2010.10739812" aria-label="Paper" data-tip="Paper"></a></td>
-            <td>Monitoring the 2008 Election Visually</td><td class="venue"><i>Chance</i></td><td class="date">2010</td></tr>
-        </tbody>
+        <tbody></tbody>
       </table>
       </details>
     </section>
@@ -730,6 +731,38 @@
       showAll(table, more, list.length, 6);
     }
 
+    // papers and earlier projects come from the CV (cv/cv.json)
+    function papers(list) {
+      const cv = document.querySelector('nav a[aria-label="CV"] path');
+      const d = [...cv.parentNode.children].map((p) => p.getAttribute("d")).join("");
+      for (const p of list) {
+        const links = el("td", { class: "repo-links" });
+        links.append(iconLink(p.url, `Paper: ${p.authors}`, d, "line"));
+        // "The R Journal 8(2): 243–257" -> "The R Journal"; volume and pages in the tooltip
+        const venue = el("td", { class: "venue", "data-tip": p.venue });
+        venue.append(el("i", {}, p.venue.replace(/\s+\d.*/, "")));
+        const tr = el("tr");
+        tr.append(links, el("td", {}, p.title), venue, dateCell(String(p.year)));
+        document.querySelector("#papers tbody").append(tr);
+      }
+    }
+
+    function earlier(list) {
+      for (const r of list) {
+        const gh = r.url.startsWith("https://github.com/");
+        const links = el("td", { class: "repo-links" });
+        links.append(gh ? iconLink(r.url, `GitHub: ${r.url.slice(19)}`, ICONS.github) : iconLink(r.url, "Website", ICONS.globe, "line"));
+        const name = el("td", { class: "name" });
+        name.append(el("code", {}, r.name), el("span", { class: "about" }, r.about));
+        const [y0, y1] = [r.start.slice(0, 4), r.end.slice(0, 4)];
+        const date = el("td", { class: "date" });
+        date.append(el("time", { datetime: r.start }, y0 === y1 ? y0 : `${y0}–${y1}`));
+        const tr = el("tr");
+        tr.append(links, name, el("td", { class: "venue" }, r.org), date);
+        document.querySelector("#earlier tbody").append(tr);
+      }
+    }
+
     const load = (name) => fetch(`data/${name}.json`).then((r) => r.json());
     load("summary").then((s) => {
       document.getElementById("hero").textContent = fmt.format(s.merged_prs);
@@ -742,12 +775,7 @@
     load("other").then(other);
     Promise.all([load("videos"), load("talks")]).then(([v, t]) => { talks(t); videos(v, t); });
     load("posts").then(posts);
-    // papers are hand-written above; each link gets the nav's CV (file) icon
-    document.querySelectorAll("#papers a").forEach((a) => {
-      const s = document.querySelector('nav a[aria-label="CV"] svg').cloneNode(true);
-      s.classList.add("line");
-      a.append(s);
-    });
+    fetch("cv/cv.json").then((r) => r.json()).then(({ publications, research }) => { papers(publications); earlier(research); });
   </script>
 </body>
 </html>

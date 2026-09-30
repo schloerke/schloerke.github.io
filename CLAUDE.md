@@ -183,8 +183,14 @@ stripped in the PDF since the vendored fonts have none. The page shows exact cou
 
 ## Hand-edited content
 
-The bio, papers list, and nav links are hand-written in `index.html`. The nav is all icons in two groups:
+The bio and nav links are hand-written in `index.html`. The nav is all icons in two groups:
 GitHub / Bluesky / ORCID (filled, Simple Icons, CC0), then CV (links to `cv/`) / Talks / Blog posts (outline, Lucide, ISC,
 styled by `.links .line`). Each icon link has `aria-label` and `title`.
-Papers are low priority, so that section is a `<details>` that starts collapsed. It is a hand-written
-`dated` table (icon, title, journal, year); a script fills each empty link with the nav's CV (file) icon.
+
+The page also fetches the hand-written `cv/cv.json`, so the CV and the home page share one source:
+- `publications` → the Papers table. Papers are low priority, so that section is a `<details>` that starts
+  collapsed. It is a `dated` table: the nav's CV (file) icon linking the paper (authors in the tooltip), title,
+  journal (the `venue` up to its first number, e.g. "The R Journal"; the full venue is in the tooltip), and year.
+- `research` → the "Earlier work" table under Other repos: projects from before PRs were common, so they
+  never reach `MIN_PRS`. Icon (GitHub if the `url` is on github.com, else a globe), name with its `about`,
+  `org`, and years (from `start` / `end`).
