@@ -125,7 +125,7 @@ committing a gap. The page's "Data updated" date shows how stale the data is. If
 
 cranlogs and pypistats don't send CORS headers, which is why the data is fetched at build time
 rather than in the browser. `.github/workflows/data.yml` runs `make data` nightly and commits
-`data/` (and, once a month, `cv/cv_barret_schloerke.pdf`). Its `keepalive` job re-enables the workflow via the API each run, because GitHub
+`data/` (and, on Mondays, `cv/cv_barret_schloerke.pdf`). Its `keepalive` job re-enables the workflow via the API each run, because GitHub
 disables scheduled workflows after 60 days without non-bot activity. The job fails after a
 hard-coded date on purpose; bump it yearly.
 
@@ -135,7 +135,7 @@ hard-coded date on purpose; bump it yearly.
 make data                         # rebuild all of data/ (uses `gh auth token` if GITHUB_TOKEN is unset)
 make data-packages                # rebuild one section; also data-prs, data-other, data-talks, data-contributions
 make data ONLY="packages other"   # rebuild several sections in one run
-make cv                           # build cv/cv_barret_schloerke.pdf with typst 0.13.1 (the nightly workflow rebuilds it monthly)
+make cv                           # build cv/cv_barret_schloerke.pdf with typst 0.13.1 (the nightly workflow rebuilds it weekly)
 make serve                        # preview at http://localhost:8000 (override with PORT=...); scripts/serve.py sends Cache-Control: no-store
 ```
 
@@ -168,10 +168,10 @@ vita.schloerke.com (from the `schloerke/curriculum_vitae` repo) until a one-page
 Colors are the site's light-mode values, copied into `cv/index.html` `:root` and the top of `cv/cv.typ`; keep them in sync.
 
 The PDF is committed. `make cv` builds it with `--ignore-system-fonts --font-path cv/fonts` (Inter 4.1, OFL, plus
-Typst's bundled DejaVu Sans Mono). The nightly workflow rebuilds it once a month, with the same Typst version
-(0.13.1, pinned in `data.yml`; bump both together): `cv.typ` writes `built YYYY-MM` into the PDF's keywords, and
-the workflow runs `make cv` only when that isn't the current month (so a skipped cron day just moves it to the next
-run), or on any manual run. The PDF's bytes only change when what it shows changes:
+Typst's bundled DejaVu Sans Mono). The nightly workflow rebuilds it weekly (Mondays, UTC) and on any manual run,
+with the same Typst version (0.13.1, pinned in `data.yml` and `cv.yml`; bump all three together).
+`.github/workflows/cv.yml` runs `make cv` on PRs that touch `cv/`, `data/`, or the `Makefile`, so a broken build
+fails there first; it commits nothing. The PDF's bytes only change when what it shows changes:
 `document(date: none)`, a month rather than a day in the footer, and counts rounded down (`approx()`: PRs to 10s,
 totals to 100s, shown as `350+`), so the workflow's `git diff --cached --quiet` commits it only then. Emoji are
 stripped in the PDF since the vendored fonts have none. The page shows exact counts.

@@ -1,0 +1,21 @@
+# Build the CV PDF on PRs that touch it or its data, so a broken cv.typ or cv.json fails here
+# instead of in the weekly rebuild. Nothing is committed.
+on:
+  pull_request:
+    paths:
+      - "cv/**"
+      - "data/**"
+      - "Makefile"
+      - ".github/workflows/cv.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: typst-community/setup-typst@v5
+        with:
+          typst-version: 0.13.1  # keep in sync with data.yml
+      - run: make cv
+      # informational: does this build match the committed PDF byte for byte?
+      - run: git diff --quiet cv/cv_barret_schloerke.pdf && echo "PDF matches the committed one" || echo "::notice::PDF differs from the committed one"

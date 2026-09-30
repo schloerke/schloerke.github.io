@@ -19,13 +19,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Rebuild the CV PDF once a month: on the first run whose month isn't in the PDF's
-      # keywords ("built YYYY-MM", from cv.typ). A skipped cron day just moves it to the next run.
-      # A manual run always rebuilds. Same typst as local builds and only the fonts in cv/fonts,
-      # so the bytes change only when the content does (the new month's footer always does).
+      # Rebuild the CV PDF weekly (Mondays, UTC) or on a manual run. Same typst as local builds
+      # and only the fonts in cv/fonts, so the bytes change only when the content does; with
+      # rounded counts, most weeks nothing is committed. (typst version: also in cv.yml)
       - id: cv
         run: |
-          if [[ "${{ github.event_name }}" == workflow_dispatch ]] || ! grep -aq "built $(date -u +%Y-%m)" cv/cv_barret_schloerke.pdf; then
+          if [[ "${{ github.event_name }}" == workflow_dispatch || "$(date -u +%u)" == 1 ]]; then
             echo "build=true" >> "$GITHUB_OUTPUT"
           fi
       - if: steps.cv.outputs.build
