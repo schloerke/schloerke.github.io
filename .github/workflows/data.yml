@@ -19,10 +19,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # Rebuild the CV PDF from the fresh data. Same typst as local builds, and only the fonts in
+      # cv/fonts, so the PDF's bytes change only when its content does; git diff below decides.
+      - uses: typst-community/setup-typst@v5
+        with:
+          typst-version: 0.13.1
+      - run: make cv
+
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898319+github-actions[bot]@users.noreply.github.com"
-          git add data
+          git add data cv/cv_barret_schloerke.pdf
           git diff --cached --quiet || (git commit -m "Refresh data" && git push)
 
   # GitHub disables scheduled workflows after 60 days without repo activity,

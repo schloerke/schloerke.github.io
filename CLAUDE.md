@@ -125,7 +125,7 @@ committing a gap. The page's "Data updated" date shows how stale the data is. If
 
 cranlogs and pypistats don't send CORS headers, which is why the data is fetched at build time
 rather than in the browser. `.github/workflows/data.yml` runs `make data` nightly and commits
-`data/`. Its `keepalive` job re-enables the workflow via the API each run, because GitHub
+`data/` (and `cv/cv_barret_schloerke.pdf`, rebuilt by `make cv`). Its `keepalive` job re-enables the workflow via the API each run, because GitHub
 disables scheduled workflows after 60 days without non-bot activity. The job fails after a
 hard-coded date on purpose; bump it yearly.
 
@@ -135,6 +135,7 @@ hard-coded date on purpose; bump it yearly.
 make data                         # rebuild all of data/ (uses `gh auth token` if GITHUB_TOKEN is unset)
 make data-packages                # rebuild one section; also data-prs, data-other, data-talks, data-contributions
 make data ONLY="packages other"   # rebuild several sections in one run
+make cv                           # build cv/cv_barret_schloerke.pdf with typst 0.13.1 (the nightly workflow also runs it)
 make serve                        # preview at http://localhost:8000 (override with PORT=...); scripts/serve.py sends Cache-Control: no-store
 ```
 
@@ -147,10 +148,36 @@ needs both an entry in `SECTIONS` (`scripts/build_data.py`) and a `data-<section
 In Conductor, `.conductor/settings.toml` defines a `site` run script (`make serve` on
 `$CONDUCTOR_PORT`) that starts automatically when a new workspace finishes setup.
 
+## CV (`cv/`)
+
+`cv/index.html` (schloerke.com/cv/) and `cv/cv.typ` (the PDF) render the same data: `cv/cv.json` is
+hand-written (contact, summary, experience, education, teaching, awards, publications, earlier research
+software, service, skills), and packages, talks, videos, posts, and totals come from `data/`. Packages are
+grouped by repo (languages joined, strongest role, every epic tagged with its language when a repo has several);
+maintainer / author repos get a full entry with epics as bullets, contributor repos a one-line "Also contributed to".
+The page builds plain text in document order so copy/paste reads like the PDF, and prints without its buttons.
+Contact info sits top right as a vertical list, each with its icon on the right edge (stacked under the name on
+narrow screens); list sections use an icon for a bullet (GitHub / globe, file, talk, film, pen, award, cap, users).
+Icons live in `cv/icons.json` (Simple Icons CC0 filled, Lucide ISC outline with `line: true`), shared by the page and
+`cv.typ`; most were copied out of `index.html`. The email is stored only as `["user", "domain"]` in `cv.json` and
+joined by JS (and Typst), so the address isn't in the HTML or JSON for simple scrapers.
+A `note` (awards, teaching, service) can have `links: {"words in the note": url}`; `linkify()` in both files splits the
+note around each phrase's first match and links it, so a phrase inside an earlier linked one isn't matched twice.
+Its "CV (PDF)" and "Resume (PDF)" links open in a new tab; the resume is still the old LaTeX one at
+vita.schloerke.com (from the `schloerke/curriculum_vitae` repo) until a one-page Typst resume exists.
+Colors are the site's light-mode values, copied into `cv/index.html` `:root` and the top of `cv/cv.typ`; keep them in sync.
+
+The PDF is committed. `make cv` builds it with `--ignore-system-fonts --font-path cv/fonts` (Inter 4.1, OFL, plus
+Typst's bundled DejaVu Sans Mono), and the nightly workflow runs `make cv` after `make data` with the same Typst
+version (0.13.1, pinned in `data.yml`; bump both together). The PDF's bytes only change when what it shows changes:
+`document(date: none)`, a month rather than a day in the footer, and counts rounded down (`approx()`: PRs to 10s,
+totals to 100s, shown as `350+`), so the workflow's `git diff --cached --quiet` commits it only then. Emoji are
+stripped in the PDF since the vendored fonts have none. The page shows exact counts.
+
 ## Hand-edited content
 
 The bio, papers list, and nav links are hand-written in `index.html`. The nav is all icons in two groups:
-GitHub / Bluesky / ORCID (filled, Simple Icons, CC0), then CV / Talks / Blog posts (outline, Lucide, ISC,
+GitHub / Bluesky / ORCID (filled, Simple Icons, CC0), then CV (links to `cv/`) / Talks / Blog posts (outline, Lucide, ISC,
 styled by `.links .line`). Each icon link has `aria-label` and `title`.
 Papers are low priority, so that section is a `<details>` that starts collapsed. It is a hand-written
 `dated` table (icon, title, journal, year); a script fills each empty link with the nav's CV (file) icon.

@@ -60,7 +60,7 @@ TALKS = {  # talk repo -> hand-written entries, for repos with no date in the na
          "url": "https://shinydevseries.com/interview/ep014/"},
     ],
     "workshop-rinpharma24-shinylive": [
-        {"date": "2024-10-25", "title": "{shinylive}: Serverless Shiny applications workshop", "venue": "R/Pharma 2024",
+        {"date": "2024-10-25", "title": "{shinylive}: Serverless Shiny applications workshop. An exercise in deploying your app to GitHub Pages", "venue": "R/Pharma 2024",
          "url": "https://schloerke.com/workshop-rinpharma24-shinylive/"},
     ],
 }
