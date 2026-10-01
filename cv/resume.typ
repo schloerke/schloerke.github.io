@@ -5,10 +5,10 @@
 #let posts = json("/data/posts.json")
 
 #show: style.with("Resume", size: 9pt, margin: (x: 0.6in, y: 0.5in))
-#show heading.where(level: 2): it => block(above: 1.1em, below: 0.5em, width: 100%, stroke: (bottom: 0.5pt + rule), inset: (bottom: 0.3em))[
+#show heading.where(level: 2): it => block(above: 1.4em, below: 0.6em, width: 100%, stroke: (bottom: 0.5pt + rule), inset: (bottom: 0.3em))[
   #text(10pt, weight: "semibold", it.body)
 ]
-#let row = row.with(above: 0.6em)
+#let row = row.with(above: 0.75em)
 
 // no tagline and fewer contacts than the CV, to keep the top quiet
 #header(spacing: 0.3em, tagline: false, contact: ("mail", "globe", "github", "linkedin"))
