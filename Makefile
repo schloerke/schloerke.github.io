@@ -22,8 +22,9 @@ data-talks: ## Rebuild talks, videos, and posts
 data-contributions: ## Rebuild contribution calendars
 	@$(MAKE) data ONLY=contributions
 
-cv: ## Build cv/cv_barret_schloerke.pdf from cv/cv.json and data/ (needs typst)
+cv: ## Build the CV and one-page resume PDFs in cv/ from cv/cv.json and data/ (needs typst)
 	typst compile --root . --ignore-system-fonts --font-path cv/fonts cv/cv.typ cv/cv_barret_schloerke.pdf
+	typst compile --root . --ignore-system-fonts --font-path cv/fonts cv/resume.typ cv/resume_barret_schloerke.pdf
 
 serve: ## Preview the site at http://localhost:$PORT (default 8000)
 	uv run scripts/serve.py $(PORT)

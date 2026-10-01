@@ -141,7 +141,7 @@ hard-coded date on purpose; bump it yearly.
 make data                         # rebuild all of data/ (uses `gh auth token` if GITHUB_TOKEN is unset)
 make data-packages                # rebuild one section; also data-prs, data-other, data-talks, data-contributions
 make data ONLY="packages other"   # rebuild several sections in one run
-make cv                           # build cv/cv_barret_schloerke.pdf with typst 0.13.1 (the nightly workflow rebuilds it weekly)
+make cv                           # build cv/cv_barret_schloerke.pdf and cv/resume_barret_schloerke.pdf with typst 0.13.1 (the nightly workflow rebuilds it weekly)
 make serve                        # preview at http://localhost:8000 (override with PORT=...); scripts/serve.py sends Cache-Control: no-store
 ```
 
@@ -169,11 +169,15 @@ Icons live in `cv/icons.json` (Simple Icons CC0 filled, Lucide ISC outline with 
 joined by JS (and Typst), so the address isn't in the HTML or JSON for simple scrapers.
 A `note` (awards, teaching, service) can have `links: {"words in the note": url}`; `linkify()` in both files splits the
 note around each phrase's first match and links it, so a phrase inside an earlier linked one isn't matched twice.
-Its "CV (PDF)" and "Resume (PDF)" links open in a new tab; the resume is still the old LaTeX one at
-vita.schloerke.com (from the `schloerke/curriculum_vitae` repo) until a one-page Typst resume exists.
+Its "CV (PDF)" and "Resume (PDF)" links open in a new tab. `cv/resume.typ` is the one-page resume
+(`cv/resume_barret_schloerke.pdf`): the same data cut down (full bullets for the two current roles, one for the rest except the internship,
+top 8 maintained / authored repos, talk / video / post counts, a few awards; no tagline, no role on package rows,
+and only email / website / GitHub / LinkedIn for contacts). It asserts it is one page, so
+`make cv` fails if new content pushes it over. `cv/style.typ` holds what both PDFs share (colors, page and text
+setup via `#show: style.with(...)`, `row()`, `approx()`, `icon()`, the per-repo `repos` list, and the header).
 Colors are the site's light-mode values, copied into `cv/index.html` `:root` and the top of `cv/cv.typ`; keep them in sync.
 
-The PDF is committed. `make cv` builds it with `--ignore-system-fonts --font-path cv/fonts` (Inter 4.1, OFL, plus
+The PDF is committed. `make cv` builds both PDFs with `--ignore-system-fonts --font-path cv/fonts` (Inter 4.1, OFL, plus
 Typst's bundled DejaVu Sans Mono). The nightly workflow rebuilds it weekly (Mondays, UTC) and on any manual run,
 with the same Typst version (0.13.1, pinned in `data.yml` and `cv.yml`; bump all three together).
 `.github/workflows/cv.yml` runs `make cv` on every PR (no `paths:` filter, since its `build` job is a required check
