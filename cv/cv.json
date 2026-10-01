@@ -10,7 +10,7 @@
     {"icon": "orcid", "label": "ORCID", "text": "0000-0001-9986-114X", "url": "https://orcid.org/0000-0001-9986-114X"},
     {"icon": "linkedin", "label": "LinkedIn", "text": "schloerke", "url": "https://www.linkedin.com/in/schloerke"}
   ],
-  "summary": "Software engineer at Posit, where I build and maintain tools in the Shiny ecosystem for both R and Python, including shiny, py-shiny, shinytest2, shinylive, plumber, and reactlog. Lately that means OpenTelemetry for Shiny, LLM-powered apps, and custom UI with React. PhD in Statistics from Purdue University, focused on large data visualization.",
+  "summary": "Senior software engineer on Shiny, Posit's web framework for R and Python (1M+ monthly downloads). 2,000+ merged pull requests across 160+ GitHub repositories since 2018. Current work: OpenTelemetry for Shiny, LLM-powered apps, and React-based custom UI. PhD in Statistics from Purdue University, focused on large data visualization.",
   "education": [
     {
       "degree": "PhD, Statistics", "org": "Purdue University", "place": "West Lafayette, IN",
@@ -25,16 +25,16 @@
     {
       "role": "Senior Software Engineer", "org": "Posit", "url": "https://posit.co", "place": "Remote", "start": "2022-01", "end": null,
       "bullets": [
-        "Core developer of Shiny for Python, a framework for building interactive web apps straight from Python.",
-        "Architected Playwright testing controllers for every Shiny for Python UI component, run by 1000+ pytest tests across parallel CI workers.",
+        "Core developer of Shiny for Python (200K+ monthly downloads), a framework for interactive web apps.",
+        "Architected Playwright testing controllers for every Shiny for Python UI component. Cut 7+ hours of CI compute to a 4.5-minute run by spreading 1000+ pytest tests across 170 parallel jobs (5 Python versions × 3 browsers).",
         "Built shinylive for R and Python, which export Shiny apps to static sites that run in the browser with WebAssembly.",
-        "Lately: OpenTelemetry for Shiny, LLM-powered apps (querychat, shinychat), and custom Shiny UI with React (shinyreact)."
+        "Added OpenTelemetry support; built LLM-powered apps (querychat, shinychat) and React-based UI (shinyreact)."
       ]
     },
     {
       "role": "Software Engineer", "org": "RStudio (now Posit)", "url": "https://posit.co", "place": "Remote", "start": "2018-01", "end": "2021-12",
       "bullets": [
-        "Core developer of Shiny, an R package for building interactive web apps straight from R.",
+        "Core developer of Shiny, an R package for building interactive web apps in R.",
         "Architected and automated nightly testing of 150+ Shiny apps with GitHub Actions on Mac, Windows, and Linux across 5 R versions (shinycoreci).",
         "Converted Shiny's core JavaScript to TypeScript.",
         "Maintained plumber (R web APIs), reactlog (reactivity visualizer), shinytest2, and dozens of packages in the Shiny ecosystem."
