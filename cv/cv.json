@@ -10,7 +10,7 @@
     {"icon": "orcid", "label": "ORCID", "text": "0000-0001-9986-114X", "url": "https://orcid.org/0000-0001-9986-114X"},
     {"icon": "linkedin", "label": "LinkedIn", "text": "schloerke", "url": "https://www.linkedin.com/in/schloerke"}
   ],
-  "summary": "Senior software engineer on Shiny, Posit's web framework for R and Python (1M+ monthly downloads). 2,000+ merged pull requests across 160+ GitHub repositories since 2018. Current work: OpenTelemetry for Shiny, LLM-powered apps, and React-based custom UI. PhD in Statistics from Purdue University, focused on large data visualization.",
+  "summary": "Senior software engineer on Shiny, Posit's web framework for R and Python (1M+ monthly downloads). 2,300+ merged pull requests across 160+ GitHub repositories since 2018. Current work: OpenTelemetry for Shiny, LLM-powered apps, and React-based custom UI. PhD in Statistics from Purdue University, focused on large data visualization.",
   "education": [
     {
       "degree": "PhD, Statistics", "org": "Purdue University", "place": "West Lafayette, IN",
@@ -26,48 +26,48 @@
       "role": "Senior Software Engineer", "org": "Posit", "url": "https://posit.co", "place": "Remote", "start": "2022-01", "end": null,
       "bullets": [
         "Core developer of Shiny for Python (200K+ monthly downloads), a framework for interactive web apps.",
-        "Architected Playwright testing controllers for every Shiny for Python UI component. Cut 7+ hours of CI compute to a 4.5-minute run by spreading 1000+ pytest tests across 170 parallel jobs (5 Python versions × 3 browsers).",
+        "Cut CI time 98%, measured by 4+ hours of testing finishing in a 4.5-minute run, by architecting Playwright controllers for every Shiny for Python component and spreading 1000+ tests over 170 jobs (5 Pythons × 3 browsers).",
         "Built shinylive for R and Python, which export Shiny apps to static sites that run in the browser with WebAssembly.",
-        "Added OpenTelemetry support; built LLM-powered apps (querychat, shinychat) and React-based UI (shinyreact)."
+        "Enabled every Shiny user to trace apps with OpenTelemetry, build LLM-powered apps (querychat, shinychat), and pair agentic coding with React-based UI (shinyreact)."
       ]
     },
     {
       "role": "Software Engineer", "org": "RStudio (now Posit)", "url": "https://posit.co", "place": "Remote", "start": "2018-01", "end": "2021-12",
       "bullets": [
         "Core developer of Shiny, an R package for building interactive web apps in R.",
-        "Architected and automated nightly testing of 150+ Shiny apps with GitHub Actions on Mac, Windows, and Linux across 5 R versions (shinycoreci).",
-        "Converted Shiny's core JavaScript to TypeScript.",
-        "Maintained plumber (R web APIs), reactlog (reactivity visualizer), shinytest2, and dozens of packages in the Shiny ecosystem."
+        "Cut release testing from 3 weeks across 10 people to under 2 days for 2 by architecting shinycoreci: nightly GitHub Actions testing of 150+ apps on Mac, Windows, and Linux × 5 R versions.",
+        "Migrated Shiny's core JavaScript to TypeScript, giving the team confidence to change client code, by porting the client library to typed modules.",
+        "Sustained plumber, reactlog, shinytest2, and dozens of other Shiny packages by owning releases, docs, and triage."
       ]
     },
     {
       "role": "Tool Development Team", "org": "Gates Foundation: HBGDki", "url": "http://hbgdki.org", "place": "Remote", "start": "2016-04", "end": "2018-12",
       "bullets": [
         "Produced custom summary statistics for 75+ datasets to feed visualization apps.",
-        "Kept data secure while coordinating with five other data scientists.",
-        "Created and maintained template R packages for standardized package development."
+        "Protected sensitive study data by coordinating secure data-handling practices with five other data scientists.",
+        "Standardized the team's R package development by creating and maintaining template R packages."
       ]
     },
     {
       "role": "Researcher, DARPA XDATA and D3M grants", "org": "Purdue University", "url": "https://www.darpa.mil/program/data-driven-discovery-of-models", "place": "West Lafayette, IN", "start": "2016-09", "end": "2017-12",
       "bullets": [
-        "Worked remotely with Hafen Consulting, Kitware, and KnowledgeVis on a web interface for subject matter experts to explore machine learning pipelines.",
-        "Lead point of contact for integrating services with other working groups."
+        "Delivered a web interface for subject matter experts to explore machine learning pipelines by partnering remotely with Hafen Consulting, Kitware, and KnowledgeVis.",
+        "Led service integration across 15 partner working groups by serving as the lead point of contact."
       ]
     },
     {
       "role": "Software Engineer", "org": "Metamarkets", "place": "San Francisco, CA", "start": "2011-01", "end": "2012-07",
       "bullets": [
         "Built interactive D3 visualizations on DVL, a reactive data visualization library, in CoffeeScript.",
-        "Wrote Node.js front-end servers: automated deploys, server clusters, and company / user management.",
-        "Cut site startup time and trimmed data queries to reduce server load."
+        "Wrote Node.js front-end servers that automated deploys, clusters, and company / user management, allowing anyone on the team to ship or debug the client experience.",
+        "Reduced site startup time and server load by trimming data queries and startup work."
       ]
     },
     {
       "role": "Data Scientist Intern", "org": "Novartis Pharmaceutical R&D", "place": "Basel, Switzerland", "start": "2008-05", "end": "2008-08",
       "bullets": [
-        "Built a Gantt chart tool showing employee availability for management.",
-        "Wrote a web tutorial of common graphics as reusable plotting layers."
+        "Equipped management with a live view of employee availability by building a Gantt chart tool.",
+        "Standardized common graphics for the R&D team by writing a web tutorial that packaged them as reusable plotting layers."
       ]
     }
   ],
