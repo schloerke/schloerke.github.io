@@ -23,7 +23,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Rebuild the CV PDF weekly (Mondays, UTC) or on a manual run. Same typst as local builds
+      # Rebuild the CV and resume PDFs weekly (Mondays, UTC) or on a manual run. Same typst as local builds
       # and only the fonts in cv/fonts, so the bytes change only when the content does; with
       # rounded counts, most weeks nothing is committed. (typst version: also in cv.yml)
       - id: cv
@@ -41,7 +41,7 @@ jobs:
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898319+github-actions[bot]@users.noreply.github.com"
-          git add data cv/cv_barret_schloerke.pdf
+          git add data cv/*.pdf
           git diff --cached --quiet || (git commit -m "Refresh data" && git push)
 
   # GitHub disables scheduled workflows after 60 days without repo activity,

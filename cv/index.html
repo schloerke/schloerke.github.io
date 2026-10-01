@@ -88,7 +88,7 @@
     <p class="tagline mono" id="tagline"></p>
     <nav class="actions">
       <a href="cv_barret_schloerke.pdf" target="_blank" rel="noopener">CV (PDF) ↗</a>
-      <a href="https://vita.schloerke.com/resume_barret_schloerke.pdf" target="_blank" rel="noopener">Resume (PDF) ↗</a>
+      <a href="resume_barret_schloerke.pdf" target="_blank" rel="noopener">Resume (PDF) ↗</a>
     </nav>
     </div>
     <ul class="contact" id="contact"></ul>
@@ -151,7 +151,7 @@
     function render(cv, icons, pkgs, talks, videos, posts, summary) {
       ICONS = icons;
       document.getElementById("title").textContent = cv.title;
-      document.getElementById("tagline").textContent = cv.tagline;
+      document.getElementById("tagline").innerText = cv.tagline.join("\n");
       // the address is only ever in cv.json as its two halves, so it isn't in the HTML for scrapers to find
       document.getElementById("contact").innerHTML = cv.contact.map((c) => {
         const [text, url] = c.email ? [c.email.join("@"), `mailto:${c.email.join("@")}`] : [c.text, c.url];

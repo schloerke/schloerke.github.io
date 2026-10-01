@@ -1,7 +1,7 @@
 {
   "name": "Barret Schloerke",
   "title": "Senior Software Engineer, Posit",
-  "tagline": "code[c(\"architect\", \"manager\", \"philosopher\")]",
+  "tagline": ["code[c(\"architect\", \"manager\", \"philosopher\")]", "data[c(\"wrangler\", \"explorer\", \"visualizer\")]"],
   "contact": [
     {"icon": "mail", "label": "Email", "email": ["schloerke", "gmail.com"]},
     {"icon": "globe", "label": "Website", "text": "schloerke.com", "url": "https://schloerke.com"},

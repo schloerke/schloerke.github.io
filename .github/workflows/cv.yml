@@ -1,6 +1,7 @@
-# Build the CV PDF on every PR, so a broken cv.typ or cv.json fails here instead of in the
-# weekly rebuild. Nothing is committed. `build` is a required check on main (repo ruleset),
-# so it has no `paths:` filter: a required check that never runs would block the merge.
+# Build the CV and resume PDFs on every PR, so a broken cv.typ / resume.typ / cv.json, or a
+# resume that outgrew one page, fails here instead of in the weekly rebuild.
+# Nothing is committed. `build` is a required check on main (repo ruleset), so it has no
+# `paths:` filter: a required check that never runs would block the merge.
 on:
   pull_request:
 
