@@ -113,6 +113,10 @@ TALKS_NO_REPO = [  # talks from the LaTeX CV with no talk repo
     {"date": "2010-08-01", "title": "GGally: A Plot Matrix for All Variable Types", "venue": "JSM 2010", "url": None},
 ]
 TALK_VIDEO = {  # talk repo -> its opensource.posit.co recording (or a YouTube URL); shown with the talk, not under Videos
+    # a list gives one recording per TALKS entry, in order
+    "presentation-2020-08-14-shinydevseries": ["https://www.youtube.com/watch?v=RcnfYcSsY8w",
+                                               "https://www.youtube.com/watch?v=qOQMdtPdfU4",
+                                               "https://www.youtube.com/watch?v=zqV4nUiO7-4"],
     "presentation-2021-08-12-harvard-plumber-async": "https://www.youtube.com/watch?v=eHrzsIGY0so",
     "presentation-2021-08-05-harvard-plumber-beginner": "https://www.youtube.com/watch?v=GPNFP7qIxHc",
     "presentation-2025-11-12-ggplot2-extenders-GGally": "https://www.youtube.com/watch?v=Q4Cf_pIr4gs",
@@ -493,13 +497,15 @@ def talks(videos):
                        "url": home if home and "github.com/" not in home else None}]  # the repo has its own link
         else:
             continue
-        if (slug := TALK_VIDEO.get(r["name"], "")).startswith("https://www.youtube.com/"):
-            talks_[0]["video"] = youtube(slug)
-        elif slug:
-            url = f"https://opensource.posit.co/resources/videos/{slug}/"
-            if video := next((v for v in videos if v["url"] == url), None):
-                videos.remove(video)
-                talks_[0]["video"] = video
+        slugs = TALK_VIDEO.get(r["name"], [])
+        for talk, slug in zip(talks_, [slugs] if isinstance(slugs, str) else slugs):  # a list: one per TALKS entry
+            if slug.startswith("https://www.youtube.com/"):
+                talk["video"] = youtube(slug)
+            elif slug:
+                url = f"https://opensource.posit.co/resources/videos/{slug}/"
+                if video := next((v for v in videos if v["url"] == url), None):
+                    videos.remove(video)
+                    talk["video"] = video
         out += talks_
     return sorted(out, key=lambda t: t["date"], reverse=True)
 

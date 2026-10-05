@@ -100,7 +100,8 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   `VENUE_URL` (top of the script) hand-maps a venue to its home page; that row gets a `venue_url` and the venue name becomes a link. `TALK_VIDEO` (top of the script) hand-maps a talk repo to
   its opensource.posit.co recording, because the video's date and title rarely match the talk's. That video
   moves out of `videos.json` and into the talk's `video` field. A `TALK_VIDEO` value can instead be a YouTube URL, for a
-  recording not on opensource.posit.co (e.g. Harvard R User Group). Its date, title, length, and views are scraped from the
+  recording not on opensource.posit.co (e.g. Harvard R User Group), or a list of them, one per `TALKS` entry of that repo
+  (shinydevseries → 3 episodes). Its date, title, length, and views are scraped from the
   watch page's embedded JSON (no API key). GitHub's runners often get a bot-check page instead, so then the committed
   `talks.json` video is kept (with a warning). The page shows it as the talk row's film icon (Lucide, ISC),
   and the Videos summary count still includes it.
