@@ -660,12 +660,14 @@
       return td;
     };
 
-    const stats = (v) => `${v.minutes} min · ${fmt.format(v.views)} views`;
+    // a hand-written TALK_VIDEO (not on YouTube) may have a note instead of minutes / views
+    const stats = (v) => [v.minutes && `${v.minutes} min`, v.views != null && `${fmt.format(v.views)} views`, v.note]
+      .filter(Boolean).join(" · ");
 
     // talk recordings live on their talk (see TALK_VIDEO) but count toward the total
     function videos(list, talks) {
       const all = [...list, ...talks.filter((t) => t.video).map((t) => t.video)];
-      const views = all.reduce((s, v) => s + v.views, 0);
+      const views = all.reduce((s, v) => s + (v.views ?? 0), 0);
       document.getElementById("videos-summary").textContent =
         `${all.length} recordings (${all.length - list.length} with their talks above), ${fmt.format(views)} views on YouTube`;
       const table = document.getElementById("videos-list");

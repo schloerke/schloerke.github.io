@@ -113,9 +113,22 @@ TALKS_NO_REPO = [  # talks from the LaTeX CV with no talk repo
     {"date": "2010-08-01", "title": "GGally: A Plot Matrix for All Variable Types", "venue": "JSM 2010", "url": None},
 ]
 TALK_VIDEO = {  # talk repo -> its opensource.posit.co recording (or a YouTube URL); shown with the talk, not under Videos
+    # a list gives one recording per TALKS entry, in order
+    "presentation-2020-08-14-shinydevseries": ["https://www.youtube.com/watch?v=RcnfYcSsY8w",
+                                               "https://www.youtube.com/watch?v=qOQMdtPdfU4",
+                                               "https://www.youtube.com/watch?v=zqV4nUiO7-4"],
     "presentation-2021-08-12-harvard-plumber-async": "https://www.youtube.com/watch?v=eHrzsIGY0so",
     "presentation-2021-08-05-harvard-plumber-beginner": "https://www.youtube.com/watch?v=GPNFP7qIxHc",
     "presentation-2025-11-12-ggplot2-extenders-GGally": "https://www.youtube.com/watch?v=Q4Cf_pIr4gs",
+    "presentation-2022-05-26-rinpharma-shinytest2": "https://www.youtube.com/watch?v=mh0HMPqLyhQ",
+    "presentation-2022-04-27-appsilon-shinytest2": "https://www.youtube.com/watch?v=EOVPBN5o8F8",
+    # a dict is a hand-written video hosted elsewhere
+    "presentation-2015_02_24-trelliscope": {"date": "2015-02-24", "title": "A Kaleidoscope of Statistical Graphics Research Projects",
+                                            "venue": None, "url": "https://video-archive.fields.utoronto.ca/view/3476",
+                                            "minutes": None, "views": None, "note": "my part starts at ~52 min"},
+    # no public recording, and none coming (checked 2026-10): every other talk in talks.json without a video, i.e.
+    # jsm-querychat, shinyconf-ai-kung-fu (2025), open-source-pharma otel (2026), jnj22 shinytest2, 2020-04-29 reactlog
+    # (Statistical Programming DC), ggduo (useR! 2016), and everything before 2020 except the trelliscope talk above
     "presentation-2025-09-17-posit-conf-otel": "2025-11-07_observability-at-scale-barret-schloerke-posit-positconf2025",
     "presentation-2025-08-09-user-plumber2": "2025-10-29_plumber2-streamlining-web-api-development-in-r-barret-schloerke",
     "presentation-2024-08-13-posit-shiny-data-frame": "2024-10-31_barret-schloerke-editable-data-frames-in-py-shiny-updating-original-data-in-real-time",
@@ -134,6 +147,7 @@ VENUES = {  # regex on a talk repo name (or video title) -> venue; {y} is the ta
     r"rstudio-global": "rstudio::global({y})",
     r"-user-|ggduo": "useR! {y}",
     r"shinyconf|appsilon": "ShinyConf {y}",
+    r"2022-05-26-rinpharma": "R/Pharma Shiny for FDA Submissions",
     r"rinpharma": "R/Pharma {y}",
     r"jsm|2016_08_03_cognostics": "JSM {y}",
     r"2017_04_14-cognostics": "CSESC {y}",
@@ -152,6 +166,7 @@ VENUE_URL = {  # venue -> its home page; the page links the venue name
     "ggplot2 extenders": "https://exts.ggplot2.tidyverse.org/",
     "WOMBAT 2016": "https://wombat.numbat.space/",
     "Shiny Developer Series": "https://shinydevseries.com/",
+    "Statistical Programming DC": "https://www.meetup.com/data-science-dc/events/270217358/",
 }
 MIN_PRS = 3  # repos with fewer merged PRs are drive-by fixes
 MONTHS = 6  # pypistats only keeps 180 days
@@ -489,13 +504,17 @@ def talks(videos):
                        "url": home if home and "github.com/" not in home else None}]  # the repo has its own link
         else:
             continue
-        if (slug := TALK_VIDEO.get(r["name"], "")).startswith("https://www.youtube.com/"):
-            talks_[0]["video"] = youtube(slug)
-        elif slug:
-            url = f"https://opensource.posit.co/resources/videos/{slug}/"
-            if video := next((v for v in videos if v["url"] == url), None):
-                videos.remove(video)
-                talks_[0]["video"] = video
+        slugs = TALK_VIDEO.get(r["name"], [])
+        for talk, slug in zip(talks_, slugs if isinstance(slugs, list) else [slugs]):  # a list: one per TALKS entry
+            if isinstance(slug, dict):  # hand-written, hosted elsewhere
+                talk["video"] = slug
+            elif slug.startswith("https://www.youtube.com/"):
+                talk["video"] = youtube(slug)
+            elif slug:
+                url = f"https://opensource.posit.co/resources/videos/{slug}/"
+                if video := next((v for v in videos if v["url"] == url), None):
+                    videos.remove(video)
+                    talk["video"] = video
         out += talks_
     return sorted(out, key=lambda t: t["date"], reverse=True)
 
