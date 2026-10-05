@@ -454,11 +454,15 @@ def venue(text, year):
 
 def youtube(url):
     """A video not on opensource.posit.co: date, title, length, and views from its YouTube watch page."""
-    page = fetch(url, raw=True)
+    page = fetch(url, raw=True) or ""
     # ponytail: scrapes the page's embedded player JSON; use the YouTube Data API if this breaks
     get = lambda k: json.loads(re.search(rf'"{k}":("[^"]*")', page).group(1))
-    return {"date": get("publishDate")[:10], "title": get("title"), "venue": None, "url": url,
-            "minutes": round(int(get("lengthSeconds")) / 60), "views": int(get("viewCount"))}
+    try:
+        return {"date": get("publishDate")[:10], "title": get("title"), "venue": None, "url": url,
+                "minutes": round(int(get("lengthSeconds")) / 60), "views": int(get("viewCount"))}
+    except AttributeError:  # GitHub's runners get a "confirm you're not a bot" page: keep the committed video
+        print(f"warning: no video data on {url}, keeping the committed one", file=sys.stderr)
+        return next((t["video"] for t in read("talks") or [] if (t.get("video") or {}).get("url") == url), None)
 
 
 def talks(videos):

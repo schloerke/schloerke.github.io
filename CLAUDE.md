@@ -101,7 +101,8 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   its opensource.posit.co recording, because the video's date and title rarely match the talk's. That video
   moves out of `videos.json` and into the talk's `video` field. A `TALK_VIDEO` value can instead be a YouTube URL, for a
   recording not on opensource.posit.co (e.g. Harvard R User Group). Its date, title, length, and views are scraped from the
-  watch page's embedded JSON (no API key). The page shows it as the talk row's film icon (Lucide, ISC),
+  watch page's embedded JSON (no API key). GitHub's runners often get a bot-check page instead, so then the committed
+  `talks.json` video is kept (with a warning). The page shows it as the talk row's film icon (Lucide, ISC),
   and the Videos summary count still includes it.
   Videos and blog posts are tables laid out like the talks table (class `dated`, shared `venueCell` / `dateCell`):
   videos have a film icon (length and views in the tooltip), title, venue, and date; posts have a pen icon, title, and date.
