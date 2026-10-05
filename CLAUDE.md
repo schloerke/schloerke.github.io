@@ -101,7 +101,9 @@ Each file puts one list item or top-level key per line (`dump()`), so a changed 
   its opensource.posit.co recording, because the video's date and title rarely match the talk's. That video
   moves out of `videos.json` and into the talk's `video` field. A `TALK_VIDEO` value can instead be a YouTube URL, for a
   recording not on opensource.posit.co (e.g. Harvard R User Group), or a list of them, one per `TALKS` entry of that repo
-  (shinydevseries → 3 episodes). Its date, title, length, and views are scraped from the
+  (shinydevseries → 3 episodes), or a hand-written video dict for one hosted elsewhere (the Fields Institute archive), whose
+  `minutes` / `views` can be null and whose `note` goes in the tooltip. A comment under `TALK_VIDEO` lists the talks
+  known to have no public recording, so nobody goes looking again. Its date, title, length, and views are scraped from the
   watch page's embedded JSON (no API key). GitHub's runners often get a bot-check page instead, so then the committed
   `talks.json` video is kept (with a warning). The page shows it as the talk row's film icon (Lucide, ISC),
   and the Videos summary count still includes it.

@@ -122,7 +122,13 @@ TALK_VIDEO = {  # talk repo -> its opensource.posit.co recording (or a YouTube U
     "presentation-2025-11-12-ggplot2-extenders-GGally": "https://www.youtube.com/watch?v=Q4Cf_pIr4gs",
     "presentation-2022-05-26-rinpharma-shinytest2": "https://www.youtube.com/watch?v=mh0HMPqLyhQ",
     "presentation-2022-04-27-appsilon-shinytest2": "https://www.youtube.com/watch?v=EOVPBN5o8F8",
-    # no recording, won't be uploaded: presentation-2025-08-07-jsm-querychat, presentation-2025-04-10-shinyconf-ai-kung-fu
+    # a dict is a hand-written video hosted elsewhere
+    "presentation-2015_02_24-trelliscope": {"date": "2015-02-24", "title": "A Kaleidoscope of Statistical Graphics Research Projects",
+                                            "venue": None, "url": "https://video-archive.fields.utoronto.ca/view/3476",
+                                            "minutes": None, "views": None, "note": "my part starts at ~52 min"},
+    # no public recording, and none coming (checked 2026-10): every other talk in talks.json without a video, i.e.
+    # jsm-querychat, shinyconf-ai-kung-fu (2025), open-source-pharma otel (2026), jnj22 shinytest2, 2020-04-29 reactlog
+    # (Statistical Programming DC), ggduo (useR! 2016), and everything before 2020 except the trelliscope talk above
     "presentation-2025-09-17-posit-conf-otel": "2025-11-07_observability-at-scale-barret-schloerke-posit-positconf2025",
     "presentation-2025-08-09-user-plumber2": "2025-10-29_plumber2-streamlining-web-api-development-in-r-barret-schloerke",
     "presentation-2024-08-13-posit-shiny-data-frame": "2024-10-31_barret-schloerke-editable-data-frames-in-py-shiny-updating-original-data-in-real-time",
@@ -160,6 +166,7 @@ VENUE_URL = {  # venue -> its home page; the page links the venue name
     "ggplot2 extenders": "https://exts.ggplot2.tidyverse.org/",
     "WOMBAT 2016": "https://wombat.numbat.space/",
     "Shiny Developer Series": "https://shinydevseries.com/",
+    "Statistical Programming DC": "https://www.meetup.com/data-science-dc/events/270217358/",
 }
 MIN_PRS = 3  # repos with fewer merged PRs are drive-by fixes
 MONTHS = 6  # pypistats only keeps 180 days
@@ -498,8 +505,10 @@ def talks(videos):
         else:
             continue
         slugs = TALK_VIDEO.get(r["name"], [])
-        for talk, slug in zip(talks_, [slugs] if isinstance(slugs, str) else slugs):  # a list: one per TALKS entry
-            if slug.startswith("https://www.youtube.com/"):
+        for talk, slug in zip(talks_, slugs if isinstance(slugs, list) else [slugs]):  # a list: one per TALKS entry
+            if isinstance(slug, dict):  # hand-written, hosted elsewhere
+                talk["video"] = slug
+            elif slug.startswith("https://www.youtube.com/"):
                 talk["video"] = youtube(slug)
             elif slug:
                 url = f"https://opensource.posit.co/resources/videos/{slug}/"
