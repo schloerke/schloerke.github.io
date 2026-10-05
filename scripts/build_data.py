@@ -116,6 +116,9 @@ TALK_VIDEO = {  # talk repo -> its opensource.posit.co recording (or a YouTube U
     "presentation-2021-08-12-harvard-plumber-async": "https://www.youtube.com/watch?v=eHrzsIGY0so",
     "presentation-2021-08-05-harvard-plumber-beginner": "https://www.youtube.com/watch?v=GPNFP7qIxHc",
     "presentation-2025-11-12-ggplot2-extenders-GGally": "https://www.youtube.com/watch?v=Q4Cf_pIr4gs",
+    "presentation-2022-05-26-rinpharma-shinytest2": "https://www.youtube.com/watch?v=mh0HMPqLyhQ",
+    "presentation-2022-04-27-appsilon-shinytest2": "https://www.youtube.com/watch?v=EOVPBN5o8F8",
+    # no recording, won't be uploaded: presentation-2025-08-07-jsm-querychat, presentation-2025-04-10-shinyconf-ai-kung-fu
     "presentation-2025-09-17-posit-conf-otel": "2025-11-07_observability-at-scale-barret-schloerke-posit-positconf2025",
     "presentation-2025-08-09-user-plumber2": "2025-10-29_plumber2-streamlining-web-api-development-in-r-barret-schloerke",
     "presentation-2024-08-13-posit-shiny-data-frame": "2024-10-31_barret-schloerke-editable-data-frames-in-py-shiny-updating-original-data-in-real-time",
@@ -134,6 +137,7 @@ VENUES = {  # regex on a talk repo name (or video title) -> venue; {y} is the ta
     r"rstudio-global": "rstudio::global({y})",
     r"-user-|ggduo": "useR! {y}",
     r"shinyconf|appsilon": "ShinyConf {y}",
+    r"2022-05-26-rinpharma": "R/Pharma Shiny for FDA Submissions",
     r"rinpharma": "R/Pharma {y}",
     r"jsm|2016_08_03_cognostics": "JSM {y}",
     r"2017_04_14-cognostics": "CSESC {y}",
