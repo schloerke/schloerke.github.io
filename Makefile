@@ -1,4 +1,4 @@
-.PHONY: help cv data data-prs data-packages data-other data-talks data-contributions serve
+.PHONY: help cv data html data-prs data-packages data-other data-talks data-contributions serve
 
 PORT ?= 8000
 GITHUB_TOKEN ?= $(shell gh auth token 2>/dev/null)
@@ -9,6 +9,10 @@ help: ## Show targets
 
 data: ## Rebuild data/ (ONLY="prs packages other talks contributions" for just some)
 	uv run scripts/build_data.py $(ONLY)
+	@$(MAKE) html
+
+html: ## Write plain rows from data/ and cv/cv.json into index.html, for crawlers without JS
+	uv run scripts/build_html.py
 
 # one section each; skipped sections are read back from data/
 data-prs: ## Rebuild merged PR counts (searches this year and last)

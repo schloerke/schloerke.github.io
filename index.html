@@ -93,7 +93,7 @@
     .epics .bar { position: absolute; top: calc(.8em - 2px); height: 5px; min-width: 5px; border-radius: 3px;
       background: var(--accent); box-shadow: 0 0 0 2px var(--bg); }
     .epics .years { height: 1.2em; margin-bottom: -.2rem; }
-    .epics .years::before { display: none; }
+    .epics .years::before, .epics time.track::before { display: none; } /* time.track: the static rows' dates */
     .epics .yr { position: absolute; transform: translateX(-50%); color: var(--muted); font-size: .75rem; }
     .epics .about { color: var(--text-2); }
     button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
@@ -241,7 +241,83 @@
           <th class="num"><button class="sort" value="prs" aria-pressed="true">PRs</button></th>
           <th class="spark-h"><button class="sort" value="downloads" aria-pressed="false" title="Monthly downloads over the last 6 months, sorted by the last month">Downloads (6m)</button></th>
         </tr></thead>
-        <tbody></tbody>
+        <tbody>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://shiny.posit.co/py/">shiny</a></code><span class="about">A web development framework for Python.</span></td><td class="num">354</td><td></td></tr>
+<tr class="epics"><td colspan="3"></td><td colspan="3"><ul><li><time class="track">2026-07 – 2026-09</time><span>Test mode<span class="about"> · test_server() and exported test values for fast tests without a browser.</span> · 9 PRs</span></li><li><time class="track">2026-07 – 2026-09</time><span>Agent Skills<span class="about"> · Skills shipped in the package so coding agents know how to write Shiny apps.</span> · 10 PRs</span></li><li><time class="track">2026-04 – 2026-08</time><span>Session lifecycle<span class="about"> · session.destroy(), a soft teardown when a session closes, and session.allow_reconnect().</span> · 4 PRs</span></li><li><time class="track">2026-03 – 2026-09</time><span>Release train skill<span class="about"> · An Agent Skill that walks a py-shiny release from prep through PyPI, conda-forge, and shinylive.</span> · 8 PRs</span></li><li><time class="track">2026-01 – 2026-07</time><span>OpenTelemetry<span class="about"> · Traces and logs for sessions, reactivity, and outputs.</span> · 21 PRs</span></li><li><time class="track">2025-03 – 2025-04</time><span>Bookmarking<span class="about"> · Save and restore an app&#x27;s state in the URL or on the server.</span> · 11 PRs</span></li><li><time class="track">2024-03 – 2024-10</time><span>Data frames<span class="about"> · render.data_frame with editing, selection, sorting, filtering, and styles.</span> · 35 PRs</span></li><li><time class="track">2024-01 – 2024-02</time><span>Output renderers<span class="about"> · shiny.render.renderer, a base class for writing your own output renderers.</span> · 10 PRs</span></li><li><time class="track">2023-06 – 2026-07</time><span>API reference<span class="about"> · The quartodoc function reference and its runnable examples.</span> · 8 PRs</span></li><li><time class="track">2023-04 – 2024-01</time><span>UI components from bslib<span class="about"> · Ported sidebars, cards, accordions, value boxes, tooltips, and popovers from R&#x27;s bslib.</span> · 23 PRs</span></li><li><time class="track">2023-03 – 2024-07</time><span>Playwright testing<span class="about"> · shiny.playwright controllers for every UI component, and the shiny.pytest plugin.</span> · 10 PRs</span></li></ul></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://posit-dev.github.io/shinyreact/">shinyreact</a></code><span class="about">Client-Side &#x27;React&#x27; Interface for &#x27;shiny&#x27;</span></td><td class="num">176</td><td></td></tr>
+<tr class="epics"><td colspan="3"></td><td colspan="3"><ul><li><time class="track">2026-08 – 2026-09</time><span>Agent Skills<span class="about"> · Skills for building and converting apps with coding agents, shipped in the package.</span> · 6 PRs</span></li><li><time class="track">2026-06 – 2026-09</time><span>Initial development<span class="about"> · Ported the Python API to R, then CRAN checks, a pkgdown site, and webR builds for 0.1.0.</span> · 23 PRs</span></li><li><time class="track">2026-04 – 2026-09</time><span>ui.tsx apps<span class="about"> · Write the whole page in React and serve it from R.</span> · 20 PRs</span></li></ul></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://posit-dev.github.io/shinyreact/">shinyreact</a></code><span class="about">Shiny UI infrastructure for React-based component rendering</span></td><td class="num">176</td><td></td></tr>
+<tr class="epics"><td colspan="3"></td><td colspan="3"><ul><li><time class="track">2026-08 – 2026-09</time><span>Agent Skills<span class="about"> · Skills for building and converting apps with coding agents, shipped in the package.</span> · 6 PRs</span></li><li><time class="track">2026-05 – 2026-09</time><span>Renderer dependencies<span class="about"> · Find and serve the HTML dependencies of Shiny outputs used inside React.</span> · 7 PRs</span></li><li><time class="track">2026-04 – 2026-09</time><span>ui.tsx apps<span class="about"> · Write the whole page in React and serve it from Python.</span> · 20 PRs</span></li><li><time class="track">2026-03 – 2026-09</time><span>Testing<span class="about"> · Playwright e2e tests, WireTap for wire payloads, and in-memory test_server().</span> · 10 PRs</span></li><li><time class="track">2026-03 – 2026-05</time><span>Initial development<span class="about"> · Began as shinyjson, a JSON spec renderer, then turned React-first and dropped json-render.</span> · 16 PRs</span></li></ul></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://posit-dev.github.io/shinyreact/">@posit-dev/shinyreact</a></code><span class="about">React hooks and components for Shiny (shinyreact) — the ui.tsx pattern&#x27;s client runtime</span></td><td class="num">176</td><td></td></tr>
+<tr class="epics"><td colspan="3"></td><td colspan="3"><ul><li><time class="track">2026-08 – 2026-09</time><span>npm package<span class="about"> · A dual build published as @posit-dev/shinyreact, usable with no server-side JS.</span> · 8 PRs</span></li><li><time class="track">2026-08</time><span>Wire protocol<span class="about"> · One versioned protocol, checked by a handshake, shared with the R and Python packages.</span> · 6 PRs</span></li><li><time class="track">2026-03 – 2026-08</time><span>React hooks<span class="about"> · useShinyInput / useShinyOutput hooks, and ShinyOutput for classic Shiny outputs.</span> · 13 PRs</span></li></ul></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="http://ggobi.github.io/ggally/">GGally</a></code><span class="about">Extension to &#x27;ggplot2&#x27;</span></td><td class="num">156</td><td></td></tr>
+<tr class="epics"><td colspan="3"></td><td colspan="3"><ul><li><time class="track">2025-06 – 2025-08</time><span>S7<span class="about"> · Moved ggmatrix to S7 for ggplot2 4.0.</span> · 4 PRs</span></li><li><time class="track">2020-05</time><span>Discrete stats<span class="about"> · Count, cross, table, and statistic plots for GGally 2.0.</span> · 8 PRs</span></li><li><time class="track">2016-06 – 2017-05</time><span>ggduo, ggnostic, and friends<span class="about"> · Plot matrices for two groups of variables, model diagnostics, and time series.</span> · 5 PRs</span></li><li><time class="track">2014-11 – 2017-06</time><span>ggpairs and ggmatrix<span class="about"> · The generalized pairs plot and the plot matrix behind it.</span> · 17 PRs</span></li></ul></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://rstudio.github.io/shinytest2/">shinytest2</a></code><span class="about">Testing for Shiny Applications</span></td><td class="num">147</td><td></td></tr>
+<tr class="epics"><td colspan="3"></td><td colspan="3"><ul><li><time class="track">2022-02 – 2022-04</time><span>Migration from shinytest<span class="about"> · migrate_from_shinytest() converts existing shinytest tests.</span> · 4 PRs</span></li><li><time class="track">2021-10 – 2023-02</time><span>Screenshots<span class="about"> · Consistent screenshots, compared with a kernel density smoother to ignore stray pixels.</span> · 7 PRs</span></li><li><time class="track">2021-10 – 2022-08</time><span>Test recorder<span class="about"> · record_test() writes a test while you click around the app.</span> · 6 PRs</span></li><li><time class="track">2021-09 – 2022-09</time><span>AppDriver<span class="about"> · Drive a Shiny app in headless Chrome: set inputs, click, and snapshot values.</span> · 30 PRs</span></li></ul></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://shiny.posit.co/">shiny</a></code><span class="about">Web Application Framework for R</span></td><td class="num">141</td><td></td></tr>
+<tr class="epics"><td colspan="3"></td><td colspan="3"><ul><li><time class="track">2026-07</time><span>MCP Apps<span class="about"> · Serve Shiny apps as MCP Apps, with author tools for LLM clients.</span> · 5 PRs</span></li><li><time class="track">2026-05 – 2026-08</time><span>Session lifecycle<span class="about"> · session$destroy(), a soft teardown when a session closes, and clean state on reconnect.</span> · 5 PRs</span></li><li><time class="track">2025-10 – 2025-12</time><span>OpenTelemetry<span class="about"> · Traces and logs for sessions, reactivity, and outputs through {otel}.</span> · 10 PRs</span></li><li><time class="track">2021-07 – 2021-08</time><span>Quosures<span class="about"> · exprToFunction() and installExprFunction() accept quosures, including inject()ed ones.</span> · 3 PRs</span></li><li><time class="track">2020-12 – 2021-04</time><span>devmode()<span class="about"> · One switch that turns on the options you want while developing an app.</span> · 3 PRs</span></li><li><time class="track">2020-04</time><span>testServer()<span class="about"> · Test server functions and modules in memory against a mock session.</span> · 4 PRs</span></li><li><time class="track">2018-09 – 2020-08</time><span>reactlog integration<span class="about"> · Record every reactive event so reactlog can draw the reactive graph.</span> · 9 PRs</span></li><li><time class="track">2018-09</time><span>Plot brushing<span class="about"> · Plot click and brush events carry CSS and image coordinates, and brushing works in WebKit.</span> · 4 PRs</span></li></ul></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://shiny.posit.co/">@posit/shiny</a></code><span class="about">Easy interactive web applications with R</span></td><td class="num">141</td><td></td></tr>
+<tr class="epics"><td colspan="3"></td><td colspan="3"><ul><li><time class="track">2021-02 – 2022-09</time><span>TypeScript<span class="about"> · Ported shiny.js to TypeScript, moved the build to esbuild, and published the types.</span> · 12 PRs</span></li></ul></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://www.rplumber.io">plumber</a></code><span class="about">An API Generator for R</span></td><td class="num">130</td><td></td></tr>
+<tr class="epics"><td colspan="3"></td><td colspan="3"><ul><li><time class="track">2020-08 – 2020-12</time><span>pr_*() API<span class="about"> · The pipe-friendly router API and consistent R6 methods of plumber 1.0.</span> · 7 PRs</span></li><li><time class="track">2020-07 – 2021-01</time><span>Docker<span class="about"> · Docker images for running plumber APIs.</span> · 4 PRs</span></li><li><time class="track">2019-02 – 2020-09</time><span>Async<span class="about"> · Promise and future support for long-running endpoints.</span> · 4 PRs</span></li><li><time class="track">2019-02 – 2020-08</time><span>Serializers and parsers<span class="about"> · Body parsers chosen by content type, and serializers for many output formats.</span> · 9 PRs</span></li><li><time class="track">2018-08 – 2020-12</time><span>OpenAPI docs<span class="about"> · OpenAPI v3 specs and pluggable docs pages (Swagger, RapiDoc, Redoc).</span> · 13 PRs</span></li></ul></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://pkgs.rstudio.com/learnr">learnr</a></code><span class="about">Interactive Tutorials for R</span></td><td class="num">70</td><td></td></tr>
+<tr class="epics"><td colspan="3"></td><td colspan="3"><ul><li><time class="track">2019-05 – 2020-09</time><span>Exercises<span class="about"> · Safer exercise evaluation, checker functions, and clearer errors.</span> · 9 PRs</span></li><li><time class="track">2019-04 – 2020-06</time><span>Quiz questions<span class="about"> · Questions rebuilt as Shiny modules, with a custom question API.</span> · 12 PRs</span></li></ul></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://rstudio.github.io/promises/">promises</a></code><span class="about">Abstractions for Promise-Based Asynchronous Programming</span></td><td class="num">48</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="http://rstudio.github.io/leaflet/">leaflet</a></code><span class="about">Create Interactive Web Maps with the JavaScript &#x27;Leaflet&#x27; Library</span></td><td class="num">44</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="http://rstudio.github.io/reactlog">reactlog</a></code><span class="about">Reactivity Visualizer for &#x27;shiny&#x27;</span></td><td class="num">42</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://rstudio.github.io/shinyloadtest/">shinyloadtest</a></code><span class="about">Load Test Shiny Applications</span></td><td class="num">32</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://rstudio.github.io/htmltools/">htmltools</a></code><span class="about">Tools for HTML</span></td><td class="num">32</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://posit-dev.github.io/r-shinylive/">shinylive</a></code><span class="about">Run &#x27;shiny&#x27; Applications in the Browser</span></td><td class="num">27</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://posit-dev.github.io/py-shinyswatch/">shinyswatch</a></code><span class="about">Bootswatch + Bootstrap 5 themes for Shiny.</span></td><td class="num">21</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://rstudio.github.io/bslib/">bslib</a></code><span class="about">Custom &#x27;Bootstrap&#x27; &#x27;Sass&#x27; Themes for &#x27;shiny&#x27; and &#x27;rmarkdown&#x27;</span></td><td class="num">20</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://shiny.posit.co/py/get-started/shinylive.html">shinylive</a></code><span class="about">Run Shiny applications running Python in the browser.</span></td><td class="num">19</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://rstudio.github.io/chromote/">chromote</a></code><span class="about">Headless Chrome Web Browser Interface</span></td><td class="num">17</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://github.com/posit-dev/py-htmltools">htmltools</a></code><span class="about">Tools for HTML generation and output.</span></td><td class="num">17</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://posit-dev.github.io/posit-sdk-py/">posit-sdk</a></code><span class="about">Posit SDK for Python</span></td><td class="num">16</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://rstudio.github.io/sortable/">sortable</a></code><span class="about">Drag-and-Drop in &#x27;shiny&#x27; Apps with &#x27;SortableJS&#x27;</span></td><td class="num">12</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://rstudio.github.io/shinytest/">shinytest</a></code><span class="about">Test Shiny Apps</span></td><td class="num">12</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://rstudio.github.io/httpuv/">httpuv</a></code><span class="about">HTTP and WebSocket Server Library</span></td><td class="num">12</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://hafen.github.io/trelliscopejs">trelliscopejs</a></code><span class="about">Create Interactive Trelliscope Displays</span></td><td class="num">11</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://rladies.github.io/meetupr">meetupr</a></code><span class="about">Access Meetup Data</span></td><td class="num">10</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://github.com/fulyagokalp/lmmpar">lmmpar</a></code><span class="about">Parallel Linear Mixed Model</span></td><td class="num">9</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://swagger.io/swagger-ui/">swagger</a></code><span class="about">Dynamically Generates Documentation from a &#x27;Swagger&#x27; Compliant API</span></td><td class="num">9</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://rmarkdown.rstudio.com">rmarkdown</a></code><span class="about">Dynamic Documents for R</span></td><td class="num">8</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://rstudio.github.io/leaflet.providers/">leaflet.providers</a></code><span class="about">Leaflet Providers</span></td><td class="num">8</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://github.com/schloerke/autocogs">autocogs</a></code><span class="about">Automatic Cognostic Summaries</span></td><td class="num">8</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://posit-dev.github.io/shinychat/">shinychat</a></code><span class="about">Chat UI Component for &#x27;shiny&#x27;</span></td><td class="num">8</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://posit-dev.github.io/shinychat/">shinychat</a></code><span class="about">An AI Chat interface for Shiny apps.</span></td><td class="num">8</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://github.com/hafen/lazyrmd">lazyrmd</a></code><span class="about">Render R Markdown Outputs Lazily</span></td><td class="num">7</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://trafficonese.github.io/leaflet.extras/">leaflet.extras</a></code><span class="about">Extra Functionality for &#x27;leaflet&#x27; Package</span></td><td class="num">7</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="http://schloerke.com/gqlr/">gqlr</a></code><span class="about">&#x27;GraphQL&#x27; Server in R</span></td><td class="num">7</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://posit-dev.github.io/chatlas/">chatlas</a></code><span class="about">A simple and consistent interface for chatting with LLMs</span></td><td class="num">7</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="http://hafen.github.io/packagedocs/">packagedocs</a></code><span class="about">Build Website of Package Documentation</span></td><td class="num">6</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://rstudio.github.io/sass/">sass</a></code><span class="about">Syntactically Awesome Style Sheets (&#x27;Sass&#x27;)</span></td><td class="num">6</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://rstudio.github.io/websocket/">websocket</a></code><span class="about">&#x27;WebSocket&#x27; Client Library</span></td><td class="num">6</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="http://rstudio.github.io/flexdashboard/">flexdashboard</a></code><span class="about">R Markdown Format for Flexible Dashboards</span></td><td class="num">6</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://rstudio.github.io/webshot2/">webshot2</a></code><span class="about">Take Screenshots of Web Pages</span></td><td class="num">6</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://cachem.r-lib.org">cachem</a></code><span class="about">Cache R Objects with Automatic Pruning</span></td><td class="num">5</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://later.r-lib.org/">later</a></code><span class="about">Utilities for Scheduling Functions to Execute Later with Event Loops</span></td><td class="num">5</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://rstudio.github.io/vetiver-r/">vetiver</a></code><span class="about">Version, Share, Deploy, and Monitor Models</span></td><td class="num">5</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://testthat.r-lib.org">testthat</a></code><span class="about">Unit Testing for R</span></td><td class="num">5</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://posit-dev.github.io/querychat/">querychat</a></code><span class="about">Filter and Query Data Frames in &#x27;shiny&#x27; Using an LLM Chat Interface</span></td><td class="num">5</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://posit-dev.github.io/querychat/">querychat</a></code><span class="about">Chat with your data using natural language</span></td><td class="num">5</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://github.com/delta-rho/trelliscope">trelliscope</a></code><span class="about">Create and Navigate Large Multi-Panel Visual Displays</span></td><td class="num">4</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://bhaskarvk.github.io/leaflet.esri/">leaflet.esri</a></code><span class="about">&#x27;ESRI&#x27; Bindings for the &#x27;leaflet&#x27; Package</span></td><td class="num">4</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="http://wch.github.io/webshot/">webshot</a></code><span class="about">Take Screenshots of Web Pages</span></td><td class="num">4</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://rstudio.github.io/webdriver/">webdriver</a></code><span class="about">&#x27;WebDriver&#x27; Client for &#x27;PhantomJS&#x27;</span></td><td class="num">4</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://r-lib.github.io/fastmap/">fastmap</a></code><span class="about">Fast Data Structures</span></td><td class="num">4</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://narwhals-dev.github.io/narwhals/">narwhals</a></code><span class="about">Extremely lightweight compatibility layer between dataframe libraries</span></td><td class="num">4</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="http://plumber2.posit.co/">plumber2</a></code><span class="about">Easy and Powerful Web Servers</span></td><td class="num">4</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://docs.ropensci.org/graphql">graphql</a></code><span class="about">A GraphQL Query Parser</span></td><td class="num">3</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://ggplot2.tidyverse.org">ggplot2</a></code><span class="about">Create Elegant Data Visualisations Using the Grammar of Graphics</span></td><td class="num">3</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://gt.rstudio.com">gt</a></code><span class="about">Easily Create Presentation-Ready Display Tables</span></td><td class="num">3</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://github.com/meztez/redoc">redoc</a></code><span class="about">Generates &#x27;Redoc&#x27; Documentation from an &#x27;OpenAPI&#x27; Specification</span></td><td class="num">3</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://rstudio.github.io/shinyvalidate/">shinyvalidate</a></code><span class="about">Input Validation for Shiny Apps</span></td><td class="num">3</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://rstudio.github.io/jquerylib">jquerylib</a></code><span class="about">Obtain &#x27;jQuery&#x27; as an HTML Dependency Object</span></td><td class="num">3</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://routr.data-imaginist.com">routr</a></code><span class="about">A Simple Router for HTTP and WebSocket Requests</span></td><td class="num">3</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://posit-dev.github.io/brand-yml/">brand.yml</a></code><span class="about">Unified Branding with a Simple YAML File</span></td><td class="num">3</td><td></td></tr>
+<tr><td></td><td></td><td></td><td class="name"><code><a href="https://posit-dev.github.io/brand-yml/">brand_yml</a></code><span class="about">Read brand yaml files, a unified way to store brand information.</span></td><td class="num">3</td><td></td></tr>
+        </tbody>
       </table>
       <button id="more" class="more"></button>
       <details class="note"><summary>Details</summary>
@@ -267,7 +343,35 @@
           <th>Repository</th>
           <th class="num">PRs</th>
         </tr></thead>
-        <tbody></tbody>
+        <tbody>
+<tr><td></td><td class="name"><code><a href="https://github.com/rstudio/shinycoreci">rstudio/shinycoreci</a></code><span class="about">Application-level automated tests for Shiny</span></td><td class="num">106</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/posit-dev/py-shiny-site">posit-dev/py-shiny-site</a></code><span class="about">The documentation website for Shiny for Python</span></td><td class="num">71</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/DivadNojnarg/outstanding-shiny-ui">DivadNojnarg/outstanding-shiny-ui</a></code><span class="about">Outstanding User Interfaces with Shiny CRC Press book online version</span></td><td class="num">29</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/rstudio/shiny-examples">rstudio/shiny-examples</a></code></td><td class="num">28</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/schloerke/shinyjster">schloerke/shinyjster</a></code><span class="about">Run javascript testing which will autokill an app on successful testing</span></td><td class="num">24</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/posit-dev/shiny-issue-triage">posit-dev/shiny-issue-triage</a></code><span class="about">A place where we can auto-label issues in other shiny team managed repos</span></td><td class="num">20</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/posit-dev/shinylive">posit-dev/shinylive</a></code><span class="about">Run Shiny on Python and R (compiled to wasm) in the browser</span></td><td class="num">19</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/rstudio/shiny-workflows">rstudio/shiny-workflows</a></code><span class="about">GitHub Actions workflows for Shiny and related packages</span></td><td class="num">18</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/posit-dev/shiny-showcase-bioinformatics">posit-dev/shiny-showcase-bioinformatics</a></code><span class="about">A Quarto gallery of Shiny apps and packages for computational biology</span></td><td class="num">12</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/rstudio/hex-stickers">rstudio/hex-stickers</a></code><span class="about">RStudio hex stickers</span></td><td class="num">9</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/posit-dev/open-source-website">posit-dev/open-source-website</a></code><span class="about">Posit Open Source Website</span></td><td class="num">9</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/rstudio/gradethis">rstudio/gradethis</a></code><span class="about">Tools for teachers to use with learnr</span></td><td class="num">7</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/rstudio/shinycannon">rstudio/shinycannon</a></code><span class="about">Load generation tool, part of shinyloadtest</span></td><td class="num">7</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/DivadNojnarg/OSUICode">DivadNojnarg/OSUICode</a></code><span class="about">Standalone code for the &quot;Outstanding Shiny UI&quot; Book</span></td><td class="num">7</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/posit-dev/py-shiny-templates">posit-dev/py-shiny-templates</a></code><span class="about">Templates for Shiny for Python</span></td><td class="num">6</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/conda-forge/staged-recipes">conda-forge/staged-recipes</a></code><span class="about">A place to submit conda recipes before they become fully fledged conda-forge feedstocks</span></td><td class="num">6</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/r-lib/actions">r-lib/actions</a></code><span class="about">GitHub Actions for the R community</span></td><td class="num">5</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/posit-dev/skills">posit-dev/skills</a></code><span class="about">A collection of Claude Skills from Posit</span></td><td class="num">5</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/3rd-Eden/memcached">3rd-Eden/memcached</a></code><span class="about">A fully featured Memcached client build on top of Node.js. Build with scaling in mind so it will support Memcached clusters and consistent hashing.</span></td><td class="num">3</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/securingsincity/react-ace">securingsincity/react-ace</a></code><span class="about">React Ace Component</span></td><td class="num">3</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/rstudio/rstudio">rstudio/rstudio</a></code><span class="about">RStudio is an integrated development environment (IDE) for R</span></td><td class="num">3</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/rstudio/shiny-testing-gha-example">rstudio/shiny-testing-gha-example</a></code><span class="about">Example testing Shiny application with GitHub Actions</span></td><td class="num">3</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/posit-dev/posit-conf">posit-dev/posit-conf</a></code><span class="about">Materials for rstudio::conf</span></td><td class="num">3</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/r-wasm/actions">r-wasm/actions</a></code><span class="about">GitHub Actions associated with R WebAssembly tasks</span></td><td class="num">3</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/quarto-ext/shinylive">quarto-ext/shinylive</a></code><span class="about">Quarto extension to embed Shinylive for Python applications</span></td><td class="num">3</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/posit-dev/connect-extensions">posit-dev/connect-extensions</a></code><span class="about">Home for Posit Connect extensions</span></td><td class="num">3</td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/conda-forge/py-shiny-feedstock">conda-forge/py-shiny-feedstock</a></code><span class="about">A conda-smithy repository for py-shiny.</span></td><td class="num">3</td></tr>
+        </tbody>
       </table>
       <button id="other-more" class="more"></button>
 
@@ -279,7 +383,15 @@
           <th class="venue">Where</th>
           <th class="date">Years</th>
         </tr></thead>
-        <tbody></tbody>
+        <tbody>
+<tr><td></td><td class="name"><code><a href="https://github.com/bokeh/rbokeh">rbokeh</a></code><span class="about">R interface to the Bokeh visualization library.</span></td><td class="venue">Purdue University</td><td class="date"><time datetime="2016-02">2016-02</time></td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/vogievetsky/DVL">DVL</a></code><span class="about">Functionally reactive JavaScript library binding data to visualizations.</span></td><td class="venue">Metamarkets</td><td class="date"><time datetime="2011-05">2011-05</time></td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/hadley/helpr">helpr</a></code><span class="about">Friendlier HTML documentation for R, with search across packages.</span></td><td class="venue">Rice University</td><td class="date"><time datetime="2010-04">2010-04</time></td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/ggobi/cranvas">cranvas</a></code><span class="about">Interactive plotting canvas for R, drawing a million points in under a second.</span></td><td class="venue">Iowa State University</td><td class="date"><time datetime="2010-01">2010-01</time></td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/ggobi/tourr">tourr</a></code><span class="about">Geodesic interpolation and basis generation for tour methods in R.</span></td><td class="venue">Iowa State University</td><td class="date"><time datetime="2009-08">2009-08</time></td></tr>
+<tr><td></td><td class="name"><code><a href="https://github.com/ggobi/DescribeDisplay">DescribeDisplay</a></code><span class="about">Publication-quality R graphics from GGobi plots.</span></td><td class="venue">Iowa State University</td><td class="date"><time datetime="2009-08">2009-08</time></td></tr>
+<tr><td></td><td class="name"><code><a href="https://schloerke.github.io/geozoo/">geozoo</a></code><span class="about">Library of high-dimensional geometric objects, including the new Hyper Ring Torus.</span></td><td class="venue">Iowa State University</td><td class="date"><time datetime="2007-01">2007-01</time></td></tr>
+        </tbody>
       </table>
     </section>
 
@@ -293,7 +405,52 @@
           <th class="venue">Venue</th>
           <th class="date">Date</th>
         </tr></thead>
-        <tbody></tbody>
+        <tbody>
+<tr><td></td><td><a href="https://schloerke.com/presentation-2026-09-15-posit-conf-shinyreact/">Beyond Bootstrap: Building Custom Shiny UI with React</a></td><td class="venue">posit::conf(2026)</td><td class="date"><time datetime="2026-09-15">2026-09</time></td></tr>
+<tr><td></td><td><a href="https://schloerke.com/presentation-2026-04-21-open-source-pharma-otel/">OpenTelemetry in R: Capturing Traces, Logs, and Metrics for Shiny Applications</a></td><td class="venue">Open Source in Pharma</td><td class="date"><time datetime="2026-04-21">2026-04</time></td></tr>
+<tr><td></td><td><a href="https://schloerke.com/presentation-2025-11-12-ggplot2-extenders-GGally/">{GGally}: Success and Long-Haul Maintenance Strategies</a></td><td class="venue"><a href="https://exts.ggplot2.tidyverse.org/">ggplot2 extenders</a></td><td class="date"><time datetime="2025-11-12">2025-11</time></td></tr>
+<tr><td></td><td><a href="https://schloerke.com/presentation-2025-09-17-posit-conf-otel/">Observability at scale: Monitoring Shiny Applications with OpenTelemetry</a></td><td class="venue">posit::conf(2025)</td><td class="date"><time datetime="2025-09-17">2025-09</time></td></tr>
+<tr><td></td><td><a href="https://schloerke.com/presentation-2025-08-09-user-plumber2/">{plumber2}: Streamlining Web API Development in R</a></td><td class="venue">useR! 2025</td><td class="date"><time datetime="2025-08-09">2025-08</time></td></tr>
+<tr><td></td><td><a href="https://schloerke.com/presentation-2025-08-07-jsm-querychat/">{querychat}: Natural language interfaces for interactive data graphics in Shiny</a></td><td class="venue">JSM 2025</td><td class="date"><time datetime="2025-08-07">2025-08</time></td></tr>
+<tr><td></td><td><a href="https://schloerke.com/presentation-2025-04-10-shinyconf-ai-kung-fu/">AI Kung-Fu 🥋: Training your LLM client in two function calls</a></td><td class="venue">ShinyConf 2025</td><td class="date"><time datetime="2025-04-10">2025-04</time></td></tr>
+<tr><td></td><td><a href="https://schloerke.com/workshop-rinpharma24-shinylive/">{shinylive}: Serverless Shiny applications workshop. An exercise in deploying your app to GitHub Pages</a></td><td class="venue">R/Pharma 2024</td><td class="date"><time datetime="2024-10-25">2024-10</time></td></tr>
+<tr><td></td><td><a href="https://schloerke.com/presentation-2024-08-13-posit-shiny-data-frame/">Data frames in Shiny for Python</a></td><td class="venue">posit::conf(2024)</td><td class="date"><time datetime="2024-08-13">2024-08</time></td></tr>
+<tr><td></td><td><a href="https://schloerke.com/presentation-2024-04-18-appsilon-shinylive/">{shinylive}: Serverless Shiny apps</a></td><td class="venue">ShinyConf 2024</td><td class="date"><time datetime="2024-04-18">2024-04</time></td></tr>
+<tr><td></td><td><a href="https://schloerke.com/presentation-2023-03-15-appsilon-nightly-testing/">Lessons learned from testing 2500+ Shiny Apps every day</a></td><td class="venue">ShinyConf 2023</td><td class="date"><time datetime="2023-03-15">2023-03</time></td></tr>
+<tr><td></td><td><a href="https://schloerke.com/presentation-2022-10-18-jnj22-shinytest2/">{shinytest2}: Regression testing Shiny applications</a></td><td class="venue">Johnson &amp; Johnson Shiny Day</td><td class="date"><time datetime="2022-10-18">2022-10</time></td></tr>
+<tr><td></td><td><a href="https://schloerke.com/presentation-2022-07-28-rstudioconf22-shinytest2/">{shinytest2}: Regression testing Shiny applications</a></td><td class="venue">rstudio::conf(2022)</td><td class="date"><time datetime="2022-07-28">2022-07</time></td></tr>
+<tr><td></td><td><a href="https://schloerke.com/presentation-2022-05-26-rinpharma-shinytest2/">{shinytest2}: Regression Testing for Shiny Applications</a></td><td class="venue">R/Pharma Shiny for FDA Submissions</td><td class="date"><time datetime="2022-05-26">2022-05</time></td></tr>
+<tr><td></td><td><a href="https://schloerke.com/presentation-2022-04-27-appsilon-shinytest2/">shinytest2: Regression Testing for Shiny Applications</a></td><td class="venue">ShinyConf 2022</td><td class="date"><time datetime="2022-04-27">2022-04</time></td></tr>
+<tr><td></td><td><a href="https://schloerke.com/presentation-2021-08-12-harvard-plumber-async/">plumber + future: Async Web APIs</a></td><td class="venue">Harvard R User Group</td><td class="date"><time datetime="2021-08-12">2021-08</time></td></tr>
+<tr><td></td><td><a href="https://github.com/schloerke/presentation-2021-08-05-harvard-plumber-beginner">An intro to plumber</a></td><td class="venue">Harvard R User Group</td><td class="date"><time datetime="2021-08-05">2021-08</time></td></tr>
+<tr><td></td><td><a href="https://github.com/schloerke/presentation-2021-01-rstudio-global-plumber-async">plumber + future: Async Web APIs</a></td><td class="venue">rstudio::global(2021)</td><td class="date"><time datetime="2021-01-01">2021-01</time></td></tr>
+<tr><td></td><td><a href="https://github.com/schloerke/presentation-2020-10-28-integrating-plumber">Expanding R Horizons: Integrating R with Plumber APIs</a></td><td class="venue">RStudio Webinar</td><td class="date"><time datetime="2020-10-28">2020-10</time></td></tr>
+<tr><td></td><td><a href="https://shinydevseries.com/interview/ep014/">Episode 14: Shining a Light on learnr</a></td><td class="venue"><a href="https://shinydevseries.com/">Shiny Developer Series</a></td><td class="date"><time datetime="2020-10-03">2020-10</time></td></tr>
+<tr><td></td><td><a href="https://shinydevseries.com/interview/ep013/">Episode 13: Inside Plumber 1.0</a></td><td class="venue"><a href="https://shinydevseries.com/">Shiny Developer Series</a></td><td class="date"><time datetime="2020-09-17">2020-09</time></td></tr>
+<tr><td></td><td><a href="https://shinydevseries.com/interview/ep012/">Episode 12: reactlog</a></td><td class="venue"><a href="https://shinydevseries.com/">Shiny Developer Series</a></td><td class="date"><time datetime="2020-09-09">2020-09</time></td></tr>
+<tr><td></td><td><a href="https://schloerke.com/presentation-2020-04-29-reactlog/">Reactlog 2.0: Debugging the State of Shiny</a></td><td class="venue"><a href="https://www.meetup.com/data-science-dc/events/270217358/">Statistical Programming DC</a></td><td class="date"><time datetime="2020-04-29">2020-04</time></td></tr>
+<tr><td></td><td><a href="https://schloerke.com/presentation-2019-11-11-shinymeta/">Reproducible Shiny apps with shinymeta</a></td><td class="venue">ABACUS 2019</td><td class="date"><time datetime="2019-11-11">2019-11</time></td></tr>
+<tr><td></td><td><a href="https://github.com/schloerke/presentation-2019-05-02-shiny-reactlog-sparklyr">Debug Large Data Apps: shiny + reactlog + sparklyr</a></td><td class="venue">Advanced R workshop, Northeastern University</td><td class="date"><time datetime="2019-05-02">2019-05</time></td></tr>
+<tr><td></td><td><a href="https://posit.co/resources/videos/reactlog-2-0-debugging-the-state-of-shiny/">Reactlog 2.0: Debugging the State of Shiny</a></td><td class="venue">rstudio::conf(2019)</td><td class="date"><time datetime="2019-01-18">2019-01</time></td></tr>
+<tr><td></td><td><a href="https://github.com/schloerke/presentation-2018-08-20-nasa-shiny-lightning">Shiny</a></td><td class="venue">NASA Datanauts</td><td class="date"><time datetime="2018-08-20">2018-08</time></td></tr>
+<tr><td></td><td><a href="https://github.com/schloerke/presentation-2017_04_14-cognostics">Cognostics: Metrics enabling detailed interactive visualization of big data</a></td><td class="venue">CSESC 2017</td><td class="date"><time datetime="2017-04-14">2017-04</time></td></tr>
+<tr><td></td><td><a href="https://github.com/schloerke/presentation-2017_03_29-web_scraping">Web Scraping with R</a></td><td class="venue"></td><td class="date"><time datetime="2017-03-29">2017-03</time></td></tr>
+<tr><td></td><td><a href="https://github.com/schloerke/presentation-2017_01_26-tidyverse">tidyverse[c(&quot;magrittr&quot;, &quot;dplyr&quot;, &quot;tidyr&quot;)]</a></td><td class="venue">Purdue Graduate Statistics Seminar</td><td class="date"><time datetime="2017-01-26">2017-01</time></td></tr>
+<tr><td></td><td><a href="https://github.com/schloerke/presentation-2016_08_03_cognostics">Cognostics: Metrics enabling detailed interactive visualization of big data</a></td><td class="venue">JSM 2016</td><td class="date"><time datetime="2016-08-03">2016-08</time></td></tr>
+<tr><td></td><td><a href="https://github.com/schloerke/presentation-2016_06_30-ggduo">ggduo: Pairs plot for two group data</a></td><td class="venue">useR! 2016</td><td class="date"><time datetime="2016-06-30">2016-06</time></td></tr>
+<tr><td></td><td><a href="https://slides.com/schloerke/tessera-src-2016-5-25">Analysis and Visualization of Large Complex Data with Tessera</a></td><td class="venue">Spring Research Conference, IIT</td><td class="date"><time datetime="2016-06-01">2016-06</time></td></tr>
+<tr><td></td><td><a href="https://slides.com/schloerke/tessera-purdue-2016-4-7">Analysis and Visualization of Large Complex Data with Tessera</a></td><td class="venue">Purdue Graduate Statistics Seminar</td><td class="date"><time datetime="2016-04-07">2016-04</time></td></tr>
+<tr><td></td><td><a href="https://slides.com/schloerke/tessera-isu-2016-3">Analysis and Visualization of Large Complex Data with Tessera</a></td><td class="venue">Iowa State Graphics Research Group</td><td class="date"><time datetime="2016-03-24">2016-03</time></td></tr>
+<tr><td></td><td><a href="https://slides.com/schloerke/tessera-monash-2016">Analysis and Visualization of Large Complex Data with Tessera</a></td><td class="venue">NUMBAT Seminar, Monash University</td><td class="date"><time datetime="2016-03-04">2016-03</time></td></tr>
+<tr><td></td><td><a href="https://github.com/schloerke/presentation-2016_02_18-graphql">gqlr = GraphQL + R: a data query language and runtime</a></td><td class="venue"><a href="https://wombat.numbat.space/">WOMBAT 2016</a></td><td class="date"><time datetime="2016-02-18">2016-02</time></td></tr>
+<tr><td></td><td><a href="https://github.com/schloerke/presentation-2015_10_20-web_scraping">Web Scraping with R</a></td><td class="venue">American Credit Acceptance</td><td class="date"><time datetime="2015-10-20">2015-10</time></td></tr>
+<tr><td></td><td><a href="https://www.fields.utoronto.ca/programs/scientific/14-15/bigdata/optimization/">Trelliscope: D&amp;R visualization tool</a></td><td class="venue">Fields Institute Big Data Visualization</td><td class="date"><time datetime="2015-02-24">2015-02</time></td></tr>
+<tr><td></td><td><a href="https://github.com/schloerke/presentation-2014_10_21-ggplot2_spatial_statistics">ggplot2: displaying spatial and temporal data</a></td><td class="venue">Purdue Spatial Statistics Seminar</td><td class="date"><time datetime="2014-10-21">2014-10</time></td></tr>
+<tr><td></td><td><a href="https://github.com/schloerke/presentation-2014_06_27-Git">git</a></td><td class="venue">Purdue Working Group</td><td class="date"><time datetime="2014-06-27">2014-06</time></td></tr>
+<tr><td></td><td><a href="https://github.com/schloerke/presentation-2014_02_14-minimize-work-inefficiencies">Reducing Working Environment Inefficiencies</a></td><td class="venue">Purdue Graduate Statistics Seminar</td><td class="date"><time datetime="2014-02-14">2014-02</time></td></tr>
+<tr><td></td><td><a href="https://schloerke.com/talks/2010-09-helpr.pdf">helpr: Help for R</a></td><td class="venue">Iowa State Working Group</td><td class="date"><time datetime="2010-09-01">2010-09</time></td></tr>
+<tr><td></td><td>GGally: A Plot Matrix for All Variable Types</td><td class="venue">JSM 2010</td><td class="date"><time datetime="2010-08-01">2010-08</time></td></tr>
+        </tbody>
       </table>
       <button id="talks-more" class="more"></button>
 
@@ -306,7 +463,19 @@
           <th class="venue">Venue</th>
           <th class="date">Date</th>
         </tr></thead>
-        <tbody></tbody>
+        <tbody>
+<tr><td></td><td><a href="https://opensource.posit.co/resources/videos/2026-08-27_git-worktree-first-workflow-conductor-barret-schloerke-data-science-lab/">Git Worktree-First Workflow + Conductor</a></td><td class="venue">Data Science Lab</td><td class="date"><time datetime="2026-08-27">2026-08</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/resources/videos/2024-10-30_shiny-12-release-wrap-your-data-frame-with-narwhals-barret-schloerke-posit/">Shiny 1.2 Release: Wrap your data frame with Narwhals! 🎉</a></td><td class="venue"></td><td class="date"><time datetime="2024-10-30">2024-10</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/resources/videos/2022-07-27_getting-started-with-shinytest2-part-i-example-basics-rstudio/">Getting Started with {shinytest2} Part I · Example + basics</a></td><td class="venue"></td><td class="date"><time datetime="2022-07-27">2022-07</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/resources/videos/2022-07-27_getting-started-with-shinytest2-part-3-using-shinytestmode-in-shinytest2-rstudio/">Getting Started with {shinytest2} Part 3 · Using shiny.testmode in {shinytest2}</a></td><td class="venue"></td><td class="date"><time datetime="2022-07-27">2022-07</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/resources/videos/2022-07-27_getting-started-with-shinytest2-part-2-exporting-values-rstudio/">Getting Started with {shinytest2} Part 2 · Exporting values</a></td><td class="venue"></td><td class="date"><time datetime="2022-07-27">2022-07</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/resources/videos/2022-06-22_programming-games-with-shiny-roll-the-dice-with-quosures-rstudio/">Programming Games with Shiny · Roll the Dice: with Quosures!</a></td><td class="venue"></td><td class="date"><time datetime="2022-06-22">2022-06</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/resources/videos/2022-05-31_programming-games-with-shiny-roll-the-dice-rstudio/">Programming Games with Shiny · Roll the Dice</a></td><td class="venue"></td><td class="date"><time datetime="2022-05-31">2022-05</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/resources/videos/2022-05-10_programming-games-with-shiny-guess-the-number-rstudio/">Programming Games with Shiny · Guess the Number</a></td><td class="venue"></td><td class="date"><time datetime="2022-05-10">2022-05</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/resources/videos/2022-03-22_programming-games-with-shiny-dragon-realm-rstudio/">Programming Games with Shiny · Dragon Realm</a></td><td class="venue"></td><td class="date"><time datetime="2022-03-22">2022-03</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/resources/videos/2022-02-15_barret-schloerke-maximize-computing-resources-using-future_promise-rstudio/">Maximize computing resources using future_promise()</a></td><td class="venue"></td><td class="date"><time datetime="2022-02-15">2022-02</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/resources/videos/2022-02-09_barret-schloerke-reactlog-rundown-rstudio/">{reactlog} Rundown</a></td><td class="venue"></td><td class="date"><time datetime="2022-02-09">2022-02</time></td></tr>
+        </tbody>
       </table>
       <button id="videos-more" class="more"></button>
     </section>
@@ -319,7 +488,33 @@
           <th>Title</th>
           <th class="date">Date</th>
         </tr></thead>
-        <tbody></tbody>
+        <tbody>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2026-09-30_introducing-shinyreact/">Introducing shinyreact: React UI backed by a Shiny server</a></td><td class="date"><time datetime="2026-09-30">2026-09</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2026-09-22_shiny-python-1-8/">Shiny for Python 1.8</a></td><td class="date"><time datetime="2026-09-22">2026-09</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2026-08-04_shiny-r-1-14-python-1-7/">Shiny updates: R 1.14, Python 1.7, bslib 0.12</a></td><td class="date"><time datetime="2026-08-04">2026-08</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2026-05-07_opentelemetry/">Bringing OpenTelemetry to R in production</a></td><td class="date"><time datetime="2026-05-07">2026-05</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2026-04-02_shiny-python-1.6/">Shiny for Python 1.6 brings toolbars and OpenTelemetry</a></td><td class="date"><time datetime="2026-04-02">2026-04</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2025-12-10_shiny-r-1.12/">OpenTelemetry + Shiny for R v1.12</a></td><td class="date"><time datetime="2025-12-10">2025-12</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2025-11-20_shinychat-tool-ui/">Tool Calling UI in shinychat</a></td><td class="date"><time datetime="2025-11-20">2025-11</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2025-11-07_promises-1.5.0/">promises v1.5.0</a></td><td class="date"><time datetime="2025-11-07">2025-11</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2025-09-12_shiny-at-conf-2025/">Shiny at posit::conf(2025)</a></td><td class="date"><time datetime="2025-09-12">2025-09</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2025-07-14_shiny-at-scipy-2025/">Posit at SciPy 2025</a></td><td class="date"><time datetime="2025-07-14">2025-07</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2025-04-15_shiny-python-1.4/">Shiny 1.4 brings bookmarking and Generative AI docs</a></td><td class="date"><time datetime="2025-04-15">2025-04</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2024-10-31_shiny-python-1.2/">Shiny for Python 1.2.0</a></td><td class="date"><time datetime="2024-10-31">2024-10</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2024-10-29_shiny-python-testing/">Testing Shiny Apps in Python</a></td><td class="date"><time datetime="2024-10-29">2024-10</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2024-07-22_shiny-python-1.0/">Announcing Shiny for Python 1.0</a></td><td class="date"><time datetime="2024-07-22">2024-07</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2024-05-09_shiny-python-0.9.0/">Editable data tables in Shiny for Python 0.9.0</a></td><td class="date"><time datetime="2024-05-09">2024-05</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2024-01-29_shiny-express/">Introducing: Shiny Express</a></td><td class="date"><time datetime="2024-01-29">2024-01</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2023-12-22_shiny-python-0.6.1/">Shiny for Python 0.6.1</a></td><td class="date"><time datetime="2023-12-22">2023-12</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2023-11-15_shiny-python-0.6.0/">Shiny for Python 0.6.0</a></td><td class="date"><time datetime="2023-11-15">2023-11</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2023-08-09_shiny-python-0.5.0/">Shiny for Python 0.5.0</a></td><td class="date"><time datetime="2023-08-09">2023-08</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2023-06-28_shiny-python-0.4.0/">Shiny for Python 0.4.0</a></td><td class="date"><time datetime="2023-06-28">2023-06</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2023-04-18_shiny-python-general-availability/">Shiny for Python out of alpha</a></td><td class="date"><time datetime="2023-04-18">2023-04</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2021-03-29_plumber-v1-1-0/">plumber 1.1.0</a></td><td class="date"><time datetime="2021-03-29">2021-03</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2021-02-01_shiny-1-6-0/">Shiny 1.6</a></td><td class="date"><time datetime="2021-02-01">2021-02</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2019-12-02_learnr-0-10-0/">learnr 0.10.0</a></td><td class="date"><time datetime="2019-12-02">2019-12</time></td></tr>
+<tr><td></td><td><a href="https://opensource.posit.co/blog/2018-05-10_leaflet-2-0-0/">leaflet 2.0.0</a></td><td class="date"><time datetime="2018-05-10">2018-05</time></td></tr>
+        </tbody>
       </table>
       <button id="posts-more" class="more"></button>
     </section>
@@ -333,7 +528,13 @@
           <th class="venue">Journal</th>
           <th class="date">Year</th>
         </tr></thead>
-        <tbody></tbody>
+        <tbody>
+<tr><td></td><td><a href="https://doi.org/10.1007/s00180-019-00950-7">Parallel computing in linear mixed models</a></td><td class="venue"><i>Computational Statistics 35(3): 1273–1289</i></td><td class="date"><time datetime="2020">2020</time></td></tr>
+<tr><td></td><td><a href="https://journal.r-project.org/articles/RJ-2016-044/index.html">Escape from Boxland: Generating a Library of High-Dimensional Geometric Shapes</a></td><td class="venue"><i>The R Journal 8(2): 243–257</i></td><td class="date"><time datetime="2016">2016</time></td></tr>
+<tr><td></td><td><a href="https://vita.had.co.nz/papers/gpp.pdf">The Generalized Pairs Plot</a></td><td class="venue"><i>Journal of Computational and Graphical Statistics 22(1)</i></td><td class="date"><time datetime="2013">2013</time></td></tr>
+<tr><td></td><td><a href="https://doi.org/10.1198/jcgs.2011.3de">Delayed, Canceled, on Time, Boarding… Flying in the USA</a></td><td class="venue"><i>Journal of Computational and Graphical Statistics 20(2)</i></td><td class="date"><time datetime="2011">2011</time></td></tr>
+<tr><td></td><td><a href="https://doi.org/10.1080/09332480.2010.10739812">Monitoring the 2008 Election Visually</a></td><td class="venue"><i>Chance 23(3)</i></td><td class="date"><time datetime="2010">2010</time></td></tr>
+        </tbody>
       </table>
       </details>
     </section>
@@ -671,6 +872,7 @@
       document.getElementById("videos-summary").textContent =
         `${all.length} recordings (${all.length - list.length} with their talks above), ${fmt.format(views)} views on YouTube`;
       const table = document.getElementById("videos-list");
+      table.tBodies[0].replaceChildren(); // drop the static rows from scripts/build_html.py
       for (const v of list) {
         const links = el("td", { class: "repo-links" });
         links.append(iconLink(v.url, `Video: ${stats(v)}`, ICONS.film, "line"));
@@ -683,6 +885,7 @@
 
     function posts(list) {
       const table = document.getElementById("posts");
+      table.tBodies[0].replaceChildren();
       for (const p of list) {
         const links = el("td", { class: "repo-links" });
         links.append(iconLink(p.url, "Blog post", ICONS.pen, "line"));
@@ -703,6 +906,7 @@
         tl.append(el("span", { class: "yr", style: `left:${pos(`${y}-07-01`)}%` }, y));
       }
       const table = document.getElementById("talks-list"), more = document.getElementById("talks-more");
+      table.tBodies[0].replaceChildren();
       const rows = []; // x (%) of the last dot in each row; a dot too close to the one before stacks up a row
       list.forEach((t, i) => {
         const x = pos(t.date);
@@ -737,6 +941,7 @@
     function papers(list) {
       const cv = document.querySelector('nav a[aria-label="CV"] path');
       const d = [...cv.parentNode.children].map((p) => p.getAttribute("d")).join("");
+      document.querySelector("#papers tbody").replaceChildren();
       for (const p of list) {
         const links = el("td", { class: "repo-links" });
         links.append(iconLink(p.url, `Paper: ${p.authors}`, d, "line"));
@@ -750,6 +955,7 @@
     }
 
     function earlier(list) {
+      document.querySelector("#earlier tbody").replaceChildren();
       for (const r of list) {
         const gh = r.url.startsWith("https://github.com/");
         const links = el("td", { class: "repo-links" });
