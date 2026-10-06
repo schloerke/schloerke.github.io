@@ -14,3 +14,6 @@ jobs:
         with:
           typst-version: 0.13.1  # keep in sync with data.yml
       - run: make cv
+      # index.html's static rows must match data/ and cv/cv.json (run `make html`)
+      - uses: astral-sh/setup-uv@v6
+      - run: make html && git diff --exit-code index.html

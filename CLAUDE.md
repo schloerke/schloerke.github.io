@@ -11,6 +11,13 @@ or change an approach below, update this file in the same change.
 - Simple like hadley.nz: one column, plain prose, system fonts, no framework.
 - Data-rich like samuelbharti.com: stats and small charts, all driven by the JSON files in `data/`.
 - No build step for the page. `index.html` holds all markup, CSS, and JS.
+  The one generated part: `scripts/build_html.py` (`make html`, also run by `make data`) writes plain rows
+  (linked title, description, venue, date; empty icon cells; each package's epics as an open row with its dates
+  in a `time.track`) from `data/` and `cv/cv.json` into each table's
+  `<tbody>`, one row per line, so crawlers that don't run JS (most AI ones) see the content.
+  The JS clears each `<tbody>` before rendering, so a new table must do that too.
+  Edit the rest of `index.html` by hand, but not inside those `<tbody>`s. After editing `cv/cv.json`, run `make html`:
+  `cv.yml` fails the PR if the rows are stale.
 - Colors are CSS custom properties in `:root` using `light-dark()`. They follow the system
   by default; the button in the page's top-right corner cycles system (◐) → light (☀) → dark (☾), setting `data-theme` on `<html>` and saves it in `localStorage.theme`.
   Link/accent blue must stay **WCAG AAA (≥ 7:1)** against `--bg` in both modes.
@@ -135,7 +142,7 @@ rather than in the browser. `main` has a repository ruleset ("main: CV builds") 
 check, and the repo allows auto-merge. Its one bypass is a deploy key: `data.yml` checks out with the
 `DATA_DEPLOY_KEY` secret (a write deploy key) so its direct pushes to `main` get through; a personal repo's ruleset
 can't list the GitHub Actions app as a bypass. `.github/workflows/data.yml` runs `make data` nightly and commits
-`data/` (and, on Mondays, `cv/cv_barret_schloerke.pdf`). Its `keepalive` job re-enables the workflow via the API each run, because GitHub
+`data/` and `index.html` (and, on Mondays, `cv/cv_barret_schloerke.pdf`). Its `keepalive` job re-enables the workflow via the API each run, because GitHub
 disables scheduled workflows after 60 days without non-bot activity. The job fails after a
 hard-coded date on purpose; bump it yearly.
 
@@ -145,6 +152,7 @@ hard-coded date on purpose; bump it yearly.
 make data                         # rebuild all of data/ (uses `gh auth token` if GITHUB_TOKEN is unset)
 make data-packages                # rebuild one section; also data-prs, data-other, data-talks, data-contributions
 make data ONLY="packages other"   # rebuild several sections in one run
+make html                         # rewrite index.html's static table rows from data/ and cv/cv.json
 make cv                           # build cv/cv_barret_schloerke.pdf and cv/resume_barret_schloerke.pdf with typst 0.13.1 (the nightly workflow rebuilds it weekly)
 make serve                        # preview at http://localhost:8000 (override with PORT=...); scripts/serve.py sends Cache-Control: no-store
 ```
