@@ -154,6 +154,7 @@ VENUES = {  # regex on a talk repo name (or video title) -> venue; {y} is the ta
     r"2019-05-02-shiny-reactlog-sparklyr": "Advanced R workshop, Northeastern University",
     r"2020-04-29-reactlog": "Statistical Programming DC",
     r"jnj22": "Johnson & Johnson Shiny Day",
+    r"2026-10-14-jnj": "Johnson & Johnson Shiny Day (remote)",
     r"shinymeta": "ABACUS {y}",
     r"ggplot2-extenders": "ggplot2 extenders",
     r"open-source-pharma": "Open Source in Pharma",
