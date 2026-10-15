@@ -4,7 +4,7 @@
 {"repo":"DivadNojnarg/outstanding-shiny-ui","prs":29,"description":"Outstanding User Interfaces with Shiny CRC Press book online version","group":"Shiny"},
 {"repo":"rstudio/shiny-examples","prs":28,"description":"","group":"Shiny"},
 {"repo":"schloerke/shinyjster","prs":24,"description":"Run javascript testing which will autokill an app on successful testing","group":"Testing & CI"},
-{"repo":"posit-dev/shiny-issue-triage","prs":20,"description":"A place where we can auto-label issues in other shiny team managed repos","group":"Testing & CI"},
+{"repo":"posit-dev/shiny-issue-triage","prs":21,"description":"A place where we can auto-label issues in other shiny team managed repos","group":"Testing & CI"},
 {"repo":"posit-dev/shinylive","prs":19,"description":"Run Shiny on Python and R (compiled to wasm) in the browser","group":"Shiny"},
 {"repo":"rstudio/shiny-workflows","prs":18,"description":"GitHub Actions workflows for Shiny and related packages","group":"Testing & CI"},
 {"repo":"posit-dev/shiny-showcase-bioinformatics","prs":12,"description":"A Quarto gallery of Shiny apps and packages for computational biology","group":"Shiny"},
