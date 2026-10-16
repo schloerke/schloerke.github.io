@@ -14,7 +14,7 @@
 == Experience
 #for e in cv.experience {
   row([*#e.role*, #maybe-link(e.at("url", default: none), e.org) #dim[· #e.place]], span(e.start, e.end),
-    below: list(..e.bullets))
+    below: list(..e.bullets.map(b => linkify(b, e.at("links", default: (:))))))
 }
 
 == Education
