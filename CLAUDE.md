@@ -179,8 +179,8 @@ narrow screens); list sections use an icon for a bullet (GitHub / globe, file, t
 Icons live in `cv/icons.json` (Simple Icons CC0 filled, Lucide ISC outline with `line: true`), shared by the page and
 `cv.typ`; most were copied out of `index.html`. The email is stored only as `["user", "domain"]` in `cv.json` and
 joined by JS (and Typst), so the address isn't in the HTML or JSON for simple scrapers.
-A `note` (awards, teaching, service) can have `links: {"words in the note": url}`; `linkify()` in both files splits the
-note around each phrase's first match and links it, so a phrase inside an earlier linked one isn't matched twice.
+A `note` (awards, teaching, service) or an experience entry's bullets can have `links: {"words in the text": url}` (e.g. Metamarkets → Druid); `linkify()` in both files splits the
+text around each phrase's first match and links it, so a phrase inside an earlier linked one isn't matched twice.
 Its "CV (PDF)" and "Resume (PDF)" links open in a new tab. `cv/resume.typ` is the one-page resume
 (`cv/resume_barret_schloerke.pdf`): the same data cut down (full bullets for the two current roles, one for the rest except the internship,
 top 8 maintained / authored repos, talk / video / post counts, a few awards; no tagline, no role on package rows,
@@ -197,6 +197,9 @@ and a required check that never runs blocks the merge); it commits nothing. The 
 `document(date: none)`, a month rather than a day in the footer, and counts rounded down (`approx()`: PRs to 10s,
 totals to 100s, shown as `350+`), so the workflow's `git diff --cached --quiet` commits it only then. Emoji are
 stripped in the PDF since the vendored fonts have none. The page shows exact counts.
+
+`job_applications/` is gitignored: it is its own private repo (`schloerke/job_applications`) cloned there, holding
+tailored resumes that import `cv/style.typ` and `data/`. Never commit it here: everything in this repo is public on schloerke.com.
 
 ## Hand-edited content
 

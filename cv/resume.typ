@@ -22,7 +22,7 @@
 // the two current roles in full, a line each for the rest, minus the internship
 #for (i, e) in cv.experience.filter(e => not e.role.ends-with("Intern")).enumerate() {
   row([*#e.role*, #maybe-link(e.at("url", default: none), e.org) #dim[· #e.place]], span(e.start, e.end),
-    below: list(..if i < 2 { e.bullets } else { e.bullets.slice(0, 1) }))
+    below: list(..(if i < 2 { e.bullets } else { e.bullets.slice(0, 1) }).map(b => linkify(b, e.at("links", default: (:))))))
 }
 
 == Open source software

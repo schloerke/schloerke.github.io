@@ -57,8 +57,9 @@
     },
     {
       "role": "Software Engineer", "org": "Metamarkets", "place": "San Francisco, CA", "start": "2011-01", "end": "2012-07",
+      "links": {"Druid": "https://druid.apache.org/"},
       "bullets": [
-        "Built interactive D3 visualizations on DVL, a reactive data visualization library, in CoffeeScript.",
+        "Built interactive D3 visualizations for analytics dashboards, backed by Druid, on DVL, a reactive data visualization library, in CoffeeScript.",
         "Wrote Node.js front-end servers that automated deploys, clusters, and company / user management, allowing anyone on the team to ship or debug the client experience.",
         "Reduced site startup time and server load by trimming data queries and startup work."
       ]

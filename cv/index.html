@@ -116,7 +116,7 @@
     const span = (a, b) => (a === b ? month(a) : `${month(a)} – ${b ? month(b) : "Present"}`);
     const years = (a, b) => (b && a.slice(0, 4) === b.slice(0, 4) ? a.slice(0, 4) : `${a.slice(0, 4)} – ${b ? b.slice(0, 4) : "Present"}`);
     const head = (left, when) => `<div class="head"><div>${left}</div> <span class="when">${when}</span></div>`;
-    const bullets = (xs) => (xs?.length ? `<ul>${xs.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : "");
+    const bullets = (xs, links) => (xs?.length ? `<ul>${xs.map((x) => `<li>${linkify(x, links)}</li>`).join("")}</ul>` : "");
     const section = (title, body) => `<section><h2>${title}</h2>${body}</section>`;
     let ICONS; // cv/icons.json, shared with cv.typ
     const icon = (name) => `<svg class="i${ICONS[name].line ? " line" : ""}" viewBox="0 0 24 24" aria-hidden="true"><path d="${ICONS[name].d}"/></svg>`;
@@ -166,7 +166,7 @@
         section("Summary", `<p>${esc(cv.summary)}</p>`),
         section("Experience", cv.experience.map((e) => `<div class="entry">
           ${head(`<strong>${esc(e.role)}</strong>, ${link(e.org, e.url)}`, span(e.start, e.end))}
-          <p class="sub">${esc(e.place)}</p>${bullets(e.bullets)}</div>`).join("")),
+          <p class="sub">${esc(e.place)}</p>${bullets(e.bullets, e.links)}</div>`).join("")),
         section("Education", cv.education.map((e) => `<div class="entry">
           ${head(`<strong>${link(e.degree, e.url)}</strong>, ${esc(e.org)}`, years(e.start, e.end))}
           <p class="sub">${esc(e.place)}</p>${bullets(e.notes)}</div>`).join("")),
