@@ -26,7 +26,7 @@
 }
 
 == Open source software
-#approx(summary.merged_prs, 100) merged pull requests across #approx(summary.repos, 10) GitHub repositories since #calc.min(..summary.years). Top packages I maintain or author:
+#approx(summary.merged_prs, 100) merged pull requests across #approx(summary.repos, 10) repositories, plus #approx(summary.reviewed_prs, 100) PR reviews, since #calc.min(..summary.years). My top packages:
 // by merged PRs, GGally (pre-Posit) last. Repos sharing a name (R and Python shiny) are one row,
 // with each repo's link on its languages and the name linking the R repo's homepage (shiny.posit.co).
 // learnr is cut to keep the resume to one page
@@ -51,7 +51,9 @@
 }
 
 == Talks, awards & teaching
-#row([#talks.len() talks & workshops, #videos.len() videos, and #posts.len() blog posts, listed at #link("https://schloerke.com")[schloerke.com]], "")
+// rstudio::conf and rstudio::global are posit::conf's old names
+#let conf = talks.filter(t => t.at("venue", default: none) != none and t.venue.contains(regex("::(conf|global)\(")))
+#row([#talks.len() talks & workshops (#conf.len() at posit::conf), #videos.len() videos, and #posts.len() blog posts, listed at #link("https://schloerke.com")[schloerke.com]], "")
 #for a in cv.awards.filter(a => a.at("url", default: none) != none).slice(0, 2) { row(link(a.url, a.title), years(a.start, a.end)) }
 #for t in cv.teaching.slice(0, 1) { row([*#t.role*, #maybe-link(t.at("url", default: none), t.org) #note(t)], years(t.start, t.end)) }
 

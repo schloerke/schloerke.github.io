@@ -35,7 +35,7 @@
     {
       "role": "Software Engineer", "org": "RStudio (now Posit)", "url": "https://posit.co", "place": "Remote", "start": "2018-01", "end": "2021-12",
       "bullets": [
-        "Cut release testing from 3 weeks across 10 people to under 2 days for 2 by architecting shinycoreci: nightly GitHub Actions testing of 150+ apps on Mac, Windows, and Linux × 5 R versions.",
+        "Cut release testing from 3 weeks across 10 people to under 2 days for 2 by architecting shinycoreci: nightly testing of 150+ apps on Mac, Windows, and Linux × 5 R versions. Built shiny-workflows, shared CI for every Shiny team package.",
         "Migrated Shiny's JavaScript to TypeScript, so every PR's client code is type-checked across all files (before, none was).",
         "Sustained plumber, reactlog, shinytest2, and dozens of other Shiny packages by owning releases, docs, and triage."
       ]

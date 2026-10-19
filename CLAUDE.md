@@ -32,7 +32,10 @@ only rewrites files whose contents changed. The page fetches each file on its ow
 Each file puts one list item or top-level key per line (`dump()`), so a changed row is a one-line diff.
 
 - `summary.json`: `updated`, `merged_prs` / `repos` totals since `SINCE` (shown at the top of the
-  "since 2018" dialog, so they cover the same years), and `years` (the contribution calendars).
+  "since 2018" dialog, so they cover the same years), `reviewed_prs` (others' PRs I reviewed or commented on
+  since `SINCE`, one `commenter:` search; shown on the CV and resume), and `years` (the contribution calendars).
+  The account-wide searches add `is:public` (per-repo ones only hit public repos already): a local run uses your own token, which also sees private repos, and their names
+  must stay off the site (the nightly run's Actions token only sees public ones).
   The package / other tables still count merged PRs from every year.
 - `merged_prs.json`: `{year: {repo: merged PRs}}` from GitHub search, one query per year
   (search caps results at 1000). The page doesn't read it; it is a cache so each run only

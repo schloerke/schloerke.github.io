@@ -170,7 +170,7 @@
         section("Education", cv.education.map((e) => `<div class="entry">
           ${head(`<strong>${link(e.degree, e.url)}</strong>, ${esc(e.org)}`, years(e.start, e.end))}
           <p class="sub">${esc(e.place)}</p>${bullets(e.notes)}</div>`).join("")),
-        section("Open source software", `<p class="sub">${summary.merged_prs.toLocaleString("en-US")} merged pull requests across ${summary.repos} GitHub repositories since ${Math.min(...summary.years)}. Packages I maintain or author, by merged PRs:</p>` +
+        section("Open source software", `<p class="sub">${summary.merged_prs.toLocaleString("en-US")} merged pull requests across ${summary.repos} GitHub repositories, and ${summary.reviewed_prs.toLocaleString("en-US")} reviews of others' pull requests, since ${Math.min(...summary.years)}. Packages I maintain or author, by merged PRs:</p>` +
           list(lead, "github", (r) => `
             <code>${link(r.name, `https://github.com/${r.repo}`)}</code> <span class="about">${esc(r.langs.join(", "))} · ${esc(r.role)} · ${r.prs} PRs</span>
             <p class="sub">${esc(r.description)}</p>
