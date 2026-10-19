@@ -19,7 +19,7 @@
     },
     {"degree": "MS, Mathematical Statistics", "org": "Purdue University", "place": "West Lafayette, IN", "start": "2013-01", "end": "2014-12", "notes": []},
     {"degree": "PhD program, Statistics", "org": "Rice University", "place": "Houston, TX", "start": "2012-08", "end": "2012-12", "notes": ["Advisor: Hadley Wickham."]},
-    {"degree": "BS, Computer Engineering", "org": "Iowa State University", "place": "Ames, IA", "start": "2006-08", "end": "2010-12", "notes": ["Statistics graphics research with Dianne Cook and Heike Hofmann."]}
+    {"degree": "BS, Computer Engineering", "org": "Iowa State University", "place": "Ames, IA", "start": "2006-08", "end": "2010-12", "notes": ["Statistics graphics research with Dianne Cook, Hadley Wickham, and Heike Hofmann."]}
   ],
   "experience": [
     {
