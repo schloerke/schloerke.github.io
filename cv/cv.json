@@ -10,7 +10,7 @@
     {"icon": "orcid", "label": "ORCID", "text": "0000-0001-9986-114X", "url": "https://orcid.org/0000-0001-9986-114X"},
     {"icon": "linkedin", "label": "LinkedIn", "text": "schloerke", "url": "https://www.linkedin.com/in/schloerke"}
   ],
-  "summary": "Senior software engineer on Shiny, Posit's web framework for R and Python (1M+ monthly downloads). 2,300+ merged pull requests across 160+ GitHub repositories since 2018. Current work: OpenTelemetry for Shiny, LLM-powered apps, and React-based custom UI. PhD in Statistics from Purdue University, focused on large data visualization.",
+  "summary": "Senior software engineer for Shiny, Posit's web framework for R and Python (1M+ monthly downloads). My statistician's skepticism (PhD) shapes how I build and test tools that turn data scientists into full-stack app developers. Highlights: built OpenTelemetry tracing into Shiny for R and Python, so users can see where their apps spend time; created shinyreact, so Shiny apps can use React-based UI; and cut Shiny's release testing from 3 weeks for 10 people to under 2 days for 2.",
   "education": [
     {
       "degree": "PhD, Statistics", "org": "Purdue University", "place": "West Lafayette, IN",
@@ -25,25 +25,25 @@
     {
       "role": "Senior Software Engineer", "org": "Posit", "url": "https://posit.co", "place": "Remote", "start": "2022-01", "end": null,
       "bullets": [
-        "Core developer of Shiny for Python (200K+ monthly downloads), a framework for interactive web apps.",
+        "Core developer of Shiny for R and Python, Posit's flagship framework that brings users to its commercial products.",
         "Cut CI time 98%, measured by 4+ hours of testing finishing in a 4.5-minute run, by architecting Playwright controllers for every Shiny for Python component and spreading 1000+ tests over 170 jobs (5 Pythons × 3 browsers).",
-        "Built shinylive for R and Python, which export Shiny apps to static sites that run in the browser with WebAssembly.",
+        "Brought Shiny for R's best UI to Python by porting bslib's components: sidebars, cards, value boxes, tooltips, and more.",
+        "Built shinylive for R and Python: Shiny apps that run in the browser with no server, even in Quarto sites and slides.",
         "Enabled every Shiny user to trace apps with OpenTelemetry, build LLM-powered apps (querychat, shinychat), and pair agentic coding with React-based UI (shinyreact)."
       ]
     },
     {
       "role": "Software Engineer", "org": "RStudio (now Posit)", "url": "https://posit.co", "place": "Remote", "start": "2018-01", "end": "2021-12",
       "bullets": [
-        "Core developer of Shiny, an R package for building interactive web apps in R.",
-        "Cut release testing from 3 weeks across 10 people to under 2 days for 2 by architecting shinycoreci: nightly GitHub Actions testing of 150+ apps on Mac, Windows, and Linux × 5 R versions.",
-        "Migrated Shiny's core JavaScript to TypeScript, giving the team confidence to change client code, by porting the client library to typed modules.",
+        "Cut release testing from 3 weeks across 10 people to under 2 days for 2 by architecting shinycoreci: nightly testing of 150+ apps on Mac, Windows, and Linux × 5 R versions. Built shiny-workflows, shared CI for every Shiny team package.",
+        "Migrated Shiny's JavaScript to TypeScript, so every PR's client code is type-checked across all files (before, none was).",
         "Sustained plumber, reactlog, shinytest2, and dozens of other Shiny packages by owning releases, docs, and triage."
       ]
     },
     {
       "role": "Tool Development Team", "org": "Gates Foundation: HBGDki", "url": "http://hbgdki.org", "place": "Remote", "start": "2016-04", "end": "2018-12",
       "bullets": [
-        "Produced custom summary statistics for 75+ datasets to feed visualization apps.",
+        "Produced custom summary statistics for 75+ datasets, feeding visualization apps that consultants used in work to prevent avoidable infant deaths.",
         "Protected sensitive study data by coordinating secure data-handling practices with five other data scientists.",
         "Standardized the team's R package development by creating and maintaining template R packages."
       ]

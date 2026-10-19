@@ -262,7 +262,7 @@ def merged_pr_counts():
         if year < this - 1 and str(year) in by_year:
             continue
         # search caps at 1000 results, so query one year at a time
-        q = f"author:{USER}+type:pr+is:merged+merged:{year}-01-01..{year}-12-31"
+        q = f"author:{USER}+type:pr+is:public+is:merged+merged:{year}-01-01..{year}-12-31"
         by_year[str(year)] = dict(Counter(i["repository_url"].split("/repos/")[1] for i in search(q)))
     return by_year
 
@@ -296,6 +296,13 @@ def r_role(txt):
 
 def listed_role(maintainers, authors):
     return "maintainer" if NAME in str(maintainers) else "author" if NAME in str(authors) else "contributor"
+
+
+def reviewed_prs():
+    """Others' PRs I reviewed or commented on since SINCE. `commenter:` also counts formal reviews
+    (it matched all but 3 of the reviewed-by union in 2026), and I only comment on PRs I review."""
+    q = f"commenter:{USER}+-author:{USER}+type:pr+is:public+created:>={SINCE}-01-01"
+    return gh(f"search/issues?q={q}&per_page=1")["total_count"]
 
 
 def reviews(repo):
@@ -602,6 +609,7 @@ files = {
     # a partial run keeps the old date, since the sections it skipped weren't refreshed
     "summary": {"updated": read("summary")["updated"] if only else dt.date.today().isoformat(),
                 "merged_prs": sum(recent_prs.values()), "repos": len(recent_prs),
+                "reviewed_prs": reviewed_prs() if want("prs") else read("summary").get("reviewed_prs"),
                 "years": sorted((int(y) for y in cals if y != "last"), reverse=True)},
     "packages": pkgs,
     "other": other_work(pr_counts, pkgs) if want("other") else read("other"),

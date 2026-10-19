@@ -6,13 +6,13 @@
 
 [[Python.shiny]]
 title = "UI components from bslib"
-about = "Ported sidebars, cards, accordions, value boxes, tooltips, and popovers from R's bslib."
+about = "Ported sidebars, cards, accordions, value boxes, tooltips, and popovers from R's bslib, so Python users get the same layout tools as R."
 match = 'sidebar|accordion|\bcards?\b|value.?box|tooltip|popover|experimental|navset|bslib|bs5|bootstrap'
 until = "2024-01"
 
 [[Python.shiny]]
 title = "Playwright testing"
-about = "shiny.playwright controllers for every UI component, and the shiny.pytest plugin."
+about = "shiny.playwright controllers for every UI component, and the shiny.pytest plugin; 1000+ tests over 170 CI jobs finish in 4.5 minutes instead of 4+ hours."
 match = 'playwright|e2e|pytest'
 until = "2024-07"
 
@@ -38,7 +38,7 @@ until = "2025-04"
 
 [[Python.shiny]]
 title = "OpenTelemetry"
-about = "Traces and logs for sessions, reactivity, and outputs."
+about = "Traces and logs for sessions, reactivity, and outputs, so users can see where their apps spend time."
 match = 'otel|opentelemetry'
 
 [[Python.shiny]]
@@ -68,18 +68,18 @@ match = 'session\.destroy|allow_reconnect|teardown|dangling'
 
 [[R.shiny]]
 title = "reactlog integration"
-about = "Record every reactive event so reactlog can draw the reactive graph."
+about = "Record every reactive event so reactlog can draw the reactive graph, letting users see the logic behind their app while debugging."
 match = 'reactlog'
 until = "2020-12"
 
 [[R.shiny]]
 title = "OpenTelemetry"
-about = "Traces and logs for sessions, reactivity, and outputs through {otel}."
+about = "Traces and logs for sessions, reactivity, and outputs through {otel}, so users can see where their apps spend time."
 match = 'otel'
 
 [[R.shiny]]
 title = "MCP Apps"
-about = "Serve Shiny apps as MCP Apps, with author tools for LLM clients."
+about = "Serve Shiny apps as MCP Apps, with author tools for LLM clients, so apps show up inside the chat in clients like Claude Desktop."
 match = '\bmcp'
 
 [[R.shiny]]
@@ -89,7 +89,7 @@ match = 'brush|plot click'
 
 [[R.shiny]]
 title = "testServer()"
-about = "Test server functions and modules in memory against a mock session."
+about = "Test server functions and modules in memory against a mock session; no browser needed, so tests run much faster."
 match = 'testServer|mock|runTests'
 
 [[R.shiny]]
@@ -109,7 +109,7 @@ match = 'session\$destroy|teardown|reconnect|destroys'
 
 [[TypeScript."@posit/shiny"]]
 title = "TypeScript"
-about = "Ported shiny.js to TypeScript, moved the build to esbuild, and published the types."
+about = "Ported shiny.js to TypeScript, moved the build to esbuild, and published the types; every PR's client code is now type-checked."
 match = 'typescript|\bTS\b|eslint|esbuild|srcts'
 until = "2022-12"
 
@@ -127,19 +127,19 @@ until = "2022-12"
 
 [[R.shinytest2]]
 title = "Screenshots"
-about = "Consistent screenshots, compared with a kernel density smoother to ignore stray pixels."
+about = "Consistent screenshots, compared with a kernel density smoother to ignore stray pixels from Chrome rounding and small font weight changes, so screenshot tests stop flaking."
 match = 'screenshot'
 until = "2023-12"
 
 [[R.shinytest2]]
 title = "Migration from shinytest"
-about = "migrate_from_shinytest() converts existing shinytest tests."
+about = "migrate_from_shinytest() converts existing shinytest tests; shinytest was deprecated in May 2024 in favor of shinytest2."
 match = 'migrat'
 until = "2022-12"
 
 [[R.GGally]]
 title = "ggpairs and ggmatrix"
-about = "The generalized pairs plot and the plot matrix behind it."
+about = "The generalized pairs plot and the plot matrix behind it; the paper describing it has 120+ citations."
 match = 'ggpairs|ggmatrix'
 until = "2017-12"
 
@@ -200,13 +200,13 @@ until = "2020-12"
 
 [[R.learnr]]
 title = "Exercises"
-about = "Safer exercise evaluation, checker functions, and clearer errors."
+about = "Safer exercise evaluation, checker functions, and clearer errors. Instructors use learnr for course materials, 29 CRAN packages use it, and its lessons shaped Posit Academy."
 match = 'exercise'
 until = "2020-12"
 
 [[R.shinyreact]]
 title = "Initial development"
-about = "Ported the Python API to R, then CRAN checks, a pkgdown site, and webR builds for 0.1.0."
+about = "Ported the Python API to R, then CRAN checks, a pkgdown site, and webR builds for 0.1.0; 2 other CRAN packages already use it."
 match = '\(r\)|R/Python|R package|CRAN|win-builder|spell|NEWS|pkgdown|tidytemplate|webR|wasm'
 
 [[R.shinyreact]]

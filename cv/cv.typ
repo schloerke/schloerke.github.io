@@ -24,7 +24,7 @@
 }
 
 == Open source software
-#dim[#approx(summary.merged_prs, 100) merged pull requests across #approx(summary.repos, 10) GitHub repositories since #calc.min(..summary.years). Packages I maintain or author, by merged PRs:]
+#dim[#approx(summary.merged_prs, 100) merged pull requests across #approx(summary.repos, 10) GitHub repositories, and #approx(summary.reviewed_prs, 100) reviews of others' pull requests, since #calc.min(..summary.years). Packages I maintain or author, by merged PRs:]
 #for r in repos.filter(r => r.role != "contributor") {
   let epics = r.epics.sorted(key: e => e.start).rev()
   row([#link("https://github.com/" + r.repo, raw(r.name)) #dim[#r.langs.join(", ") · #r.role · #approx(r.prs, 10) PRs · #r.description]], "",
