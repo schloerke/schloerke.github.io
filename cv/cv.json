@@ -10,7 +10,7 @@
     {"icon": "orcid", "label": "ORCID", "text": "0000-0001-9986-114X", "url": "https://orcid.org/0000-0001-9986-114X"},
     {"icon": "linkedin", "label": "LinkedIn", "text": "schloerke", "url": "https://www.linkedin.com/in/schloerke"}
   ],
-  "summary": "Senior software engineer on Shiny, Posit's web framework for R and Python (1M+ monthly downloads). 2,300+ merged pull requests across 160+ GitHub repositories since 2018. Current work: OpenTelemetry for Shiny, LLM-powered apps, and React-based custom UI. PhD in Statistics from Purdue University, focused on large data visualization.",
+  "summary": "Senior software engineer for Shiny, Posit's web framework for R and Python (1M+ monthly downloads). My statistician's skepticism (PhD) shapes how I build and test tools that turn data scientists into full-stack app developers. Highlights: core developer of Shiny for Python (370+ merged PRs); created shinyreact, so Shiny apps can use React-based UI; and cut Shiny's release testing from 3 weeks for 10 people to under 2 days for 2.",
   "education": [
     {
       "degree": "PhD, Statistics", "org": "Purdue University", "place": "West Lafayette, IN",

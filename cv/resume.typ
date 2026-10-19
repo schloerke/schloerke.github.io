@@ -29,7 +29,8 @@
 #approx(summary.merged_prs, 100) merged pull requests across #approx(summary.repos, 10) GitHub repositories since #calc.min(..summary.years). Top packages I maintain or author:
 // by merged PRs, GGally (pre-Posit) last. Repos sharing a name (R and Python shiny) are one row,
 // with each repo's link on its languages and the name linking the R repo's homepage (shiny.posit.co).
-#let top = repos.filter(r => r.role != "contributor").slice(0, 8)
+// learnr is cut to keep the resume to one page
+#let top = repos.filter(r => r.role != "contributor").slice(0, 8).filter(r => r.name != "learnr")
 #let names = top.map(r => r.name).dedup()
 #let names = names.filter(n => n != "GGally") + names.filter(n => n == "GGally")
 #let gh(r, body) = link("https://github.com/" + r.repo, body)
