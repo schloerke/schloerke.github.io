@@ -28,7 +28,7 @@
         "Core developer of Shiny for R and Python, Posit's flagship framework that brings users to its commercial products.",
         "Cut CI time 98%, measured by 4+ hours of testing finishing in a 4.5-minute run, by architecting Playwright controllers for every Shiny for Python component and spreading 1000+ tests over 170 jobs (5 Pythons × 3 browsers).",
         "Brought Shiny for R's best UI to Python by porting bslib's components: sidebars, cards, value boxes, tooltips, and more.",
-        "Built shinylive for R and Python: Shiny apps that run in the browser with no server, even in Quarto sites and slides.",
+        "Packaged shinylive for R and Python: run Shiny apps in the browser with no server, even in Quarto sites and slides.",
         "Enabled every Shiny user to trace apps with OpenTelemetry, build LLM-powered apps (querychat, shinychat), and pair agentic coding with React-based UI (shinyreact)."
       ]
     },
