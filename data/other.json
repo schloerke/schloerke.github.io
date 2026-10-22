@@ -21,6 +21,7 @@
 {"repo":"securingsincity/react-ace","prs":3,"description":"React Ace Component","group":"Community"},
 {"repo":"rstudio/rstudio","prs":3,"description":"RStudio is an integrated development environment (IDE) for R","group":"Community"},
 {"repo":"rstudio/shiny-testing-gha-example","prs":3,"description":"Example testing Shiny application with GitHub Actions","group":"Testing & CI"},
+{"repo":"rstudio/r-system-requirements","prs":3,"description":"System requirements for R packages","group":"Community"},
 {"repo":"posit-dev/posit-conf","prs":3,"description":"Materials for rstudio::conf","group":"Community"},
 {"repo":"r-wasm/actions","prs":3,"description":"GitHub Actions associated with R WebAssembly tasks","group":"Testing & CI"},
 {"repo":"quarto-ext/shinylive","prs":3,"description":"Quarto extension to embed Shinylive for Python applications","group":"Shiny"},
