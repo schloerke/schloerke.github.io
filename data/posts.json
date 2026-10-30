@@ -1,4 +1,6 @@
 [
+{"date":"2026-10-29","title":"All Together Now: Concurrent Async in Shiny for Python","url":"https://opensource.posit.co/blog/2026-10-29_shiny-python-concurrent-async/","image":"https://opensource.posit.co/blog/2026-10-29_shiny-python-concurrent-async/feature.gif"},
+{"date":"2026-10-29","title":"Shiny for Python 1.9","url":"https://opensource.posit.co/blog/2026-10-29_shiny-python-1-9/","image":"https://opensource.posit.co/blog/2026-10-29_shiny-python-1-9/feature.gif"},
 {"date":"2026-10-08","title":"Genomes, Prompts, and Shiny: What I Built During My Summer at Posit","url":"https://opensource.posit.co/blog/2026-10-08_genomes-prompts-and-shiny/","image":"https://opensource.posit.co/blog/2026-10-08_genomes-prompts-and-shiny/featured_hu_cb0bd8eaa8dde936.webp"},
 {"date":"2026-09-30","title":"Introducing shinyreact: React UI backed by a Shiny server","url":"https://opensource.posit.co/blog/2026-09-30_introducing-shinyreact/","image":"https://opensource.posit.co/blog/2026-09-30_introducing-shinyreact/feature_hu_dfad09fa76be738.webp"},
 {"date":"2026-09-22","title":"Shiny for Python 1.8","url":"https://opensource.posit.co/blog/2026-09-22_shiny-python-1-8/","image":"https://opensource.posit.co/blog/2026-09-22_shiny-python-1-8/feature.gif"},
