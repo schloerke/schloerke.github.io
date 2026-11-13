@@ -9,5 +9,9 @@
 {"date":"2022-05-10","title":"Programming Games with Shiny \u00b7 Guess the Number","venue":null,"url":"https://opensource.posit.co/resources/videos/2022-05-10_programming-games-with-shiny-guess-the-number-rstudio/","minutes":35,"views":2082},
 {"date":"2022-03-22","title":"Programming Games with Shiny \u00b7 Dragon Realm","venue":null,"url":"https://opensource.posit.co/resources/videos/2022-03-22_programming-games-with-shiny-dragon-realm-rstudio/","minutes":41,"views":4841},
 {"date":"2022-02-15","title":"Maximize computing resources using future_promise()","venue":null,"url":"https://opensource.posit.co/resources/videos/2022-02-15_barret-schloerke-maximize-computing-resources-using-future_promise-rstudio/","minutes":22,"views":2338},
-{"date":"2022-02-09","title":"{reactlog} Rundown","venue":null,"url":"https://opensource.posit.co/resources/videos/2022-02-09_barret-schloerke-reactlog-rundown-rstudio/","minutes":39,"views":2902}
+{"date":"2022-02-09","title":"{reactlog} Rundown","venue":null,"url":"https://opensource.posit.co/resources/videos/2022-02-09_barret-schloerke-reactlog-rundown-rstudio/","minutes":39,"views":2902},
+{"date":"2021-03-01","title":"How to Turn R Code into a Web API with Plumber","venue":null,"url":"https://opensource.posit.co/resources/videos/2021-03-01_how-to-turn-r-code-into-a-web-api-with-plumber/","minutes":57,"views":18566},
+{"date":"2020-10-04","title":"Episode 14: Shining a Light on learnr","venue":null,"url":"https://opensource.posit.co/resources/videos/2020-10-04_episode-14-shining-a-light-on-learnr/","minutes":20,"views":1035},
+{"date":"2020-09-17","title":"Episode 13: Inside Plumber 1.0","venue":null,"url":"https://opensource.posit.co/resources/videos/2020-09-17_episode-13-inside-plumber-10-barret-schloerke/","minutes":33,"views":1137},
+{"date":"2020-09-09","title":"Episode 12: Barret Schloerke Part 1 (reactlog)","venue":null,"url":"https://opensource.posit.co/resources/videos/2020-09-09_episode-12-barret-schloerke-part-1-reactlog/","minutes":25,"views":436}
 ]
