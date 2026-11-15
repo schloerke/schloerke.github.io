@@ -204,6 +204,18 @@ stripped in the PDF since the vendored fonts have none. The page shows exact cou
 `job_applications/` is gitignored: it is its own private repo (`schloerke/job_applications`) cloned there, holding
 tailored resumes that import `cv/style.typ` and `data/`. Never commit it here: everything in this repo is public on schloerke.com.
 
+## Meals (`meals/`)
+
+`meals/index.html` (schloerke.com/meals/, `noindex`) shows Barret's weekly meals and recipes from the
+private `schloerke/dinner-hub` repo, behind a password. dinner-hub's `publish-site.yml` workflow pushes
+`data/dinner-hub.enc.json` straight to `main` with a write deploy key (deploy keys bypass the ruleset).
+The file is encrypted (PBKDF2-SHA256 key from the password, AES-256-GCM; `{v, iter, salt, iv, data}`, base64),
+so the plain data never lands in this public repo. Never commit it unencrypted. The page decrypts with Web Crypto,
+then saves the raw key (not the password) in a `dinnerhub` cookie for 30 days (`Path=/meals/`); a key that stops
+working (password changed) is cleared. `#<recipe-slug>` shows one recipe. The page copies the colors and theme
+button from `index.html`; keep them in sync. To test locally, build a file with a throwaway password using
+dinner-hub's `scripts/build_site_data.py`, copy it to `data/`, and don't commit it.
+
 ## Hand-edited content
 
 The bio and nav links are hand-written in `index.html`. The nav is all icons in two groups:
