@@ -169,13 +169,20 @@
     }
 
     (async () => {
-      const file = await (await fetch("../data/dinner-hub.enc.json", { cache: "no-cache" })).json();
+      let file;
+      try {
+        file = await (await fetch("../data/dinner-hub.enc.json", { cache: "no-cache" })).json();
+      } catch {
+        return out.replaceChildren(el("p", {}, "No meal data yet."));
+      }
       const saved = getCookie();
       if (saved) {
+        let data;
         try {
           const key = await crypto.subtle.importKey("raw", b64(decodeURIComponent(saved)), "AES-GCM", false, ["decrypt"]);
-          return show(await unlock(key, file));
+          data = await unlock(key, file);
         } catch { setCookie("", 0); }  // stale key (password changed): log out
+        if (data) return show(data);
       }
       const form = document.getElementById("login");
       form.hidden = false;
@@ -184,12 +191,13 @@
         e.preventDefault();
         const err = document.getElementById("err");
         err.textContent = "Checking…";
+        let key, data;
         try {
-          const key = await deriveKey(document.getElementById("pw").value, file);
-          const data = await unlock(key, file);
-          setCookie(encodeURIComponent(unb64(await crypto.subtle.exportKey("raw", key))), 60 * 60 * 24 * 30);
-          show(data);
-        } catch { err.textContent = "Wrong password"; }
+          key = await deriveKey(document.getElementById("pw").value, file);
+          data = await unlock(key, file);
+        } catch { return err.textContent = "Wrong password"; }
+        setCookie(encodeURIComponent(unb64(await crypto.subtle.exportKey("raw", key))), 60 * 60 * 24 * 30);
+        show(data);
       });
     })();
   </script>

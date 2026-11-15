@@ -213,8 +213,9 @@ The file is encrypted (PBKDF2-SHA256 key from the password, AES-256-GCM; `{v, it
 so the plain data never lands in this public repo. Never commit it unencrypted. The page decrypts with Web Crypto,
 then saves the raw key (not the password) in a `dinnerhub` cookie for 30 days (`Path=/meals/`); a key that stops
 working (password changed) is cleared. `#<recipe-slug>` shows one recipe. The page copies the colors and theme
-button from `index.html`; keep them in sync. To test locally, build a file with a throwaway password using
-dinner-hub's `scripts/build_site_data.py`, copy it to `data/`, and don't commit it.
+button from `index.html`; keep them in sync. Test locally against the committed file with the real password.
+Never write a local build of `data/dinner-hub.enc.json`: it holds the real data, and one encrypted with a test
+password would publish it if committed. Only dinner-hub's workflow writes that file. Before it exists the page says "No meal data yet."
 
 ## Hand-edited content
 
