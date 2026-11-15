@@ -43,7 +43,7 @@
     th { text-align: left; font-weight: 500; color: var(--muted); font-size: .8rem; padding: 0 0 .35rem; }
     td { padding: .3rem 1rem .3rem 0; border-top: 1px solid var(--rule); vertical-align: top; }
     td:first-child { width: 6.5rem; color: var(--text-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
-    tr.today td { font-weight: 600; }
+    tr.today td { background: color-mix(in srgb, var(--accent) 8%, transparent); }
     .facts { color: var(--text-2); }
     ul, ol { padding-left: 1.25rem; }
     li { margin: .25rem 0; }
@@ -132,15 +132,18 @@
       const r = bundle.recipes[slug];
       const n = r.nutrition;
       document.title = r.name;
-      const facts = [r.time_minutes && `${r.time_minutes} min`, r.servings && `serves ${r.servings}`,
-        n && `${n.calories} cal · ${n.carbs_g}g carbs · ${n.protein_g}g protein · ${n.fat_g}g fat per serving`].filter(Boolean);
+      const facts = [  // one line each: time / calories + servings / macros
+        r.time_minutes && `${r.time_minutes} min`,
+        [n && `${n.calories} cal`, r.servings && `serves ${r.servings}`].filter(Boolean).join(" · "),
+        n && `${n.carbs_g}g carbs · ${n.protein_g}g protein · ${n.fat_g}g fat per serving`,
+      ].filter(Boolean);
       const sides = (r.sides || []).filter((s) => bundle.recipes[s]);
       const src = r.source && /^https?:\/\//.test(r.source)
         ? el("a", { href: r.source }, new URL(r.source).hostname.replace(/^www\./, "")) : r.source;
-      out.replaceChildren(
+      out.replaceChildren(...[
         el("p", {}, el("a", { href: "#" }, "← All meals")),
         el("h2", { style: "font-size:1.5rem;margin-top:1rem" }, r.name),
-        el("p", { className: "facts" }, facts.join(" · ")),
+        el("p", { className: "facts" }, facts.flatMap((f, i) => [i && el("br"), f])),
         el("h2", {}, "Ingredients"),
         el("ul", {}, r.ingredients.map((i) => el("li", {},
           el("span", { className: "amt" }, i.amount ?? ""), " ", i.item,
@@ -151,7 +154,8 @@
         el("ol", {}, r.instructions.map((s) => el("li", {}, s))),
         r.changes.length && el("h2", {}, "Changes"),
         r.changes.length && el("ul", {}, r.changes.map((s) => el("li", {}, s))),
-        src && el("p", { className: "note" }, "Source: ", src));
+        src && el("p", { className: "note" }, "Source: ", src),
+      ].filter(Boolean));  // drop false / 0 / undefined from `cond && el(...)`
       scrollTo(0, 0);
     }
 
